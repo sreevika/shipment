@@ -1,0 +1,218 @@
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css");
+.divider:after,
+.divider:before {
+content: "";
+flex: 1;
+height: 1px;
+background: #eee;
+}
+.h-custom {
+height: 100%;
+}
+@media (max-width: 450px) {
+.h-custom {
+height: 100%;
+}
+}
+
+// .body{
+//   box-sizing: border-box;
+// }
+
+ .elm-top{
+  background-image: url("../../assets/images/Ribbon.png");
+  background-repeat: no-repeat;
+ // background-attachment: fixed;
+  background-position: right top; 
+  background-color: #fafafa;
+  background-size: 33%;
+} 
+section {
+  background-color: #fafafa;
+}
+.track-1 {
+  margin-top: 30px;
+  text-align: left;
+  font-family:  "Trebuchet MS", Helvetica, sans-serif;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 36px;
+  line-height: 38px;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.75);
+  padding-bottom: 20px;
+}
+
+small {
+  color: rgba(31, 29, 29, 0.822);
+}
+
+.wrapper {
+  //position:relative;
+}
+
+.wrapper i {
+  position: absolute;
+}
+.icon {
+  padding: 21px 15px;
+  min-width: 40px;
+}
+
+input[type=text], input[type=password] {
+
+  padding: 10px 0px 10px 40px;
+  
+  display: inline-block;
+  
+  
+  /*text-align: center; */
+}
+
+.logo-1 {
+  width: 166px !important;
+}
+
+.logo-2 {
+  width: 140px !important;
+  display: block;
+  margin-bottom: -20px;
+}
+
+.pipe {
+  display: block;
+  width: 1px;
+  height: 35px;
+  background-color: #838282;
+  margin-left: 1px !important;
+  padding-left: 1px !important;
+}
+
+.btn.btn1 {
+  width: 100%;
+  background-color: #0471be;
+  color: white;
+  height: 37px;
+  border-radius: 25px;
+}
+
+.btn.btn1:hover {
+  background-color: #035b9a;
+  color: #fff;
+}
+
+.footer1 {
+  background-color: #4F6D83 !important;
+  text-align: center  !important;
+
+  width: 100%;
+  bottom: 0px;
+  font-size: larger;
+  font-weight: 500;
+
+}
+
+.form-container{
+  height: 100%;
+  margin-left: 0px !important;
+  width: 36% !important;
+  float: left;
+}
+
+.section-form{
+  margin-top: 180px !important; 
+  width: 100% !important;
+  padding-bottom: 100px;
+  overflow: hidden;
+}
+
+#form3Example3{
+  height: 55px;
+}
+
+#form3Example4{
+  height: 55px;
+}
+
+.person-icon{
+  position: absolute;
+}
+
+.lockIcon{
+  position: absolute;
+}
+
+.form-outline{
+  position: relative;
+  color: #035b9a;
+  input::placeholder { 
+    color: rgb(170, 157, 157);
+    opacity: 1;
+    font-weight: 500;
+    font-size: 14px;
+    padding-left: 6px;
+  }
+}
+
+.container-fluid{
+  background-color: grey;
+}
+
+#form-outline-password{
+  margin-top: 28px;
+}
+
+.bottom-text{
+  font-size: 12px;
+  padding-left: 14px;
+  line-height: 28px;
+}
+
+.bottom-count{
+  font-size: 12px;
+  padding-left: 14px;
+  line-height: 28px;
+  margin-left: 54%;
+}
+
+.form-wrapper{
+  width:  40% !important;
+  height: 500px;
+  align-items: center;
+}
+
+.fed-img {
+  width: 57% !important;
+  height: 500px;
+  margin-top: 30px !important;
+  align-items: bottom;
+  margin-left: 3%;
+}
+
+.form-elm{
+  width: 380;
+  margin-left: 130px;
+}
+
+.checkbox-elm{
+  margin-top: 16px;
+  height: 100px;
+  input{
+    height: 16px;
+    width: 16px;
+    margin-left: 148px !important;
+    
+  }
+  small{
+    font-size: 12px;
+    margin-left: 8px;
+  }
+}
+
+.submit-button {
+  font-size: 12px;
+}
+
+#checkbox-text{
+  margin-bottom: 3px;
+}
