@@ -1,4 +1,3 @@
-
 :root {
     --pet-smart--primary: #0067B2;
     --header-navigation-background: #FFFFFF;
@@ -16,6 +15,7 @@
     --dashboard-card-bg: #fff;
     --dashboard-card-icon-bg: #F7F6FD;
     --dashboard-card-text-color: #717171;
+    --filter-button-text-color: #414141;
     // --bs-body-font-family: 'Josefin Sans', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
@@ -337,6 +337,114 @@
                 line-height: 18px;
                 color: var(--dashboard-card-text-color);
             }
+        }
+    }
+}
+
+.filter-section {
+    margin-top: 56px;
+
+    .filter-section__header {
+        display: flex;
+        align-items: center;
+    }
+
+    .filter-section__button {
+        display: flex;
+        align-items: center;
+        border: 0;
+        background-color: transparent;
+
+        .filter-section__icon {
+            margin-right: 24px;
+        }
+
+        .filter-section-title {
+            font-family: var(--bs-lato-font-family);
+            font-weight: 700;
+            font-size: 18px;
+            line-height: 22px;
+            color: var(--filter-button-text-color);
+        }
+
+        .filter-section-dp-icon {
+            margin-left: 34px;
+        }
+    }
+}
+
+.shipping-list {
+    --table-cell-bg: #fff;
+    --table-header-text: #414141;
+    --table-body-text: #414141;
+    margin-top: 27px;
+
+    .filter-table {
+        table-layout: fixed;
+
+        th {
+            width: 233px;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            background: var(--table-cell-bg);
+
+            font-family: var(--bs-lato-font-family);
+            font-weight: 700 !important;
+            font-size: 12px !important;
+            padding: 12px 20px !important;
+            line-height: 21px;
+            letter-spacing: 0.14px;
+
+            color: var(--table-header-text);
+
+            &.status-cell {
+                width: 133px;
+            }
+
+            .filter-table__header {
+                display: flex;
+                align-items: flex-start;
+                padding: 0;
+                .filter-table__title {
+                    text-align: left;
+                }
+
+                &.filter-table__header--button {
+                    background-color: transparent;
+                    border: 0;
+                }
+
+                .filter-table__sort-icon {
+                    margin-left: 17px;
+                    transition: 0.3s all;
+
+                    &.none {
+                        opacity: 0;
+                    }
+
+                    &.ascending {
+                        transform: rotate(180deg);
+                    }
+
+                    &.desending {
+                        transform: rotate(0deg);
+                    }
+                }
+
+            }
+        }
+
+        td {
+
+            font-family: var(--bs-lato-font-family);
+            font-size: 16px !important;
+            padding: 12px 20px !important;
+            line-height: 21px;
+            letter-spacing: 0.14px;
+            font-weight: 400!important;
+            line-height: 21px;
+            color: var(--table-body-text);
         }
     }
 }
