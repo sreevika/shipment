@@ -234,3 +234,7 @@ a:hover {
     display: block;
     margin-bottom: -20px;
 }
+
+.selectedCard{
+    background: aliceblue !important;
+}

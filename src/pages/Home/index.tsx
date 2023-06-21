@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 
-import Grid from "@mui/material/Grid";
 import "./home-style.css";
 import './_home.scss';
 
@@ -9,11 +8,7 @@ import pangeaImg from "../../assets/images/pangea.png";
 import checkCircle from "../../assets/images/check_circle.png";
 import transit from "../../assets/images/transit.png";
 import labelImg from "../../assets/images/label-img.png";
-import rightArrowImg from "../../assets/images/line_end_arrow.png";
-import packageImg from "../../assets/images/package.png";
-import redAlertImg from "../../assets/images/red-alert.png";
-import yellowAlertImg from "../../assets/images/yellow-alert.png";
-import greenTickImg from "../../assets/images/green-tick.png";
+
 
 import { useNavigate } from "react-router-dom";
 import {
@@ -23,17 +18,9 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TableRow,
-  TableFooter,
-  TablePagination,
-  useTheme,
-  Box,
-  IconButton,
+  TableRow
 } from "@mui/material";
-import FirstPageIcon from "@mui/icons-material/FirstPage";
-import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
-import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
-import LastPageIcon from "@mui/icons-material/LastPage";
+
 import axios from "axios";
 function getFormattedDate(date: Date) {
   const year = date.getFullYear();
@@ -41,85 +28,7 @@ function getFormattedDate(date: Date) {
   const day = date.getDate().toString().padStart(2, "0");
   return day + "/" + month + "/" + year;
 }
-interface TablePaginationActionsProps {
-  count: number;
-  page: number;
-  rowsPerPage: number;
-  onPageChange: (
-    event: React.MouseEvent<HTMLButtonElement>,
-    newPage: number
-  ) => void;
-}
 
-function TablePaginationActions(props: TablePaginationActionsProps) {
-  const theme = useTheme();
-  const { count, page, rowsPerPage, onPageChange } = props;
-
-  const handleFirstPageButtonClick = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    onPageChange(event, 0);
-  };
-
-  const handleBackButtonClick = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    onPageChange(event, page - 1);
-  };
-
-  const handleNextButtonClick = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    onPageChange(event, page + 1);
-  };
-
-  const handleLastPageButtonClick = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
-  };
-
-  return (
-    <Box sx={{ flexShrink: 0, ml: 2.5 }}>
-      <IconButton
-        onClick={handleFirstPageButtonClick}
-        disabled={page === 0}
-        aria-label="first page"
-      >
-        {theme.direction === "rtl" ? <LastPageIcon /> : <FirstPageIcon />}
-      </IconButton>
-      <IconButton
-        onClick={handleBackButtonClick}
-        disabled={page === 0}
-        aria-label="previous page"
-      >
-        {theme.direction === "rtl" ? (
-          <KeyboardArrowRight />
-        ) : (
-          <KeyboardArrowLeft />
-        )}
-      </IconButton>
-      <IconButton
-        onClick={handleNextButtonClick}
-        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label="next page"
-      >
-        {theme.direction === "rtl" ? (
-          <KeyboardArrowLeft />
-        ) : (
-          <KeyboardArrowRight />
-        )}
-      </IconButton>
-      <IconButton
-        onClick={handleLastPageButtonClick}
-        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label="last page"
-      >
-        {theme.direction === "rtl" ? <FirstPageIcon /> : <LastPageIcon />}
-      </IconButton>
-    </Box>
-  );
-}
 interface shipment {
   id: number;
   trackingNumberUniqueId: string;
@@ -237,9 +146,6 @@ export default function HomePage() {
   const [searchType, setSearchType] = useState("storeId");
   const [searchValue, setSearchValue] = useState("");
 
-  const searchTypeSelectionChange = (e: { target: { value: any } }) => {
-    setSearchType(e.target.value);
-  };
 
   const handleLogout = () => {
     navigate("/login"); // Use the navigate function to navigate to the login page
@@ -247,18 +153,18 @@ export default function HomePage() {
   let originalRows = originalRows1;
   const searchValueChange = (e: any) => {
     setSearchValue(e.target.value);
-
+    setSearchType("storeId");
     if (searchType != "" && searchValue != "") {
       if (searchType == "storeId") {
         originalRows = originalRows1.filter((item) => {
           return Object.keys(item).some(
-            (key) => item.storeId == e.target.value
+            () => item.storeId == e.target.value
           );
         });
       } else {
         originalRows = originalRows1.filter((item) => {
           return Object.keys(item).some(
-            (key) => item.trackingNumber == e.target.value
+            () => item.trackingNumber == e.target.value
           );
         });
       }
@@ -296,9 +202,11 @@ export default function HomePage() {
   const last = new Date(date.getTime() - 7 * 24 * 60 * 60 * 1000);
   const todayDate = getFormattedDate(date);
   const lastDayDate = getFormattedDate(last);
-  const [data, setData] = useState(originalRows);
+
+  const [isCardSelected, setCardSelected] = useState("");
 
   const filterByBlock = (value: string) => {
+    setCardSelected(value)
     if (value === "") setRows(originalRows);
     else {
       let filteredData = originalRows;
@@ -306,39 +214,37 @@ export default function HomePage() {
         filteredData = originalRows;
       } else if (value === "onTime") {
         filteredData = originalRows.filter((item) => {
-          return Object.keys(item).some((key) => item.isOnTime == true);
+          return Object.keys(item).some(() => item.isOnTime == true);
         });
       } else if (value === "exception") {
         filteredData = originalRows.filter((item) => {
           return Object.keys(item).some(
-            (key) => item.isException == true && item.isDelivered == false
+            () => item.isException == true && item.isDelivered == false
           );
         });
       } else if (value === "delivered") {
         filteredData = originalRows.filter((item) => {
-          return Object.keys(item).some((key) => item.isDelivered == true);
+          return Object.keys(item).some(() => item.isDelivered == true);
         });
       } else if (value === "delayed") {
         filteredData = originalRows.filter((item) => {
-          return Object.keys(item).some((key) => item.isDelayed == true);
+          return Object.keys(item).some(() => item.isDelayed == true);
         });
       } else if (value === "early") {
         filteredData = originalRows.filter((item) => {
-          return Object.keys(item).some((key) => item.isEarly == true);
+          return Object.keys(item).some(() => item.isEarly == true);
         });
       } else if (value === "cancelled") {
         filteredData = originalRows.filter((item) => {
-          return Object.keys(item).some((key) => item.isCancelled == true);
+          return Object.keys(item).some(() => item.isCancelled == true);
         });
       } else if (value === "outForDelivery") {
         filteredData = originalRows.filter((item) => {
           return Object.keys(item).some(
-            (key) => item.isOutForDelivery == true && item.isDelivered == false
+            () => item.isOutForDelivery == true && item.isDelivered == false
           );
         });
       }
-
-      setData(filteredData);
       setRows(filteredData);
     }
   };
@@ -417,11 +323,11 @@ export default function HomePage() {
                 FedEx
               </a>
             </li>
-            <li className="header-navigation__menu-item">
+            {/* <li className="header-navigation__menu-item">
               <a href="#" className="header-navigation__menu-link">
                 UPS
               </a>
-            </li>
+            </li> */}
           </ul>
           <div className="header-navigation__search-bar">
             <div className="header-navigation__search-select">
@@ -501,7 +407,7 @@ export default function HomePage() {
           </div>
           <div className="header-navigation__profile">
             <ul className="header-navigation__actions">
-              <li className="header-navigation__item-actions">
+              {/* <li className="header-navigation__item-actions">
                 <a href="#" className="header-navigation__item-actions-anchor">
                   <div className="header-navigation__item-actions-icon">
                     <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -512,9 +418,9 @@ export default function HomePage() {
                     Alerts
                   </div>
                 </a>
-              </li>
+              </li> */}
               <li className="header-navigation__item-actions">
-                <a href="#" className="header-navigation__item-actions-anchor">
+                <a href="#" className="header-navigation__item-actions-anchor" onClick={handleLogout}>
                   <div className="header-navigation__item-actions-icon">
                     <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M1.833 14C1.45833 14 1.14233 13.8717 0.885 13.615C0.628333 13.3577 0.5 13.0417 0.5 12.667V1.74999C0.5 1.37533 0.628333 1.05933 0.885 0.801992C1.14233 0.545326 1.45833 0.416992 1.833 0.416992H7.104V1.49999H1.833C1.77767 1.49999 1.72233 1.52766 1.667 1.58299C1.611 1.63899 1.583 1.69466 1.583 1.74999V12.667C1.583 12.7223 1.611 12.7777 1.667 12.833C1.72233 12.889 1.77767 12.917 1.833 12.917H7.104V14H1.833ZM10.604 10.104L9.833 9.33299L11.417 7.74999H5.104V6.66699H11.417L9.833 5.08299L10.604 4.31199L13.5 7.20799L10.604 10.104Z" fill="#0067B2" />
@@ -546,7 +452,7 @@ export default function HomePage() {
       </div>
       <div className="dashboard-at-glance container mid-container">
         {/* use object/array to handle this */}
-        <button className="dashboard-at-glance__card" onClick={() => filterByBlock("all")}>
+        <button  className={isCardSelected == "all" ? 'selectedCard dashboard-at-glance__card' : 'dashboard-at-glance__card'}  onClick={() => filterByBlock("all")}>
           <div className="dashboard-at-glance__card-icon">
             {dashboardIconPack("onTime")}
           </div>
@@ -559,21 +465,21 @@ export default function HomePage() {
             </div>
           </div>
         </button>
-        <button className="dashboard-at-glance__card"
-          onClick={() => filterByBlock("all")}>
+        <button  className={isCardSelected == "onTime" ? 'selectedCard dashboard-at-glance__card' : 'dashboard-at-glance__card'}
+          onClick={() => filterByBlock("onTime")}>
           <div className="dashboard-at-glance__card-icon">
             {dashboardIconPack("onTime")}
           </div>
           <div className="dashboard-at-glance__card-stats">
             <div className="dashboard-at-glance__card-count">
-              {totalCount}
+              {onTimeCount}
             </div>
             <div className="dashboard-at-glance__card-title">
               On Time
             </div>
           </div>
         </button>
-        <button className="dashboard-at-glance__card"
+        <button className={isCardSelected == "exception" ? 'selectedCard dashboard-at-glance__card' : 'dashboard-at-glance__card'}
           onClick={() => filterByBlock("exception")}>
           <div className="dashboard-at-glance__card-icon">
             {dashboardIconPack("error")}
@@ -587,8 +493,8 @@ export default function HomePage() {
             </div>
           </div>
         </button>
-        <button className="dashboard-at-glance__card"
-          onClick={() => filterByBlock("outbound")}>
+        <button className={isCardSelected == "outForDelivery" ? 'selectedCard dashboard-at-glance__card' : 'dashboard-at-glance__card'}
+          onClick={() => filterByBlock("outForDelivery")}>
           <div className="dashboard-at-glance__card-icon">
             {dashboardIconPack("outbound")}
           </div>
@@ -601,7 +507,7 @@ export default function HomePage() {
             </div>
           </div>
         </button>
-        <button className="dashboard-at-glance__card"
+        <button className={isCardSelected == "early" ? 'selectedCard dashboard-at-glance__card' : 'dashboard-at-glance__card'}
           onClick={() => filterByBlock("early")}>
           <div className="dashboard-at-glance__card-icon">
             {dashboardIconPack("success")}
@@ -615,7 +521,7 @@ export default function HomePage() {
             </div>
           </div>
         </button>
-        <button className="dashboard-at-glance__card"
+        <button  className={isCardSelected == "delayed" ? 'selectedCard dashboard-at-glance__card' : 'dashboard-at-glance__card'}
           onClick={() => filterByBlock("delayed")}>
           <div className="dashboard-at-glance__card-icon">
             {dashboardIconPack("caution")}
@@ -629,7 +535,7 @@ export default function HomePage() {
             </div>
           </div>
         </button>
-        <button className="dashboard-at-glance__card"
+        <button  className={isCardSelected == "delivered" ? 'selectedCard dashboard-at-glance__card' : 'dashboard-at-glance__card'}
           onClick={() => filterByBlock("delivered")}>
           <div className="dashboard-at-glance__card-icon">
             {dashboardIconPack("success")}
@@ -643,10 +549,10 @@ export default function HomePage() {
             </div>
           </div>
         </button>
-        <button className="dashboard-at-glance__card"
+        <button className={isCardSelected == "cancelled" ? 'selectedCard dashboard-at-glance__card' : 'dashboard-at-glance__card'}
           onClick={() => filterByBlock("cancelled")}>
           <div className="dashboard-at-glance__card-icon">
-            {dashboardIconPack("outbound")}
+            {dashboardIconPack("cancelled")}
           </div>
           <div className="dashboard-at-glance__card-stats">
             <div className="dashboard-at-glance__card-count">

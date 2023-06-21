@@ -20,7 +20,8 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.11.2",
     "sass": "^1.63.4",
-    "sweetalert2": "^11.7.12"
+    "sweetalert2": "^11.7.12",
+    "web-vitals": "^3.3.2"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",
