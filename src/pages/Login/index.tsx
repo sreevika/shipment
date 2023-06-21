@@ -1,6 +1,6 @@
 import { FormEvent, useState } from "react";
 
-import "../../App.css";
+import "../../App.scss";
 
 import "./login-style.scss";
 //import "../assets/images/petsmart-logo.png"
