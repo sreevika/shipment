@@ -177,6 +177,36 @@ interface shipment {
   isOutForDelivery: boolean;
 }
 
+function dashboardIconPack(iconName: string) {
+  switch (iconName) {
+    case 'onTime': return (
+      <svg width="28" height="20" viewBox="0 0 28 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12.6665 19.3334V11.3334H0.666504V8.66675H12.6665V0.666748L27.3332 10.0001L12.6665 19.3334Z" fill="#0067B2" />
+      </svg>
+    )
+    case 'error': return (
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M14.0001 20.6665C14.3334 20.6665 14.6113 20.5556 14.8337 20.3337C15.0556 20.1113 15.1665 19.8334 15.1665 19.5001C15.1665 19.1668 15.0556 18.8833 14.8337 18.6497C14.6113 18.4166 14.3334 18.3001 14.0001 18.3001C13.6668 18.3001 13.3889 18.4166 13.1665 18.6497C12.9446 18.8833 12.8337 19.1668 12.8337 19.5001C12.8337 19.8334 12.9446 20.1113 13.1665 20.3337C13.3889 20.5556 13.6668 20.6665 14.0001 20.6665ZM12.9665 15.5001H15.1665V7.2001H12.9665V15.5001ZM14.0001 27.3337C12.1558 27.3337 10.4281 26.9836 8.8169 26.2833C7.2057 25.5836 5.7945 24.6281 4.5833 23.4169C3.3721 22.2057 2.41664 20.7945 1.7169 19.1833C1.01664 17.5721 0.666504 15.8444 0.666504 14.0001C0.666504 12.1558 1.01664 10.4225 1.7169 8.8001C2.41664 7.1777 3.3721 5.7665 4.5833 4.5665C5.7945 3.3665 7.2057 2.41664 8.8169 1.7169C10.4281 1.01664 12.1558 0.666504 14.0001 0.666504C15.8444 0.666504 17.5777 1.01664 19.2001 1.7169C20.8225 2.41664 22.2337 3.3665 23.4337 4.5665C24.6337 5.7665 25.5836 7.1777 26.2833 8.8001C26.9836 10.4225 27.3337 12.1558 27.3337 14.0001C27.3337 15.8444 26.9836 17.5721 26.2833 19.1833C25.5836 20.7945 24.6337 22.2057 23.4337 23.4169C22.2337 24.6281 20.8225 25.5836 19.2001 26.2833C17.5777 26.9836 15.8444 27.3337 14.0001 27.3337Z" fill="#E5002E" />
+      </svg>
+    )
+    case 'outbound': return (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M2.2336 24C1.6336 24 1.1112 23.7779 0.6664 23.3336C0.222134 22.8888 0 22.3664 0 21.7664V2.2336C0 1.6336 0.222134 1.1112 0.6664 0.6664C1.1112 0.222134 1.6336 0 2.2336 0H21.7664C22.3664 0 22.8888 0.222134 23.3336 0.6664C23.7779 1.1112 24 1.6336 24 2.2336V21.7664C24 22.3664 23.7779 22.8888 23.3336 23.3336C22.8888 23.7779 22.3664 24 21.7664 24H2.2336ZM5.3336 18.6664H12V16H5.3336V18.6664ZM6.6664 13.1L12 10.4336L17.3336 13.1V2.2336H6.6664V13.1Z" fill="#4B1088" />
+      </svg>
+    )
+    case 'caution': return (
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M14.0001 20.6665C14.3334 20.6665 14.6113 20.5556 14.8337 20.3337C15.0556 20.1113 15.1665 19.8334 15.1665 19.5001C15.1665 19.1668 15.0556 18.8833 14.8337 18.6497C14.6113 18.4166 14.3334 18.3001 14.0001 18.3001C13.6668 18.3001 13.3889 18.4166 13.1665 18.6497C12.9446 18.8833 12.8337 19.1668 12.8337 19.5001C12.8337 19.8334 12.9446 20.1113 13.1665 20.3337C13.3889 20.5556 13.6668 20.6665 14.0001 20.6665ZM12.9665 15.5001H15.1665V7.2001H12.9665V15.5001ZM14.0001 27.3337C12.1558 27.3337 10.4281 26.9836 8.8169 26.2833C7.2057 25.5836 5.7945 24.6281 4.5833 23.4169C3.3721 22.2057 2.41664 20.7945 1.7169 19.1833C1.01664 17.5721 0.666504 15.8444 0.666504 14.0001C0.666504 12.1558 1.01664 10.4225 1.7169 8.8001C2.41664 7.1777 3.3721 5.7665 4.5833 4.5665C5.7945 3.3665 7.2057 2.41664 8.8169 1.7169C10.4281 1.01664 12.1558 0.666504 14.0001 0.666504C15.8444 0.666504 17.5777 1.01664 19.2001 1.7169C20.8225 2.41664 22.2337 3.3665 23.4337 4.5665C24.6337 5.7665 25.5836 7.1777 26.2833 8.8001C26.9836 10.4225 27.3337 12.1558 27.3337 14.0001C27.3337 15.8444 26.9836 17.5721 26.2833 19.1833C25.5836 20.7945 24.6337 22.2057 23.4337 23.4169C22.2337 24.6281 20.8225 25.5836 19.2001 26.2833C17.5777 26.9836 15.8444 27.3337 14.0001 27.3337Z" fill="#E9B430" />
+      </svg>
+    )
+    case 'success': return (
+      <svg width="30" height="28" viewBox="0 0 30 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10.4668 28L7.9335 23.7333L3.1335 22.6667L3.60016 17.7333L0.333496 14L3.60016 10.2667L3.1335 5.33333L7.9335 4.26667L10.4668 0L15.0002 1.93333L19.5335 0L22.0668 4.26667L26.8668 5.33333L26.4002 10.2667L29.6668 14L26.4002 17.7333L26.8668 22.6667L22.0668 23.7333L19.5335 28L15.0002 26.0667L10.4668 28ZM13.6002 18.7333L21.1335 11.2L19.2668 9.26667L13.6002 14.9333L10.7335 12.1333L8.86683 14L13.6002 18.7333Z" fill="#008903" />
+      </svg>
+    )
+  }
+}
+
 let originalRows1: shipment[] = [];
 const EDUCONNECT_URL = `https://shipmenttrackingapi-qa.signsharecloud.com/api`;
 export default function HomePage() {
@@ -431,7 +461,7 @@ export default function HomePage() {
               <div className="header-navigation__search-wrapper">
                 <div className="search__input-box-prefix">
                   <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12.5 11H11.71L11.43 10.73C12.41 9.59 13 8.11 13 6.5C13 2.91 10.09 0 6.5 0C2.91 0 0 2.91 0 6.5C0 10.09 2.91 13 6.5 13C8.11 13 9.59 12.41 10.73 11.43L11 11.71V12.5L16 17.49L17.49 16L12.5 11ZM6.5 11C4.01 11 2 8.99 2 6.5C2 4.01 4.01 2 6.5 2C8.99 2 11 4.01 11 6.5C11 8.99 8.99 11 6.5 11Z" fill="black" fill-opacity="0.54" />
+                    <path d="M12.5 11H11.71L11.43 10.73C12.41 9.59 13 8.11 13 6.5C13 2.91 10.09 0 6.5 0C2.91 0 0 2.91 0 6.5C0 10.09 2.91 13 6.5 13C8.11 13 9.59 12.41 10.73 11.43L11 11.71V12.5L16 17.49L17.49 16L12.5 11ZM6.5 11C4.01 11 2 8.99 2 6.5C2 4.01 4.01 2 6.5 2C8.99 2 11 4.01 11 6.5C11 8.99 8.99 11 6.5 11Z" fill="black" fillOpacity="0.54" />
                   </svg>
                 </div>
 
@@ -501,24 +531,134 @@ export default function HomePage() {
       </nav>
       <div className="hero-banner">
         <div className="container mid-container hero-banner__container">
-          <div className="hero-banner__container--title">Shipment Dashboard</div>
+          <div className="hero-banner__container--title">
+            <div className="hero-banner__container-sub-title">
+              PS1013
+            </div>
+            <div className="hero-banner__container-main-title">
+              Shipment Dashboard
+            </div>
+          </div>
           <div className="hero-banner__container--date">
             {lastDayDate} - {todayDate}
           </div>
         </div>
       </div>
-      {/* <div className="imgBanner">
-        <div className="container imgBanner-container">
-          <div className="imgBanner-content">
-            <div className="LabelHead">Shipment Dashboard</div>
-            <div className=" LabelHead1">
-              {lastDayDate} - {todayDate}
+      <div className="dashboard-at-glance container mid-container">
+        {/* use object/array to handle this */}
+        <button className="dashboard-at-glance__card" onClick={() => filterByBlock("all")}>
+          <div className="dashboard-at-glance__card-icon">
+            {dashboardIconPack("onTime")}
+          </div>
+          <div className="dashboard-at-glance__card-stats">
+            <div className="dashboard-at-glance__card-count">
+              {totalCount}
+            </div>
+            <div className="dashboard-at-glance__card-title">
+              All Shipment
             </div>
           </div>
-        </div>
-        <div className="dashboard-pattern"></div>
-      </div> */}
-      < div className="GridPannel" >
+        </button>
+        <button className="dashboard-at-glance__card"
+          onClick={() => filterByBlock("all")}>
+          <div className="dashboard-at-glance__card-icon">
+            {dashboardIconPack("onTime")}
+          </div>
+          <div className="dashboard-at-glance__card-stats">
+            <div className="dashboard-at-glance__card-count">
+              {totalCount}
+            </div>
+            <div className="dashboard-at-glance__card-title">
+              On Time
+            </div>
+          </div>
+        </button>
+        <button className="dashboard-at-glance__card"
+          onClick={() => filterByBlock("exception")}>
+          <div className="dashboard-at-glance__card-icon">
+            {dashboardIconPack("error")}
+          </div>
+          <div className="dashboard-at-glance__card-stats">
+            <div className="dashboard-at-glance__card-count">
+              {exceptionCount}
+            </div>
+            <div className="dashboard-at-glance__card-title">
+              Exceptions
+            </div>
+          </div>
+        </button>
+        <button className="dashboard-at-glance__card"
+          onClick={() => filterByBlock("outbound")}>
+          <div className="dashboard-at-glance__card-icon">
+            {dashboardIconPack("outbound")}
+          </div>
+          <div className="dashboard-at-glance__card-stats">
+            <div className="dashboard-at-glance__card-count">
+              {outForDeliveryCount}
+            </div>
+            <div className="dashboard-at-glance__card-title">
+              Out for Delivery
+            </div>
+          </div>
+        </button>
+        <button className="dashboard-at-glance__card"
+          onClick={() => filterByBlock("early")}>
+          <div className="dashboard-at-glance__card-icon">
+            {dashboardIconPack("success")}
+          </div>
+          <div className="dashboard-at-glance__card-stats">
+            <div className="dashboard-at-glance__card-count">
+              {earlyDeliveryCount}
+            </div>
+            <div className="dashboard-at-glance__card-title">
+              Early Delivery
+            </div>
+          </div>
+        </button>
+        <button className="dashboard-at-glance__card"
+          onClick={() => filterByBlock("delayed")}>
+          <div className="dashboard-at-glance__card-icon">
+            {dashboardIconPack("caution")}
+          </div>
+          <div className="dashboard-at-glance__card-stats">
+            <div className="dashboard-at-glance__card-count">
+              {delayedCount}
+            </div>
+            <div className="dashboard-at-glance__card-title">
+              Delayed
+            </div>
+          </div>
+        </button>
+        <button className="dashboard-at-glance__card"
+          onClick={() => filterByBlock("delivered")}>
+          <div className="dashboard-at-glance__card-icon">
+            {dashboardIconPack("success")}
+          </div>
+          <div className="dashboard-at-glance__card-stats">
+            <div className="dashboard-at-glance__card-count">
+              {deliveredCount}
+            </div>
+            <div className="dashboard-at-glance__card-title">
+              Delivered
+            </div>
+          </div>
+        </button>
+        <button className="dashboard-at-glance__card"
+          onClick={() => filterByBlock("cancelled")}>
+          <div className="dashboard-at-glance__card-icon">
+            {dashboardIconPack("outbound")}
+          </div>
+          <div className="dashboard-at-glance__card-stats">
+            <div className="dashboard-at-glance__card-count">
+              {cancelledCount}
+            </div>
+            <div className="dashboard-at-glance__card-title">
+              Shipment Cancelled
+            </div>
+          </div>
+        </button>
+      </div>
+      {/* <div className="GridPannel" >
         <Grid container spacing={2} columns={16}>
           <Grid item xs={4}>
             <div
@@ -680,7 +820,7 @@ export default function HomePage() {
             </div>
           </Grid>
         </Grid>
-      </div >
+      </div > */}
       <div className="table-div">
         <Paper>
           <TableContainer sx={{ maxHeight: 500 }}>

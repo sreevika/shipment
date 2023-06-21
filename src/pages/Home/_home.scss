@@ -14,35 +14,16 @@
     --header-input-box-text-color: #000;
     --header-logo-box-border-color: #00000080;
     --hero-banner-title-color: #fff;
+    --dashboard-card-bg: #fff;
+    --dashboard-card-icon-bg: #F7F6FD;
+    --dashboard-card-text-color: #717171;
     // --bs-body-font-family: 'Josefin Sans', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 //max-container max-width: 1440px
 //container max-width: 1264px
 //mid-container: 1088px;
-html {
-    body {
-        --base-fallback-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-            'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-            sans-serif;
-        --bs-body-font-family: 'Josefin Sans', var(--base-fallback-font);
-        --bs-lato-font-family: 'Lato', var(--base-fallback-font);
-        --bs-roboto-font-family: 'Roboto', var(--base-fallback-font);
-        --bs-spartan-font-family: 'League Spartan', var(--base-fallback-font);
-    }
 
-    .container {
-        max-width: 1264px;
-    }
-
-    .max-container {
-        max-width: 1440px;
-    }
-
-    .mid-container {
-        max-width: 1088px;
-    }
-}
 
 .header-navigation {
     padding: 9px 17px;
@@ -264,17 +245,34 @@ html {
     background-size: cover;
 
     .hero-banner__container {
-        padding: 0;
         padding-top: 42px;
         display: flex;
         align-items: center;
 
         .hero-banner__container--title {
-            font-family: var(--bs-spartan-font-family);
-            font-weight: 800;
-            font-size: 21px;
-            line-height: 29px;
-            color: var(--hero-banner-title-color);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+
+            .hero-banner__container-sub-title {
+                font-family: var(--bs-roboto-font-family);
+                font-weight: 500;
+                font-size: 16px;
+                line-height: 24px;
+                letter-spacing: 0.15px;
+                margin-bottom: 3px;
+                color: var(--hero-banner-title-color);
+                position: absolute;
+                top: -24px;
+            }
+
+            .hero-banner__container-main-title {
+                font-family: var(--bs-spartan-font-family);
+                font-weight: 800;
+                font-size: 21px;
+                line-height: 29px;
+                color: var(--hero-banner-title-color);
+            }
         }
 
         .hero-banner__container--date {
@@ -289,44 +287,56 @@ html {
     }
 }
 
-.search-select-dropdown {
-    position: absolute;
-    padding: 16px 0;
-    top: 100%;
-    width: 100%;
-    background: var(--header-select-box-dp-bg-color);
-    box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.11), 0px 1px 10px rgba(0, 0, 0, 0.09), 0px 2px 4px rgba(0, 0, 0, 0.16);
-    border-radius: 4px;
-    min-width: 191px;
-    z-index: 2;
-    pointer-events: none;
-    opacity: 0;
-    transform: translateY(-10px);
-    transition: 0.3s all;
 
-    &.active {
-        opacity: 1;
-        pointer-events: all;
-        transform: translateY(5px);
-    }
 
-    .search-select-dp-wrapper {
-        list-style: none;
-        margin: 0;
-        padding: 0;
+.dashboard-at-glance {
+    position: relative;
+    margin-top: -26px;
+    display: grid;
+    grid-gap: 20px;
+    grid-template-columns: repeat(4, 257px);
 
-        .search-select-dp-item {
-            padding: 10px 16px;
-            transition: 0.3s all;
-            cursor: pointer;
 
-            a {
-                text-decoration: none;
-                color: var(--header-select-box-dp-text-color);
+    .dashboard-at-glance__card {
+        border: 0;
+        background-color: var(--dashboard-card-bg);
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
+        border-radius: 4px;
+        padding: 20px 17px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        column-gap: 18px;
+        text-align: left;
+
+        .dashboard-at-glance__card-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            padding: 13px;
+            background-color: var(--dashboard-card-icon-bg);
+
+        }
+
+        .dashboard-at-glance__card-stats {
+            .dashboard-at-glance__card-count {
+                color: var(--pet-smart--primary);
+                letter-spacing: 0.15px;
+                font-family: var(--bs-body-font-family);
+                font-weight: 700;
+                font-size: 24px;
+                line-height: 24px;
             }
 
-            &:hover {
-                background-color: var(--header-select-box-dp-hover-bg-color);
+            .dashboard-at-glance__card-title {
+                font-family: var(--bs-lato-font-family);
+                font-weight: 700;
+                font-size: 14px;
+                line-height: 18px;
+                color: var(--dashboard-card-text-color);
             }
         }
     }
