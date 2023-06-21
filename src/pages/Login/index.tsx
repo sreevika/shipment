@@ -68,7 +68,7 @@ export default function LoginPage() {
               <div className="form-outline mb-3 wrapper" id="form-outline-password">
                 <div className="lockIcon">
                   <HttpsOutlinedIcon sx={{ fontSize: 24, marginTop: 2, marginLeft: 1.7 }} />
-                  <RemoveRedEyeOutlinedIcon sx={{ fontSize: 24, marginTop: 2, marginLeft: 36.5, color: 'grey' }} />
+                  <RemoveRedEyeOutlinedIcon sx={{ fontSize: 24, marginTop: 2, marginLeft: 38, color: 'grey' }} />
                 </div>
                 <input type="password" id="form3Example4" className="form-control form-control-lg"
                   placeholder="Password" name="psw" value={password} onChange={passwordChangeHandler} />
