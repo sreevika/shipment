@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=League+Spartan:wght@100;200;300;400;500;600;700;800;900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 
 :root {
     --pet-smart--primary: #0067B2;
@@ -13,9 +12,14 @@
     --header-select-box-dp-text-color: #414141;
     --header-input-box-placeholder-color: #0000008a;
     --header-input-box-text-color: #000;
+    --header-logo-box-border-color: #00000080;
+    --hero-banner-title-color: #fff;
     // --bs-body-font-family: 'Josefin Sans', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
+//max-container max-width: 1440px
+//container max-width: 1264px
+//mid-container: 1088px;
 html {
     body {
         --base-fallback-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -24,6 +28,19 @@ html {
         --bs-body-font-family: 'Josefin Sans', var(--base-fallback-font);
         --bs-lato-font-family: 'Lato', var(--base-fallback-font);
         --bs-roboto-font-family: 'Roboto', var(--base-fallback-font);
+        --bs-spartan-font-family: 'League Spartan', var(--base-fallback-font);
+    }
+
+    .container {
+        max-width: 1264px;
+    }
+
+    .max-container {
+        max-width: 1440px;
+    }
+
+    .mid-container {
+        max-width: 1088px;
     }
 }
 
@@ -31,8 +48,12 @@ html {
     padding: 9px 17px;
     height: 58px;
     background-color: var(--header-navigation-background);
-    display: flex;
-    align-items: center;
+
+    .header-navigation-container {
+        display: flex;
+        align-items: center;
+        padding: 0;
+    }
 
     .header-navigation__product-image {
         display: flex;
@@ -42,6 +63,19 @@ html {
 
     .header-navigation__logo-item {
         display: block;
+        position: relative;
+
+        +.header-navigation__logo-item {
+            &:before {
+                content: '';
+                position: absolute;
+                top: 5px;
+                left: -7px;
+                height: 29px;
+                width: 1px;
+                background-color: var(--header-logo-box-border-color);
+            }
+        }
 
         &.header-navigation__ps-logo {
             .ps-logo__image {
@@ -98,7 +132,7 @@ html {
         align-items: center;
         width: 100%;
 
-        @media (max-width: 1200px) {
+        @media (max-width: 1264px) {
             margin-left: 30px;
         }
 
@@ -219,6 +253,38 @@ html {
                 color: var(--pet-smart--primary);
 
             }
+        }
+    }
+}
+
+.hero-banner {
+    height: 121px;
+    background-image: url('../../assets/images/hero-banner-img.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    .hero-banner__container {
+        padding: 0;
+        padding-top: 42px;
+        display: flex;
+        align-items: center;
+
+        .hero-banner__container--title {
+            font-family: var(--bs-spartan-font-family);
+            font-weight: 800;
+            font-size: 21px;
+            line-height: 29px;
+            color: var(--hero-banner-title-color);
+        }
+
+        .hero-banner__container--date {
+            font-family: var(--bs-roboto-font-family);
+            color: var(--hero-banner-title-color);
+            font-weight: 500;
+            font-size: 16px;
+            line-height: 24px;
+            letter-spacing: 0.15px;
+            margin-left: auto;
         }
     }
 }
