@@ -16,9 +16,12 @@
     --dashboard-card-icon-bg: #F7F6FD;
     --dashboard-card-text-color: #717171;
     --filter-button-text-color: #414141;
+
     // --bs-body-font-family: 'Josefin Sans', -apple-system, BlinkMacSystemFont, sans-serif;
 }
-
+#root {
+    background-color: #FAFAFA;
+}
 //max-container max-width: 1440px
 //container max-width: 1264px
 //mid-container: 1088px;
@@ -448,3 +451,17 @@
         }
     }
 }
+
+
+.footer1 {
+    background-color: #4F6D83 !important;
+    text-align: center  !important;
+  
+    width: 100%;
+    font-size: larger;
+    font-weight: 500;
+    bottom: 0;
+    margin-top: 2%;
+    max-height: 61px ;
+    
+  }

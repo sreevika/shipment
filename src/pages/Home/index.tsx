@@ -29,6 +29,18 @@ function getFormattedDate(date: Date) {
   return day + "/" + month + "/" + year;
 }
 
+function getFormattedDate_dt(date: any) {
+  if(date != null || date != "") {
+  date = new Date(date); 
+  const year = date.getFullYear();
+  const month = (1 + date.getMonth()).toString().padStart(2, "0");
+  const day = date.getDate().toString().padStart(2, "0");
+  return day + "/" + month + "/" + year;
+  } else {
+    return "00/00/0000";
+  }
+}
+
 interface shipment {
   id: number;
   trackingNumberUniqueId: string;
@@ -116,7 +128,7 @@ function dashboardIconPack(iconName: string) {
   }
 }
 
-let originalRows1: shipment[] = [];
+let originalRows: shipment[] = [];
 const EDUCONNECT_URL = `https://shipmenttrackingapi-qa.signsharecloud.com/api`;
 export default function HomePage() {
   const [rows, setRows] = useState<shipment[]>([]);
@@ -131,7 +143,7 @@ export default function HomePage() {
           `${EDUCONNECT_URL}/Dashboard/fedex?fromDate=2023-04-25&toDate=2023-06-23`,
           config
         );
-        originalRows1 = response.data.data;
+        originalRows = response.data.data;
         setRows(response.data.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -143,36 +155,56 @@ export default function HomePage() {
 
   const navigate = useNavigate(); // Use the useNavigate hook here
 
-  const [searchType, setSearchType] = useState("storeId");
+  const [searchType, setSearchType] = useState("Store ID");
   const [searchValue, setSearchValue] = useState("");
-
-
+  const [dropDown, setDropDown] = useState(false);
+  const [storeId, setStoreId] = useState("");
+  
   const handleLogout = () => {
     navigate("/login"); // Use the navigate function to navigate to the login page
   };
-  let originalRows = originalRows1;
-  const searchValueChange = (e: any) => {
+  let originalRows1 = originalRows;
+  const selectSearchType= () => {
+    setDropDown(!dropDown);
+  }
+  const onchangeSearchType = (value :string) => {
+    setSearchType(value);
+    setDropDown(!dropDown);
+  }
+  const searchValueChange = (e: { target: { value: any; }; }) => {
     setSearchValue(e.target.value);
-    setSearchType("storeId");
+  };
+  const clearSearchValue = () => {
+    setSearchValue("");
+  };
+  
+  
+  const searchData = (event: { key: string; }) => {
+    if (event.key === 'Enter') {
+ 
     if (searchType != "" && searchValue != "") {
-      if (searchType == "storeId") {
-        originalRows = originalRows1.filter((item) => {
+      if (searchType == "Store ID") {
+
+        setStoreId(searchValue);
+        originalRows1 = originalRows.filter((item) => {
           return Object.keys(item).some(
-            () => item.storeId == e.target.value
+            () => item.storeId == searchValue
           );
         });
       } else {
-        originalRows = originalRows1.filter((item) => {
+        originalRows1 = originalRows.filter((item) => {
           return Object.keys(item).some(
-            () => item.trackingNumber == e.target.value
+            () => item.trackingNumber ==searchValue
           );
         });
+      
       }
     } else {
-      originalRows = originalRows1;
+      originalRows1 = originalRows;
     }
 
     setRows(originalRows1);
+  }
   };
   const totalCount = Object.keys(originalRows).length;
   const onTimeCount = Object.keys(
@@ -198,6 +230,11 @@ export default function HomePage() {
   const cancelledCount = Object.keys(
     originalRows.filter((item) => item.isCancelled === true)
   ).length;
+
+  const deliveredTodayCount = Object.keys(
+    originalRows.filter((item) => item.isDelivered === true && getFormattedDate_dt(item.deliveredTime) == getFormattedDate(new Date()))
+  ).length;
+  
   const date = new Date();
   const last = new Date(date.getTime() - 7 * 24 * 60 * 60 * 1000);
   const todayDate = getFormattedDate(date);
@@ -242,6 +279,12 @@ export default function HomePage() {
         filteredData = originalRows.filter((item) => {
           return Object.keys(item).some(
             () => item.isOutForDelivery == true && item.isDelivered == false
+          );
+        });
+      } else if (value === "deliveredToday") {
+        filteredData = originalRows.filter((item) => {
+          return Object.keys(item).some(
+            () => (getFormattedDate_dt(item.deliveredTime) == getFormattedDate(new Date()) && item.isDelivered == true)
           );
         });
       }
@@ -331,8 +374,8 @@ export default function HomePage() {
           </ul>
           <div className="header-navigation__search-bar">
             <div className="header-navigation__search-select">
-              <button className="header-navigation__search-select-input">
-                Store ID
+              <button className="header-navigation__search-select-input" onClick={selectSearchType}>
+               {searchType}
                 <svg width="8" height="4" viewBox="0 0 8 4" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M0 0L3.75 3.75L7.5 0H0Z" fill="#737274" />
                 </svg>
@@ -347,15 +390,15 @@ export default function HomePage() {
               <option value="trackNo">Tracking Number</option>
             </select> */}
               {/* add active class below to show the dropdown */}
-              <div className="search-select-dropdown active">
+              <div className={dropDown ? "search-select-dropdown active" : "search-select-dropdown "}>
                 <ul className="search-select-dp-wrapper " >
-                  <li className="search-select-dp-item">
-                    <a href="#">
+                  <li className="search-select-dp-item" onClick={() => onchangeSearchType("Store ID")} >
+                    <a >
                       Store ID
                     </a>
                   </li>
-                  <li className="search-select-dp-item">
-                    <a href="#">
+                  <li className="search-select-dp-item" onClick={() => onchangeSearchType("Tracking number")} >
+                    <a>
                       Tracking number
                     </a>
 
@@ -377,8 +420,9 @@ export default function HomePage() {
                   placeholder="search..."
                   value={searchValue}
                   onChange={searchValueChange}
+                  onKeyDown={searchData}
                 />
-                <button className="search__input-box-suffix">
+                <button className="search__input-box-suffix" onClick={clearSearchValue}>
 
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M14 1.41L12.59 0L7 5.59L1.41 0L0 1.41L5.59 7L0 12.59L1.41 14L7 8.41L12.59 14L14 12.59L8.41 7L14 1.41Z" fill="#0067B2" />
@@ -388,14 +432,14 @@ export default function HomePage() {
               </div>
 
               {/* add active class below to show the dropdown */}
-              <div className="search-select-dropdown">
+              <div  className={dropDown ? "search-select-dropdown active" : "search-select-dropdown "}>
                 <ul className="search-select-dp-wrapper">
-                  <li className="search-select-dp-item">
-                    <a href="#">
+                  <li className="search-select-dp-item" onClick={() => onchangeSearchType("Store ID")}>
+                    <a >
                       Store ID
                     </a>
                   </li>
-                  <li className="search-select-dp-item">
+                  <li className="search-select-dp-item" onClick={() => onchangeSearchType("Tracking number")}>
                     <a href="#">
                       Tracking number
                     </a>
@@ -439,7 +483,7 @@ export default function HomePage() {
         <div className="container mid-container hero-banner__container">
           <div className="hero-banner__container--title">
             <div className="hero-banner__container-sub-title">
-              PS1013
+              {storeId}
             </div>
             <div className="hero-banner__container-main-title">
               Shipment Dashboard
@@ -452,19 +496,6 @@ export default function HomePage() {
       </div>
       <div className="dashboard-at-glance container mid-container">
         {/* use object/array to handle this */}
-        <button  className={isCardSelected == "all" ? 'selectedCard dashboard-at-glance__card' : 'dashboard-at-glance__card'}  onClick={() => filterByBlock("all")}>
-          <div className="dashboard-at-glance__card-icon">
-            {dashboardIconPack("onTime")}
-          </div>
-          <div className="dashboard-at-glance__card-stats">
-            <div className="dashboard-at-glance__card-count">
-              {totalCount}
-            </div>
-            <div className="dashboard-at-glance__card-title">
-              All Shipment
-            </div>
-          </div>
-        </button>
         <button  className={isCardSelected == "onTime" ? 'selectedCard dashboard-at-glance__card' : 'dashboard-at-glance__card'}
           onClick={() => filterByBlock("onTime")}>
           <div className="dashboard-at-glance__card-icon">
@@ -493,6 +524,7 @@ export default function HomePage() {
             </div>
           </div>
         </button>
+
         <button className={isCardSelected == "outForDelivery" ? 'selectedCard dashboard-at-glance__card' : 'dashboard-at-glance__card'}
           onClick={() => filterByBlock("outForDelivery")}>
           <div className="dashboard-at-glance__card-icon">
@@ -507,17 +539,17 @@ export default function HomePage() {
             </div>
           </div>
         </button>
-        <button className={isCardSelected == "early" ? 'selectedCard dashboard-at-glance__card' : 'dashboard-at-glance__card'}
-          onClick={() => filterByBlock("early")}>
+        <button className={isCardSelected == "cancelled" ? 'selectedCard dashboard-at-glance__card' : 'dashboard-at-glance__card'}
+          onClick={() => filterByBlock("cancelled")}>
           <div className="dashboard-at-glance__card-icon">
-            {dashboardIconPack("success")}
+            {dashboardIconPack("error")}
           </div>
           <div className="dashboard-at-glance__card-stats">
             <div className="dashboard-at-glance__card-count">
-              {earlyDeliveryCount}
+              {cancelledCount}
             </div>
             <div className="dashboard-at-glance__card-title">
-              Early Delivery
+              Shipment Cancelled
             </div>
           </div>
         </button>
@@ -549,20 +581,37 @@ export default function HomePage() {
             </div>
           </div>
         </button>
-        <button className={isCardSelected == "cancelled" ? 'selectedCard dashboard-at-glance__card' : 'dashboard-at-glance__card'}
-          onClick={() => filterByBlock("cancelled")}>
+        <button  className={isCardSelected == "deliveredToday" ? 'selectedCard dashboard-at-glance__card' : 'dashboard-at-glance__card'}
+          onClick={() => filterByBlock("deliveredToday")}>
           <div className="dashboard-at-glance__card-icon">
-            {dashboardIconPack("cancelled")}
+            {dashboardIconPack("success")}
           </div>
           <div className="dashboard-at-glance__card-stats">
             <div className="dashboard-at-glance__card-count">
-              {cancelledCount}
+              {deliveredTodayCount}
             </div>
             <div className="dashboard-at-glance__card-title">
-              Shipment Cancelled
+              Delivered Today
             </div>
           </div>
         </button>
+        <button className={isCardSelected == "early" ? 'selectedCard dashboard-at-glance__card' : 'dashboard-at-glance__card'}
+          onClick={() => filterByBlock("early")}>
+          <div className="dashboard-at-glance__card-icon">
+            {dashboardIconPack("success")}
+          </div>
+          <div className="dashboard-at-glance__card-stats">
+            <div className="dashboard-at-glance__card-count">
+              {earlyDeliveryCount}
+            </div>
+            <div className="dashboard-at-glance__card-title">
+              Early Delivery
+            </div>
+          </div>
+        </button>
+      
+        
+        
       </div>
       {/* <div className="GridPannel" >
         <Grid container spacing={2} columns={16}>
@@ -1064,7 +1113,16 @@ export default function HomePage() {
             </Table>
           </TableContainer>
         </Paper>
+
+      
       </div >
+      <div
+        className="flex-column flex-md-row text-center justify-content-between py-4 px-4 px-xl-5   footer1" >
+        {/* d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5  */}
+        <div className="text-white mb-3 mb-md-0 ">
+          Help for Shipment tracking  &nbsp; &nbsp; The Service Desk: servicedesk@petsmart.com &nbsp;&nbsp; 800.406.2155
+        </div>
+      </div>
     </>
   );
 }
