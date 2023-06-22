@@ -1,88 +1,14 @@
-
-@import url("https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css");
-
-body{
+body {
     background: #f2f2f2;
     font-family: 'Open Sans', sans-serif;
-  }
-  
-  .search {
-    width: 100%;
-    position: relative;
-    display: flex;
-  }
-  
-  .searchTerm {
-    border-radius: 25px;
-  }
-  
-  .searchTerm:focus{
-    color: #00B4CC;
-  }
-  
-  .searchButton {
-    width: 40px;
-    height: 36px;
-    border: 1px solid #00B4CC;
-    background: #00B4CC;
-    text-align: center;
-    color: #fff;
-    border-radius: 0 5px 5px 0;
-    cursor: pointer;
-    font-size: 20px;
-  }
-  
-  /*Resize the wrap to see the search bar change!*/
-  .wrap{
-    width: 30%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-top :2%;
-    transform: translate(-50%, -50%);
-  }
-  .logout-bar {
-    padding-right : 10%
-
-  }
-  
-
-.search-select select{
-    padding: 5px 20px;
-    margin: 2px 0;
-    display: inline-block;
-   
-}
-.navbar {
-    margin-bottom :0px;
-}
-.container {
-    padding-top :0%;
 }
 
-.imgBanner-container {
-    max-width: 80% !important;
-}
-
-.logout-link {
-    float:right;
-    right: 0px;
-    color: #0067B2 !important;
-    cursor: pointer;
-}
-body {
-    background-color: #fff;
-}
-.imgBanner {
-    position: relative;
-    height: 110px;
-    background: linear-gradient(90deg, #0A0014 0%, #23055A 40%, #50015A 80%, #4B0254 100%);
-}
-
+/* cleared */
 .imgBanner-content {
     display: flex;
     justify-content: space-between;
 }
+
 .LabelHead {
     vertical-align: middle;
     color: #fff;
@@ -90,6 +16,7 @@ body {
     font-weight: 600;
     font-size: large;
 }
+
 .LabelHead1 {
     font-weight: 300;
     vertical-align: middle;
@@ -97,49 +24,57 @@ body {
     padding-top: 42px;
     font-size: large;
 }
+
 .table-div {
-    padding:1% 10%;
-    
+    padding: 1% 10%;
+
 }
+
 .GridPannel {
-    padding:1% 10% 3% 10%;
-    margin-top :-40px;
-    
+    padding: 1% 10% 3% 10%;
+    margin-top: -40px;
+
 }
+
 Table {
     background-color: white;
     color: rgb(131 129 129);
-    
+
 }
+
 TableContainer {
-    box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),
-    0px 1px 1px 0px rgba(0,0,0,0.14), 
-    0px 1px 3px 0px rgba(0,0,0,0.12)
+    box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
+        0px 1px 1px 0px rgba(0, 0, 0, 0.14),
+        0px 1px 3px 0px rgba(0, 0, 0, 0.12)
 }
+
 .tranckRow {
-    color:#0067B2 !important;
+    color: #0067B2 !important;
 }
+
 .MuiTableCell-head {
     font-weight: 600 !important;
 }
+
 .MuiTableCell-root {
     padding: 3px 20px !important;
     font-size: 12px !important;
 }
-small{
-        color: rgb(131 129 129)
+
+small {
+    color: rgb(131 129 129)
 }
 
 .dashboardCards {
-    padding : 5% 1% 8% 8%;
-    box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),
-     0px 1px 1px 0px rgba(0,0,0,0.14), 
-     0px 1px 3px 0px rgba(0,0,0,0.12);
-     cursor: pointer;
-   
-   
+    padding: 5% 1% 8% 8%;
+    box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
+        0px 1px 1px 0px rgba(0, 0, 0, 0.14),
+        0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+    cursor: pointer;
+
+
 }
- 
+
 #circle-cover {
     /* width: 40px;
     height: 40px;
@@ -147,41 +82,46 @@ small{
     border-radius: 50px;
     align-items: center;
     padding: 2%; */
-    
+
     position: absolute;
     width: 56px;
     height: 56px;
     border-radius: 50px;
     align-items: center;
-    
+
     /* Primary/50 */
-    
+
     background: #D9D9D9;
 
 }
+
 .card-text {
     padding-left: 65px;
 }
+
 #circle-head {
- position: absolute;
-width: 32px;
-height: 32px;
-left: 14px;
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    left: 14px;
     top: 14px;
 
-align-items: center;
-background: #D9D9D9; 
+    align-items: center;
+    background: #D9D9D9;
 
 }
+
 .card-items {
     display: flex;
 }
+
 .card-header-line {
     color: #0067B2;
     cursor: pointer;
     font-weight: 900;
 
 }
+
 .dashboard-pattern {
     position: absolute;
     width: 936px;
@@ -191,9 +131,11 @@ background: #D9D9D9;
     background: url("../../assets/images/Pattern.png");
     background-repeat: repeat-x;
 }
+
 a {
     cursor: pointer;
 }
+
 a:hover {
     text-decoration: underline;
 }
@@ -204,29 +146,32 @@ a:hover {
     height: 58px;
     left: 0px;
     top: 0px;
-    
+
     /* surface */
-    
+
     background: #FFFFFF;
     /* 04 dp */
-    
+
     box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.11), 0px 1px 10px rgba(0, 0, 0, 0.09), 0px 2px 4px rgba(0, 0, 0, 0.16);
 }
+
 .navbar-brand {
-    float:left
+    float: left
 }
+
 .form-inline {
     /* right: 40%;
     position: absolute; */
     padding-left: 2%;
-    
+
 }
+
 .select-search {
     background: linear-gradient(180deg, #E4E4E4 0%, rgba(224, 224, 224, 0) 100%);
 }
 
 
-.form .fa-search{
+.form .fa-search {
 
     position: absolute;
     top: 33%;
@@ -234,6 +179,7 @@ a:hover {
     color: #9ca3af;
 
 }
+
 .nav-link1 {
     text-decoration: underline;
     text-decoration-color: rgb(190, 17, 17);
@@ -252,12 +198,14 @@ a:hover {
     align-items: center;
     width: 100%;
 }
+
 .navigation-center {
     list-style: none;
     font-weight: 500;
     font-size: 20px;
     margin: 0px;
 }
+
 .navigation-center li {
     display: inline-block;
     margin-right: 20px;
@@ -285,4 +233,8 @@ a:hover {
     height: auto;
     display: block;
     margin-bottom: -20px;
+}
+
+.selectedCard{
+    background: aliceblue !important;
 }

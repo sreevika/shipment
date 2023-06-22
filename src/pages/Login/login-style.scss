@@ -20,7 +20,7 @@ height: 100%;
 // }
 
  .elm-top{
-  background-image: url("../../assets/images/Ribbon.png");
+  background-image: url("../../assets/images/Ribbon.png"), url("../../assets/images/Pattern.png");
   background-repeat: no-repeat;
  // background-attachment: fixed;
   background-position: right top; 
@@ -222,4 +222,14 @@ input[type=text], input[type=password] {
   left: 20% !important;
   color: 'grey' !important;
   position: 'relative';
+
+}
+.error-border {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.error-border {
+  border: 1px solid red !important;
 }

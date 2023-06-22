@@ -1,5 +1,4 @@
 import { Routes, Route } from "react-router-dom";
-import React from 'react';
 import LoginPage from "../pages/Login";
 import HomePage from "../pages/Home";
 const Router = () => {
