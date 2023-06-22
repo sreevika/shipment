@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import React, { FormEvent, useState } from "react";
 
 import "../../App.css";
 
@@ -54,7 +54,7 @@ export default function LoginPage() {
                 </div>
               </div>
               <div className="track-1 mb-4">SHIPMENT TRACKING</div>
-              <div className="form-outline mb-4 wrapper">
+              <div className="form-outline wrapper">
                 <div className="person-icon">
                   <PersonOutlineIcon sx={{ fontSize: 24, marginTop: 2, marginLeft: 1.7 }} />
                 </div>
@@ -66,12 +66,12 @@ export default function LoginPage() {
 
 
               <div className="form-outline mb-3 wrapper" id="form-outline-password">
-                <div className="lockIcon">
-                  <HttpsOutlinedIcon sx={{ fontSize: 24, marginTop: 2, marginLeft: 1.7 }} />
-                  <RemoveRedEyeOutlinedIcon sx={{ fontSize: 24, marginTop: 2, marginLeft: 38, color: 'grey' }} />
-                </div>
+                    <HttpsOutlinedIcon style={{ fontSize: 24, top: 38, left: "4%", position: 'relative' }} />
+                    <RemoveRedEyeOutlinedIcon style={{fontSize: 24, top: "38px", marginRight: "5%", float: 'right', color: 'grey',position: 'relative' }} />
                 <input type="password" id="form3Example4" className="form-control form-control-lg"
                   placeholder="Password" name="psw" value={password} onChange={passwordChangeHandler} />
+                   
+                
 
                 <small className="bottom-text">Please enter your password</small>
               </div>
