@@ -347,8 +347,8 @@ export default function HomePage() {
               <option value="trackNo">Tracking Number</option>
             </select> */}
               {/* add active class below to show the dropdown */}
-              <div className="search-select-dropdown">
-                <ul className="search-select-dp-wrapper">
+              <div className="search-select-dropdown active">
+                <ul className="search-select-dp-wrapper " >
                   <li className="search-select-dp-item">
                     <a href="#">
                       Store ID
