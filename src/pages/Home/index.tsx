@@ -241,6 +241,7 @@ export default function HomePage() {
       if (searchType != "" && searchValue != "") {
         if (searchType == "Store ID") {
           setStoreId(searchValue);
+          originalRows = originalRows_backup;
           originalRows1 = originalRows.filter((item) => {
             return Object.keys(item).some(() => item.storeId == searchValue);
           });
@@ -357,60 +358,6 @@ export default function HomePage() {
   return (
     <>
       <div ref={dropdownRef}>
-        {/* <nav className="navigation">
-        <a className="logo-container">
-          <div className="mr-3 pl-4">
-            <img className="logo-1" src={petsmartImg} alt="..." />
-          </div>
-          <div className="mr-3">
-            <span className="pipe"></span>
-          </div>
-          <div>
-            <img className="logo-2" src={pangeaImg} alt="..." />
-          </div>
-        </a>
-        <div className="navigation-right">
-          <ul className="navigation-center">
-            <li>
-              <a href="" className="nav-link active nav-link1">
-                FedEx
-              </a>
-            </li>
-            <li>
-              <a href="" className="nav-link disabled">
-                Ups
-              </a>
-            </li>
-            <li className="nav-item"></li>
-          </ul>
-          <div className="form form-inline my-2 my-lg-0">
-            <div className="search-select">
-              <select
-                className="form-control form-input select-search"
-                value={searchType}
-                onChange={searchTypeSelectionChange}
-              >
-                <option value="storeId">Store ID</option>
-                <option value="trackNo">Tracking Number</option>
-              </select>
-            </div>
-            <i className="fa fa-search"></i>
-            <input
-              type="text"
-              className="form-control form-input"
-              placeholder="Search..."
-              value={searchValue}
-              onChange={searchValueChange}
-            />
-          </div>
-
-          <div className="logout-bar">
-            <a className="logout-link" onClick={handleLogout}>
-              Logout
-            </a>
-          </div>
-        </div>
-      </nav> */}
         <nav className="header-navigation">
           <div className="container max-container header-navigation-container">
             <div className="header-navigation__product-image">
