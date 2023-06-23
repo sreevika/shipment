@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import "./home-style.css";
 import "./_home.scss";
@@ -21,6 +21,7 @@ import {
 } from "@mui/material";
 
 import axios from "axios";
+
 function getFormattedDate(date: Date) {
   const year = date.getFullYear();
   const month = (1 + date.getMonth()).toString().padStart(2, "0");
@@ -178,8 +179,11 @@ function dashboardIconPack(iconName: string) {
 }
 
 let originalRows: shipment[] = [];
+let  originalRows_backup : shipment[] = [];
 const EDUCONNECT_URL = `https://shipmenttrackingapi-qa.signsharecloud.com/api`;
 export default function HomePage() {
+
+
   const [rows, setRows] = useState<shipment[]>([]);
   const token = localStorage.getItem("Authorization");
   const config = {
@@ -193,6 +197,7 @@ export default function HomePage() {
           config
         );
         originalRows = response.data.data;
+        originalRows_backup = response.data.data;
         setRows(response.data.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -202,12 +207,15 @@ export default function HomePage() {
     fetchData();
   }, []); // Empty dependency array ensures the effect runs only once
 
+console.log(JSON.stringify(originalRows_backup))
   const navigate = useNavigate(); // Use the useNavigate hook here
 
   const [searchType, setSearchType] = useState("Store ID");
   const [searchValue, setSearchValue] = useState("");
   const [dropDown, setDropDown] = useState(false);
   const [storeId, setStoreId] = useState("");
+    const dropdownRef = useRef(null);
+    
 
   const handleLogout = () => {
     navigate("/login"); // Use the navigate function to navigate to the login page
@@ -225,9 +233,15 @@ export default function HomePage() {
   };
   const clearSearchValue = () => {
     setSearchValue("");
+    console.log(JSON.stringify(originalRows_backup))
+     originalRows = originalRows_backup;
+    setRows(originalRows);
+   
   };
 
+
   const searchData = (event: { key: string }) => {
+   
     if (event.key === "Enter") {
       if (searchType != "" && searchValue != "") {
         if (searchType == "Store ID") {
@@ -235,6 +249,8 @@ export default function HomePage() {
           originalRows1 = originalRows.filter((item) => {
             return Object.keys(item).some(() => item.storeId == searchValue);
           });
+          originalRows_backup = originalRows;
+          originalRows = originalRows1;
         } else {
           originalRows1 = originalRows.filter((item) => {
             return Object.keys(item).some(
@@ -250,7 +266,6 @@ export default function HomePage() {
     }
   };
   const totalCount = Object.keys(originalRows).length;
-  console.log(totalCount);
   const onTimeCount = Object.keys(
     originalRows.filter((item) => item.isOnTime === true)
   ).length;
@@ -345,7 +360,7 @@ export default function HomePage() {
   // Rest of your code...
 
   return (
-    <>
+    <><div ref={dropdownRef}>
       {/* <nav className="navigation">
         <a className="logo-container">
           <div className="mr-3 pl-4">
@@ -1503,6 +1518,7 @@ export default function HomePage() {
           Help for Shipment tracking &nbsp; &nbsp; The Service Desk:
           servicedesk@petsmart.com &nbsp;&nbsp; 800.406.2155
         </div>
+      </div>
       </div>
     </>
   );

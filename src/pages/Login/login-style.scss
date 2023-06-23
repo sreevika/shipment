@@ -7,11 +7,11 @@ height: 1px;
 background: #eee;
 }
 .h-custom {
-height: 100%;
+height: 100vh;
 }
 @media (max-width: 450px) {
 .h-custom {
-height: 100%;
+height: 100vh;
 }
 }
 
@@ -26,6 +26,7 @@ height: 100%;
   background-position: right top; 
   background-color: #fafafa;
   background-size: 33%;
+  height: 100%;
 } 
 section {
   background-color: #fafafa;
@@ -106,11 +107,12 @@ input[type=text], input[type=password] {
   text-align: center  !important;
 
   width: 100%;
-  font-size: larger;
+  font-size: medium;
   font-weight: 500;
   bottom: 0;
-  margin-top: 2%;
-  max-height: 61px ;
+  //position: fixed;
+  height: 66px;
+  font-family: Lato;
 }
 
 
@@ -122,9 +124,10 @@ input[type=text], input[type=password] {
 }
 
 .section-form{
-  margin-top: 180px !important; 
+  padding-top: 8% !important; 
   width: 100% !important;
   overflow: hidden;
+  //height: 100vh;
 }
 
 #form3Example3{
@@ -147,6 +150,8 @@ input[type=text], input[type=password] {
 
 .form-outline{
   color: #035b9a;
+  width: 380px;
+
   input::placeholder { 
     color: rgb(170, 157, 157);
     opacity: 1;
@@ -154,6 +159,7 @@ input[type=text], input[type=password] {
     font-size: 14px;
     padding-left: 6px;
   }
+
 }
 
 .container-fluid{
@@ -178,22 +184,24 @@ input[type=text], input[type=password] {
 }
 
 .form-wrapper{
-  width:  40% !important;
-  height: 500px;
+  width:  38% !important;
+  height: 100%;
   align-items: center;
+  margin-left: 2%;
 }
 
 .fed-img {
   width: 57% !important;
-  height: 500px;
-  margin-top: 30px !important;
+  height: 100%;
+  margin-top: 3% !important;
   align-items: bottom;
-  margin-left: 3%;
+  margin-left: 2%;
 }
 
 .form-elm{
   width: 380;
-  margin-left: 130px;
+  margin-left: 25%;
+  margin-top: 5%;
 }
 
 .checkbox-elm{
@@ -213,6 +221,7 @@ input[type=text], input[type=password] {
 
 .submit-button {
   font-size: 12px;
+  width: 380px;
 }
 
 #checkbox-text{
@@ -235,4 +244,8 @@ input[type=text], input[type=password] {
 
 .error-border {
   border: 1px solid red !important;
+}
+
+.wrapper-elm{
+  height: 100vh !important;
 }
