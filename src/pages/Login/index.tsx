@@ -82,7 +82,7 @@ export default function LoginPage() {
 
   return (
 
-    <div className="wrapper-elm vh-240">
+    <div className="wrapper-elm">
 
       <div className="container-fluid h-custom">
         <div className="row elm-top d-flex justify-content-center align-items-center h-100">
