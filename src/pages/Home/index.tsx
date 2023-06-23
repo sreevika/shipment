@@ -236,6 +236,7 @@ console.log(JSON.stringify(originalRows_backup))
     console.log(JSON.stringify(originalRows_backup))
      originalRows = originalRows_backup;
     setRows(originalRows);
+    setStoreId("");
    
   };
 
