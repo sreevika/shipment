@@ -345,7 +345,7 @@ export default function HomePage() {
           return Object.keys(item).some(
             () =>
               getFormattedDate_dt(item.deliveredTime) ==
-                getFormattedDate(new Date()) && item.isDelivered == true
+              getFormattedDate(new Date()) && item.isDelivered == true
           );
         });
       }
@@ -1469,11 +1469,16 @@ export default function HomePage() {
             </TableContainer>
           </Paper>
         </div>
-        <div className="flex-column flex-md-row text-center justify-content-between py-4 px-4 px-xl-5   footer1">
+        <div className="footer__content">
           {/* d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5  */}
-          <div className="text-white mb-3 mb-md-0 ">
-            Help for Shipment tracking &nbsp; &nbsp; The Service Desk:
-            servicedesk@petsmart.com &nbsp;&nbsp; 800.406.2155
+          <div className="footer__item">
+            Help for Shipment tracking
+          </div>
+          <div className="footer__item">
+            The Service Desk:
+            servicedesk@petsmart.com
+          </div>
+          <div className="footer__item"> 800.406.2155
           </div>
         </div>
       </div>
