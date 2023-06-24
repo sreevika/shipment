@@ -220,15 +220,18 @@ export default function HomePage() {
   let originalRows1 = originalRows;
   const selectSearchType = () => {
     setDropDown(!dropDown);
+    
   };
   const onchangeSearchType = (value: string) => {
     setSearchType(value);
     setDropDown(!dropDown);
+    clearSearchValue();
   };
   const searchValueChange = (e: { target: { value: any } }) => {
     setSearchValue(e.target.value);
   };
   const clearSearchValue = () => {
+   
     setSearchValue("");
     console.log(JSON.stringify(originalRows_backup));
     originalRows = originalRows_backup;
@@ -261,7 +264,7 @@ export default function HomePage() {
       setRows(originalRows1);
     }
   };
-  const totalCount = Object.keys(originalRows).length;
+
   const onTimeCount = Object.keys(
     originalRows.filter((item) => item.isOnTime === true)
   ).length;
@@ -303,6 +306,10 @@ export default function HomePage() {
 
   const filterByBlock = (value: string) => {
     setCardSelected(value);
+    if (searchType != "Store ID") {
+      setSearchValue("");
+    }
+
     if (value === "") setRows(originalRows);
     else {
       let filteredData = originalRows;

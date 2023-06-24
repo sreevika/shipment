@@ -20,12 +20,12 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [nameError, setNameError] = useState('');
   const [passwordError, setPasswordError] = useState('');
-  const [UserIdNumber, setUserIdNumber] = useState(0);
   const [showPassword, setShowPassword] = useState(false);
+
   const unameChangeHandler = (e: { target: { value: any; }; }) => {
     setUserName(e.target.value);
     setNameError('');
-    setUserIdNumber(uname.length)
+
   };
   const passwordChangeHandler = (e: { target: { value: any; }; }) => {
     setPassword(e.target.value);
@@ -80,8 +80,8 @@ export default function LoginPage() {
   }, []);
 
   return (
-<body>
-    <div className="wrapper-elm ">
+
+    <><div className="wrapper-elm ">
 
       <div className=" container-fluid-login h-custom">
         <div className="row d-flex justify-content-center align-items-center h-100">
@@ -104,26 +104,25 @@ export default function LoginPage() {
                   <div className="person-icon">
                     <PersonOutlineIcon sx={{ fontSize: 24, marginTop: 2, marginLeft: 1.7 }} />
                   </div>
-                  <input type="text" id="form3Example3" placeholder="User ID" className={nameError ? 'error-border form-control form-control-lg' : 'form-control form-control-lg'} maxLength={11}
+                  <input type="text" id="form3Example3" placeholder="User ID" className={nameError ? 'error-border form-control form-control-lg' : 'form-control form-control-lg'} maxLength={10}
                     value={uname} onChange={unameChangeHandler} />
                   <small className="bottom-text">Please enter your ID</small>
-                  <small className="bottom-count">{UserIdNumber}/10</small>
-                </div>
+                  <small className="bottom-count">{uname.length}/10</small>
+                </div> 
 
 
                 <div className="form-outline mb-3 wrapper" id="form-outline-password">
                   <HttpsOutlinedIcon style={{ fontSize: 24, top: 38, left: "4%", position: 'relative' }} />
                   {showPassword ?
                     <VisibilityIcon style={{ fontSize: 24, top: "38px", marginRight: "5%", float: 'right', color: 'grey', position: 'relative' }} onClick={toggleShowPassword} /> :
-                    <RemoveRedEyeOutlinedIcon style={{ fontSize: 24, top: "38px", marginRight: "5%", float: 'right', color: 'grey', position: 'relative' }} onClick={toggleShowPassword} />
-                  }
+                    <RemoveRedEyeOutlinedIcon style={{ fontSize: 24, top: "38px", marginRight: "5%", float: 'right', color: 'grey', position: 'relative' }} onClick={toggleShowPassword} />}
                   <input type={showPassword ? 'text' : 'password'} id="form3Example4"
                     placeholder="Password" name="psw" value={password} onChange={passwordChangeHandler} className={passwordError ? 'error-border form-control form-control-lg' : 'form-control form-control-lg'} />
                   <small className="bottom-text">Please enter your password</small>
                 </div>
 
                 {/* <div className="d-flex justify-content-between align-items-center">
-              </div> */}
+  </div> */}
 
                 <div className="submit-button text-center mt-4 ">
                   <button type="submit" className="btn btn-lg btn1">
@@ -144,21 +143,20 @@ export default function LoginPage() {
             </div>
 
             {/* <div className="fed-img">
-              <img src={fedExImg} className="img-fluid" alt="Sample image"></img>
-            </div> */}
+      <img src={fedExImg} className="img-fluid" alt="Sample image"></img>
+    </div> */}
 
           </div>
         </div>
-       
+
       </div>
       <div className="left">
 
       </div>
 
- 
 
-    </div>
-    <div className="footer__content footer__content1" >
+
+    </div><div className="footer__content footer__content1">
         <div className="footer__item">
           Help for Shipment tracking
         </div>
@@ -168,8 +166,8 @@ export default function LoginPage() {
         </div>
         <div className="footer__item"> 800.406.2155
         </div>
-      </div>
+      </div></>
 
-    </body>
+
   );
 }
