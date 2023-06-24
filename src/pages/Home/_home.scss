@@ -466,3 +466,19 @@
     flex-shrink: 0;
     font-family: Lato;
   }
+
+.selected__filtertab {
+    margin-top: 27px;
+
+    .sel__filter__btn {
+        display: inline-flex;
+        height: 28px;
+        padding: 12px 8px 12px 12px;
+        align-items: center;
+        gap: 8px;
+        flex-shrink: 0;
+        border-radius: 16px;
+        border: 1px solid var(--primary-for-pet-smart, #0067B2);
+        background: rgba(78, 141, 214, 0.08);
+    }
+}

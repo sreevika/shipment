@@ -8,7 +8,7 @@ import pangeaImg from "../../assets/images/pangea.png";
 import checkCircle from "../../assets/images/check_circle.png";
 import transit from "../../assets/images/transit.png";
 import labelImg from "../../assets/images/label-img.png";
-
+import redAlertImg from "../../assets/images/red-alert.png";
 import { useNavigate } from "react-router-dom";
 import {
   Paper,
@@ -28,7 +28,32 @@ function getFormattedDate(date: Date) {
   const day = date.getDate().toString().padStart(2, "0");
   return day + "/" + month + "/" + year;
 }
+function getFormattedDate_view(date: any) {
+  if (date != null || date != "") {
+    date = new Date(date);
+    const year = date.getFullYear();
+    const month = (1 + date.getMonth()).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+    return day + "/" + month + "/" + year;
+  } else {
+    return "--";
+  }
+}
 
+function getFormattedDateTime_view(date: any) {
+  if (date != null || date != "") {
+    date = new Date(date);
+    const year = date.getFullYear();
+    const month = (1 + date.getMonth()).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+    const hour = date.getHours().toString().padStart(2, "00");
+    const min = date.getMinutes().toString().padStart(2, "00");
+    
+    return day + "/" + month + "/" + year +"  "+hour+":"+min;
+  } else {
+    return "--";
+  }
+}
 function getFormattedDate_dt(date: any) {
   if (date != null || date != "") {
     date = new Date(date);
@@ -241,7 +266,7 @@ export default function HomePage() {
 
   const searchData = (event: { key: string }) => {
     if (event.key === "Enter") {
-      if (searchType != "" && searchValue != "") {
+      if (searchValue != "") {
         if (searchType == "Store ID") {
           setStoreId(searchValue);
           originalRows = originalRows_backup;
@@ -921,6 +946,7 @@ export default function HomePage() {
             </button>
           </div>
         </div>
+       
         <div className="shipping-list container mid-container">
           <Paper>
             <TableContainer sx={{ maxHeight: 500 }}>
@@ -1426,6 +1452,11 @@ export default function HomePage() {
                             <img src={labelImg} />{" "}
                           </>
                         )}{" "}
+                        {row.status == "Delivery exception" && (
+                          <>
+                            <img src={redAlertImg} />{" "}
+                          </>
+                        )}{" "}
                         &nbsp; {row.status}
                         <br />
                         {row.status != "Delivered" && (
@@ -1435,7 +1466,7 @@ export default function HomePage() {
                       <TableCell align="left">
                         {row.scheduledDeliveryDate == null && <>-- </>}
                         {row.scheduledDeliveryDate != null && (
-                          <>{row.scheduledDeliveryDate} </>
+                          <>{getFormattedDate_view(row.scheduledDeliveryDate)} </>
                         )}
                       </TableCell>
                       <TableCell align="left">
@@ -1448,7 +1479,7 @@ export default function HomePage() {
                       <TableCell align="left">{row.shipperCompany}</TableCell>
                       <TableCell align="left">{row.shipperCity}</TableCell>
                       <TableCell align="left">{row.shipperState}</TableCell>
-                      <TableCell align="left">{row.shipDate}</TableCell>
+                      <TableCell align="left">{getFormattedDate_view(row.shipDate)}</TableCell>
                       <TableCell align="left">{row.deliveryCompany}</TableCell>
                       <TableCell align="left">{row.storeId}</TableCell>
                       <TableCell align="left">
@@ -1465,7 +1496,7 @@ export default function HomePage() {
                       <TableCell align="left">
                         {row.numberOfAttemptedDeliveries}
                       </TableCell>
-                      <TableCell align="left">{row.deliveredTime}</TableCell>
+                      <TableCell align="left">{getFormattedDateTime_view(row.deliveredTime)}</TableCell>
                       <TableCell align="left">
                         {row.masterTrackingNumber}
                       </TableCell>
