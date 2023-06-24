@@ -266,6 +266,8 @@ export default function HomePage() {
 
   const searchData = (event: { key: string }) => {
     if (event.key === "Enter") {
+      setCardSelected("")
+     
       if (searchValue != "") {
         if (searchType == "Store ID") {
           setStoreId(searchValue);
@@ -283,7 +285,8 @@ export default function HomePage() {
           });
         }
       } else {
-        originalRows1 = originalRows;
+        
+        originalRows1 = originalRows_backup;
       }
 
       setRows(originalRows1);
@@ -1507,9 +1510,9 @@ export default function HomePage() {
             </TableContainer>
           </Paper>
         </div>
-        <div className="footer__content">
+        {/* <div className="footer__content"> */}
           {/* d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5  */}
-          <div className="footer__item">
+          {/* <div className="footer__item">
             Help for Shipment tracking
           </div>
           <div className="footer__item">
@@ -1517,8 +1520,8 @@ export default function HomePage() {
             servicedesk@petsmart.com
           </div>
           <div className="footer__item"> 800.406.2155
-          </div>
-        </div>
+          </div> */}
+        {/* </div> */}
       </div>
     </>
   );
