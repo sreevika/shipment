@@ -250,7 +250,15 @@ input[type=text], input[type=password] {
 .error-border {
   border: 1px solid red !important;
 }
-
+.Login__error {
+  color: red;
+  font-size: 12px;
+  margin-top: 2px;
+  text-align: left;
+}
+.Login__success {
+  display:none;
+}
 .wrapper-elm{
   height:  100vh; 
   width:  100vw;

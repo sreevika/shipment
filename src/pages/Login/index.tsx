@@ -6,14 +6,28 @@ import "./login-style.scss";
 //import "../assets/images/petsmart-logo.png"
 import petsmartImg from '../../assets/images/petsmart.png';
 import pangeaImg from '../../assets/images/pangea.png';
-import { verifyLogin } from '../../api/login';
+import {verifyLogin} from '../../api/login';
+import ApiService from '../../api/ApiService';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import HttpsOutlinedIcon from '@mui/icons-material/HttpsOutlined';
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import EastOutlinedIcon from '@mui/icons-material/EastOutlined';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import { useNavigate } from "react-router-dom";
 
+interface Login {
+  data:LoginData,
+  succeeded : boolean,
+  message :string
 
+}
+interface LoginData{
+  id:number,
+  firstName:string|null,
+  lastName:string|null,
+  username:string|null,
+  accessToken :string,
+}
 
 export default function LoginPage() {
   const [uname, setUserName] = useState("");
@@ -21,15 +35,23 @@ export default function LoginPage() {
   const [nameError, setNameError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-
+  const [loginResponse, setLoginResponse] = useState<Login>([]);
+  const [loginError, setLoginError] = useState("");
+  const [loginErrorStatus, setLoginErrorStatus] = useState(false);
+  const navigate = useNavigate(); 
   const unameChangeHandler = (e: { target: { value: any; }; }) => {
     setUserName(e.target.value);
     setNameError('');
+    setLoginErrorStatus(false);
+      setLoginError("")
 
   };
   const passwordChangeHandler = (e: { target: { value: any; }; }) => {
     setPassword(e.target.value);
     setPasswordError('');
+    setLoginErrorStatus(false);
+    setLoginError("")
+
   };
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
@@ -40,8 +62,6 @@ export default function LoginPage() {
 
   const handleCheckboxChange = () => {
     setRememberMe(!rememberMe);
-
-
   };
 
   const handleLogin = (e: FormEvent<HTMLFormElement>) => {
@@ -63,8 +83,26 @@ export default function LoginPage() {
         localStorage.removeItem('password');
       }
       const loginUser = { username: uname, password: password };
-      verifyLogin(loginUser)
+      
+
+      ApiService.verifyLogin(loginUser).then((res: { data: any; })=>
+      {
+         setLoginResponse(res.data);
+      });
+  
+      if(loginResponse.succeeded != undefined) {
+        if(loginResponse.succeeded) {
+            localStorage.setItem('Authorization', loginResponse.data.accessToken);
+            setLoginErrorStatus(false);
+            setLoginError("")
+            navigate("/home");
+        } else {
+            setLoginErrorStatus(true);
+            setLoginError("The userid or password you entered is incorrect!")
+        }
+      }
     }
+  
   }
 
   useEffect(() => {
@@ -105,7 +143,7 @@ export default function LoginPage() {
                     <PersonOutlineIcon sx={{ fontSize: 24, marginTop: 2, marginLeft: 1.7 }} />
                   </div>
                   <input type="text" id="form3Example3" placeholder="User ID" className={nameError ? 'error-border form-control form-control-lg' : 'form-control form-control-lg'} maxLength={10}
-                    value={uname} onChange={unameChangeHandler} />
+                    value={uname} onChange={unameChangeHandler} onClick={unameChangeHandler}  />
                   <small className="bottom-text">Please enter your ID</small>
                   <small className="bottom-count">{uname.length}/10</small>
                 </div> 
@@ -117,13 +155,13 @@ export default function LoginPage() {
                     <VisibilityIcon style={{ fontSize: 24, top: "38px", marginRight: "5%", float: 'right', color: 'grey', position: 'relative' }} onClick={toggleShowPassword} /> :
                     <RemoveRedEyeOutlinedIcon style={{ fontSize: 24, top: "38px", marginRight: "5%", float: 'right', color: 'grey', position: 'relative' }} onClick={toggleShowPassword} />}
                   <input type={showPassword ? 'text' : 'password'} id="form3Example4"
-                    placeholder="Password" name="psw" value={password} onChange={passwordChangeHandler} className={passwordError ? 'error-border form-control form-control-lg' : 'form-control form-control-lg'} />
+                    placeholder="Password" name="psw" value={password} onChange={passwordChangeHandler} onClick={passwordChangeHandler} className={passwordError ? 'error-border form-control form-control-lg' : 'form-control form-control-lg'} />
                   <small className="bottom-text">Please enter your password</small>
                 </div>
 
                 {/* <div className="d-flex justify-content-between align-items-center">
-  </div> */}
-
+  </div> */}      
+                 <div className={loginErrorStatus ? "Login__error" : "Login__success"} >{loginError}</div> 
                 <div className="submit-button text-center mt-4 ">
                   <button type="submit" className="btn btn-lg btn1">
                     <EastOutlinedIcon />
@@ -134,8 +172,11 @@ export default function LoginPage() {
                 <div className="checkbox-elm row mt-4">
                   <input className="col-md-1" type="checkbox" checked={rememberMe} onChange={handleCheckboxChange} />
                   <small className="col-md-5 mt-1" id="checkbox-text">Remember me</small>
+                 
                 </div>
+               
               </form>
+             
               <div className="spinner-container">
                 <div className="loading-spinner">
                 </div>

@@ -22,7 +22,7 @@ export const verifyLogin = async (loginUser: any) => {
     if (response.data.succeeded) {
       // The PromiseResult.data.succeeded is true
       localStorage.setItem('Authorization', response.data.data.accessToken);
-      window.location.href = "http://localhost:5173/home";
+      //window.location.href = "http://localhost:5173/home";
       localStorage.setItem('error_message', "");
     
       //navigate("/home");
