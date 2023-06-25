@@ -1272,40 +1272,42 @@ export default function HomePage() {
                         {row.trackingNumber}
                       </TableCell>
                       <TableCell component="td" scope="row" align="left">
-                        {row.status == "Delivered" && (
+                        {row.status === "Delivered" && (
                           <>
                             <img src={checkCircle} />
                           </>
                         )}
-                        {row.isDelayed == true && (
+                        {row.isDelayed && (
                           <>
-                            <img src={transit} />{" "}
-                            {/*  add caution icon(yellow) */}
+                            <img src={transit} />
+                            {/* Add caution icon (yellow) */}
                           </>
-                        )}{" "}
-                        {row.status == "In transit" &&
-                          row.isDelayed == false && (
+                        )}
+                        {row.status === "In transit" && !row.isDelayed && (
+                          <>
+                            <img src={transit} />
+                          </>
+                        )}
+                        {row.status === "Label" && (
+                          <>
+                            <img src={labelImg} />
+                          </>
+                        )}
+                        {(row.status === "Delivery exception" ||
+                          row.status === "Shipment exception") &&
+                          !row.isDelayed && (
                             <>
-                              <img src={transit} />{" "}
+                              <img src={redAlertImg} />
                             </>
-                          )}{" "}
-                        {row.status == "Label" && (
-                          <>
-                            <img src={labelImg} />{" "}
-                          </>
-                        )}{" "}
-                        {(row.status == "Delivery exception" ||
-                          row.status == "Shipment exception") && (
-                          <>
-                            <img src={redAlertImg} />{" "}
-                          </>
-                        )}{" "}
+                          )}
                         &nbsp; {row.status}
                         <br />
-                        {row.isDelivered != true && row.isException != true && (
-                          <small>{row.statusDescription}</small>
-                        )}{" "}
+                        {row.isDelivered !== true &&
+                          row.isException !== true && (
+                            <small>{row.statusDescription}</small>
+                          )}
                       </TableCell>
+
                       <TableCell align="left">
                         {row.scheduledDeliveryDate == null && <>-- </>}
                         {row.scheduledDeliveryDate != null && (
