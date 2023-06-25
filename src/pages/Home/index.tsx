@@ -9,6 +9,7 @@ import checkCircle from "../../assets/images/check_circle.png";
 import transit from "../../assets/images/transit.png";
 import labelImg from "../../assets/images/label-img.png";
 import redAlertImg from "../../assets/images/red-alert.png";
+import yellowAlertImg from "../../assets/images/yellow-alert.png";
 import { useNavigate } from "react-router-dom";
 import {
   Paper,
@@ -1279,7 +1280,7 @@ export default function HomePage() {
                         )}
                         {row.isDelayed && (
                           <>
-                            <img src={transit} />
+                            <img src={yellowAlertImg} />
                             {/* Add caution icon (yellow) */}
                           </>
                         )}
@@ -1300,6 +1301,7 @@ export default function HomePage() {
                               <img src={redAlertImg} />
                             </>
                           )}
+                         
                         &nbsp; {row.status}
                         <br />
                         {row.isDelivered !== true &&

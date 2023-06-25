@@ -38,6 +38,16 @@ export default function LoginPage() {
   const [loginError, setLoginError] = useState("");
   const [loginErrorStatus, setLoginErrorStatus] = useState(false);
   const navigate = useNavigate();
+  // if(localStorage.getItem(password) != null ){
+  //   //setPassword(localStorage.getItem(password));
+  //   //setUserName(localStorage.getItem(username));
+
+  // } else {
+  //   setPassword("");
+  //   setUserName("");
+  // }
+  // setPassword(localStorage.getItem(password));
+  // setUserName(localStorage.getItem(username));
   const unameChangeHandler = (e: { target: { value: any } }) => {
     setUserName(e.target.value);
     setNameError("");
@@ -76,12 +86,15 @@ export default function LoginPage() {
         localStorage.setItem("username", uname);
         localStorage.setItem("password", password);
       } else {
-        localStorage.removeItem("rememberMe");
-        localStorage.removeItem("username");
-        localStorage.removeItem("password");
+        localStorage.setItem("rememberMe", "false");
+        localStorage.setItem("username", "");
+        localStorage.setItem("password", "");
+        // localStorage.removeItem("rememberMe");
+        // localStorage.removeItem("username");
+        // localStorage.removeItem("password");
       }
       const loginUser = { username: uname, password: password };
-      debugger;
+
       const response = await ApiService.verifyLogin(loginUser);
       setLoginResponse(response.data);
     }
@@ -90,7 +103,7 @@ export default function LoginPage() {
   useEffect(() => {
     if (loginResponse && loginResponse.succeeded !== undefined) {
       console.log(loginResponse);
-      debugger;
+
       if (loginResponse.succeeded) {
         localStorage.setItem("Authorization", loginResponse.data.accessToken);
         setLoginErrorStatus(false);
