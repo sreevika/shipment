@@ -48,8 +48,8 @@ function getFormattedDateTime_view(date: any) {
     const day = date.getDate().toString().padStart(2, "0");
     const hour = date.getHours().toString().padStart(2, "00");
     const min = date.getMinutes().toString().padStart(2, "00");
-    
-    return day + "/" + month + "/" + year +"  "+hour+":"+min;
+
+    return day + "/" + month + "/" + year + "  " + hour + ":" + min;
   } else {
     return "--";
   }
@@ -245,7 +245,6 @@ export default function HomePage() {
   let originalRows1 = originalRows;
   const selectSearchType = () => {
     setDropDown(!dropDown);
-    
   };
   const onchangeSearchType = (value: string) => {
     setSearchType(value);
@@ -256,7 +255,6 @@ export default function HomePage() {
     setSearchValue(e.target.value);
   };
   const clearSearchValue = () => {
-   
     setSearchValue("");
     console.log(JSON.stringify(originalRows_backup));
     originalRows = originalRows_backup;
@@ -266,8 +264,8 @@ export default function HomePage() {
 
   const searchData = (event: { key: string }) => {
     if (event.key === "Enter") {
-      setCardSelected("")
-     
+      setCardSelected("");
+
       if (searchValue != "") {
         if (searchType == "Store ID") {
           setStoreId(searchValue);
@@ -285,7 +283,6 @@ export default function HomePage() {
           });
         }
       } else {
-        
         originalRows1 = originalRows_backup;
       }
 
@@ -380,7 +377,7 @@ export default function HomePage() {
           return Object.keys(item).some(
             () =>
               getFormattedDate_dt(item.deliveredTime) ==
-              getFormattedDate(new Date()) && item.isDelivered == true
+                getFormattedDate(new Date()) && item.isDelivered == true
           );
         });
       }
@@ -742,181 +739,16 @@ export default function HomePage() {
             onClick={() => filterByBlock("early")}
           >
             <div className="dashboard-at-glance__card-icon">
-              {dashboardIconPack("success")}
+              {dashboardIconPack("onTime")}
             </div>
             <div className="dashboard-at-glance__card-stats">
               <div className="dashboard-at-glance__card-count">
                 {earlyDeliveryCount}
               </div>
-              <div className="dashboard-at-glance__card-title">
-                Early Delivery
-              </div>
+              <div className="dashboard-at-glance__card-title">Early</div>
             </div>
           </button>
         </div>
-        {/* <div className="GridPannel" >
-        <Grid container spacing={2} columns={16}>
-          <Grid item xs={4}>
-            <div
-              className="card dashboardCards"
-              onClick={() => filterByBlock("all")}
-            >
-              <div className="card-items">
-                <div id="circle-cover">
-                  <div id="circle-head">
-                    <img src={greenTickImg} />
-                  </div>
-                </div>
-                <div className="card-text">
-                  <span className="card-header-line">{totalCount}</span>
-                  <br />
-                  <small>All Shipment</small>
-                </div>
-              </div>
-            </div>
-          </Grid>
-          <Grid item xs={4}>
-            <div
-              className="card dashboardCards"
-              onClick={() => filterByBlock("onTime")}
-            >
-              <div className="card-items">
-                <div id="circle-cover">
-                  <div id="circle-head">
-                    <img src={rightArrowImg} />
-                  </div>
-                </div>
-                <div className="card-text">
-                  <span className="card-header-line">
-                    <a>{onTimeCount}</a>
-                  </span>
-                  <br />
-                  <small>On Time</small>
-                </div>
-              </div>
-            </div>
-          </Grid>
-          <Grid item xs={4}>
-            <div
-              className="card dashboardCards"
-              onClick={() => filterByBlock("exception")}
-            >
-              <div className="card-items">
-                <div id="circle-cover">
-                  <div id="circle-head">
-                    <img src={redAlertImg} />
-                  </div>
-                </div>
-                <div className="card-text">
-                  <span className="card-header-line">
-                    <a>{exceptionCount}</a>
-                  </span>
-                  <br />
-                  <small>Exceptions</small>
-                </div>
-              </div>
-            </div>
-          </Grid>
-          <Grid item xs={4}>
-            <div
-              className="card dashboardCards"
-              onClick={() => filterByBlock("outForDelivery")}
-            >
-              <div className="card-items">
-                <div id="circle-cover">
-                  <div id="circle-head">
-                    <img src={rightArrowImg} />
-                  </div>
-                </div>
-                <div className="card-text">
-                  <span className="card-header-line">
-                    {outForDeliveryCount}
-                  </span>
-                  <br />
-                  <small>Out for Delivery</small>
-                </div>
-              </div>
-            </div>
-          </Grid>
-          <Grid item xs={4}>
-            <div
-              className="card dashboardCards"
-              onClick={() => filterByBlock("early")}
-            >
-              <div className="card-items">
-                <div id="circle-cover">
-                  <div id="circle-head">
-                    <img src={greenTickImg} />
-                  </div>
-                </div>
-                <div className="card-text">
-                  <span className="card-header-line">{earlyDeliveryCount}</span>
-                  <br />
-                  <small>Early Delivery</small>
-                </div>
-              </div>
-            </div>
-          </Grid>
-          <Grid item xs={4}>
-            <div
-              className="card dashboardCards"
-              onClick={() => filterByBlock("delayed")}
-            >
-              <div className="card-items">
-                <div id="circle-cover">
-                  <div id="circle-head">
-                    <img src={yellowAlertImg} />
-                  </div>
-                </div>
-                <div className="card-text">
-                  <span className="card-header-line">{delayedCount}</span>
-                  <br />
-                  <small>Delayed</small>
-                </div>
-              </div>
-            </div>
-          </Grid>
-          <Grid item xs={4}>
-            <div
-              className="card dashboardCards"
-              onClick={() => filterByBlock("delivered")}
-            >
-              <div className="card-items">
-                <div id="circle-cover">
-                  <div id="circle-head">
-                    <img src={greenTickImg} />
-                  </div>
-                </div>
-                <div className="card-text">
-                  <span className="card-header-line">{deliveredCount}</span>
-                  <br />
-                  <small>Delivered</small>
-                </div>
-              </div>
-            </div>
-          </Grid>
-
-          <Grid item xs={4}>
-            <div
-              className="card dashboardCards"
-              onClick={() => filterByBlock("cancelled")}
-            >
-              <div className="card-items">
-                <div id="circle-cover">
-                  <div id="circle-head">
-                    <img src={packageImg} />
-                  </div>
-                </div>
-                <div className="card-text">
-                  <span className="card-header-line">{cancelledCount}</span>
-                  <br />
-                  <small>Shipment Cancelled</small>
-                </div>
-              </div>
-            </div>
-          </Grid>
-        </Grid>
-      </div > */}
         <div className="filter-section container mid-container">
           <div className="filter-section__header">
             <button className="filter-section__button">
@@ -949,7 +781,7 @@ export default function HomePage() {
             </button>
           </div>
         </div>
-       
+
         <div className="shipping-list container mid-container">
           <Paper>
             <TableContainer sx={{ maxHeight: 500 }}>
@@ -1445,31 +1277,41 @@ export default function HomePage() {
                             <img src={checkCircle} />
                           </>
                         )}
-                        {row.status == "In transit" && (
+                        {row.isDelayed == true && (
                           <>
                             <img src={transit} />{" "}
+                            {/*  add caution icon(yellow) */}
                           </>
                         )}{" "}
+                        {row.status == "In transit" &&
+                          row.isDelayed == false && (
+                            <>
+                              <img src={transit} />{" "}
+                            </>
+                          )}{" "}
                         {row.status == "Label" && (
                           <>
                             <img src={labelImg} />{" "}
                           </>
                         )}{" "}
-                        {row.status == "Delivery exception" && (
+                        {(row.status == "Delivery exception" ||
+                          row.status == "Shipment exception") && (
                           <>
                             <img src={redAlertImg} />{" "}
                           </>
                         )}{" "}
                         &nbsp; {row.status}
                         <br />
-                        {row.status != "Delivered" && (
+                        {row.isDelivered != true && row.isException != true && (
                           <small>{row.statusDescription}</small>
                         )}{" "}
                       </TableCell>
                       <TableCell align="left">
                         {row.scheduledDeliveryDate == null && <>-- </>}
                         {row.scheduledDeliveryDate != null && (
-                          <>{getFormattedDate_view(row.scheduledDeliveryDate)} </>
+                          <>
+                            {getFormattedDate_view(row.scheduledDeliveryDate)}{" "}
+                          </>
                         )}
                       </TableCell>
                       <TableCell align="left">
@@ -1482,7 +1324,9 @@ export default function HomePage() {
                       <TableCell align="left">{row.shipperCompany}</TableCell>
                       <TableCell align="left">{row.shipperCity}</TableCell>
                       <TableCell align="left">{row.shipperState}</TableCell>
-                      <TableCell align="left">{getFormattedDate_view(row.shipDate)}</TableCell>
+                      <TableCell align="left">
+                        {getFormattedDate_view(row.shipDate)}
+                      </TableCell>
                       <TableCell align="left">{row.deliveryCompany}</TableCell>
                       <TableCell align="left">{row.storeId}</TableCell>
                       <TableCell align="left">
@@ -1499,7 +1343,9 @@ export default function HomePage() {
                       <TableCell align="left">
                         {row.numberOfAttemptedDeliveries}
                       </TableCell>
-                      <TableCell align="left">{getFormattedDateTime_view(row.deliveredTime)}</TableCell>
+                      <TableCell align="left">
+                        {getFormattedDateTime_view(row.deliveredTime)}
+                      </TableCell>
                       <TableCell align="left">
                         {row.masterTrackingNumber}
                       </TableCell>
@@ -1511,8 +1357,8 @@ export default function HomePage() {
           </Paper>
         </div>
         {/* <div className="footer__content"> */}
-          {/* d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5  */}
-          {/* <div className="footer__item">
+        {/* d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5  */}
+        {/* <div className="footer__item">
             Help for Shipment tracking
           </div>
           <div className="footer__item">
