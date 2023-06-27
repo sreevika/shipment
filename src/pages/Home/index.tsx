@@ -2,7 +2,11 @@ import { useEffect, useRef, useState } from "react";
 
 import "./home-style.css";
 import "./_home.scss";
-
+import {
+  dateTimeFormatToDisplay,
+  dateFormatToDisplay,
+  dateFormatForDb,
+} from "../../constants/dateFormatOptions";
 import petsmartImg from "../../assets/images/petsmart.png";
 import pangeaImg from "../../assets/images/pangea.png";
 import checkCircle from "../../assets/images/check_circle.png";
@@ -23,48 +27,12 @@ import {
 
 import axios from "axios";
 
-function getFormattedDate(date: Date) {
-  const year = date.getFullYear();
-  const month = (1 + date.getMonth()).toString().padStart(2, "0");
-  const day = date.getDate().toString().padStart(2, "0");
-  return day + "/" + month + "/" + year;
-}
-function getFormattedDate_view(date: any) {
-  if (date != null || date != "") {
-    date = new Date(date);
-    const year = date.getFullYear();
-    const month = (1 + date.getMonth()).toString().padStart(2, "0");
-    const day = date.getDate().toString().padStart(2, "0");
-    return day + "/" + month + "/" + year;
-  } else {
-    return "--";
-  }
-}
-
-function getFormattedDateTime_view(date: any) {
-  if (date != null || date != "") {
-    date = new Date(date);
-    const year = date.getFullYear();
-    const month = (1 + date.getMonth()).toString().padStart(2, "0");
-    const day = date.getDate().toString().padStart(2, "0");
-    const hour = date.getHours().toString().padStart(2, "00");
-    const min = date.getMinutes().toString().padStart(2, "00");
-
-    return day + "/" + month + "/" + year + "  " + hour + ":" + min;
-  } else {
-    return "--";
-  }
-}
-function getFormattedDate_dt(date: any) {
-  if (date != null || date != "") {
-    date = new Date(date);
-    const year = date.getFullYear();
-    const month = (1 + date.getMonth()).toString().padStart(2, "0");
-    const day = date.getDate().toString().padStart(2, "0");
-    return day + "/" + month + "/" + year;
-  } else {
-    return "00/00/0000";
-  }
+//generic method to format time
+function formatDate(dateTime: any, format: Intl.DateTimeFormatOptions): string {
+  if (dateTime == null) return "";
+  const tempDate = new Date(dateTime);
+  const formattedDateTime = tempDate.toLocaleString("en-US", format);
+  return formattedDateTime;
 }
 
 interface shipment {
@@ -217,7 +185,10 @@ export default function HomePage() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `${EDUCONNECT_URL}/Dashboard/fedex?fromDate=2023-04-25&toDate=2023-06-23`,
+          `${EDUCONNECT_URL}/Dashboard/fedex?fromDate=${formatDate(
+            fromDate,
+            dateFormatForDb
+          )}&toDate=${formatDate(toDate, dateFormatForDb)}`,
           config
         );
         originalRows = response.data.data;
@@ -319,14 +290,24 @@ export default function HomePage() {
     originalRows.filter(
       (item) =>
         item.isDelivered === true &&
-        getFormattedDate_dt(item.deliveredTime) == getFormattedDate(new Date())
+        formatDate(item.deliveredTime, dateFormatToDisplay) ==
+          formatDate(new Date(), dateFormatToDisplay)
     )
   ).length;
 
-  const date = new Date();
-  const last = new Date(date.getTime() - 7 * 24 * 60 * 60 * 1000);
-  const todayDate = getFormattedDate(date);
-  const lastDayDate = getFormattedDate(last);
+  //FOR VALIDATION
+  originalRows.forEach((item) => {
+    const deliveredTime = formatDate(item.deliveredTime, dateFormatToDisplay);
+    const currentDate = formatDate(new Date(), dateFormatToDisplay);
+    console.log(deliveredTime + " " + currentDate);
+  });
+
+  //Find date interval
+  const toDate = new Date();
+  const fromDate = new Date(toDate.getTime() - 14 * 24 * 60 * 60 * 1000);
+  // const todayDate = getFormattedDate(toDate);
+  // const lastDayDate = getFormattedDate(fromDate);
+  // console.log("sasaas" + todayDate);
 
   const [isCardSelected, setCardSelected] = useState("");
 
@@ -377,8 +358,9 @@ export default function HomePage() {
         filteredData = originalRows.filter((item) => {
           return Object.keys(item).some(
             () =>
-              getFormattedDate_dt(item.deliveredTime) ==
-                getFormattedDate(new Date()) && item.isDelivered == true
+              formatDate(item.deliveredTime, dateFormatToDisplay) ==
+                formatDate(new Date(), dateFormatToDisplay) &&
+              item.isDelivered == true
           );
         });
       }
@@ -592,7 +574,8 @@ export default function HomePage() {
               </div>
             </div>
             <div className="hero-banner__container--date">
-              {lastDayDate} - {todayDate}
+              {formatDate(fromDate, dateFormatToDisplay)} -{" "}
+              {formatDate(toDate, dateFormatToDisplay)}
             </div>
           </div>
         </div>
@@ -1301,7 +1284,6 @@ export default function HomePage() {
                               <img src={redAlertImg} />
                             </>
                           )}
-                         
                         &nbsp; {row.status}
                         <br />
                         {row.isDelivered !== true &&
@@ -1309,14 +1291,16 @@ export default function HomePage() {
                             <small>{row.statusDescription}</small>
                           )}
                       </TableCell>
-
                       <TableCell align="left">
-                        {row.scheduledDeliveryDate == null && <>-- </>}
-                        {row.scheduledDeliveryDate != null && (
-                          <>
-                            {getFormattedDate_view(row.scheduledDeliveryDate)}{" "}
-                          </>
-                        )}
+                        {row.scheduledDeliveryDate !== "" &&
+                        row.scheduledDeliveryDate !== null
+                          ? formatDate(
+                              row.scheduledDeliveryDate,
+                              dateFormatToDisplay
+                            )
+                          : row.isDelivered
+                          ? ""
+                          : "Pending"}
                       </TableCell>
                       <TableCell align="left">
                         {row.scheduledDeliveryTimeBefore == null && <>-- </>}
@@ -1329,7 +1313,9 @@ export default function HomePage() {
                       <TableCell align="left">{row.shipperCity}</TableCell>
                       <TableCell align="left">{row.shipperState}</TableCell>
                       <TableCell align="left">
-                        {getFormattedDate_view(row.shipDate)}
+                        {formatDate(row.shipDate, dateFormatToDisplay) === ""
+                          ? "Pending"
+                          : formatDate(row.shipDate, dateFormatToDisplay)}
                       </TableCell>
                       <TableCell align="left">{row.deliveryCompany}</TableCell>
                       <TableCell align="left">{row.storeId}</TableCell>
@@ -1348,7 +1334,7 @@ export default function HomePage() {
                         {row.numberOfAttemptedDeliveries}
                       </TableCell>
                       <TableCell align="left">
-                        {getFormattedDateTime_view(row.deliveredTime)}
+                        {formatDate(row.deliveredTime, dateTimeFormatToDisplay)}
                       </TableCell>
                       <TableCell align="left">
                         {row.masterTrackingNumber}
