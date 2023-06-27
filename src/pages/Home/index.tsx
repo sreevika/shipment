@@ -23,6 +23,8 @@ import {
 
 import axios from "axios";
 
+import shipment from "../../Components/Interfaces";
+
 function getFormattedDate(date: Date) {
   const year = date.getFullYear();
   const month = (1 + date.getMonth()).toString().padStart(2, "0");
@@ -67,62 +69,7 @@ function getFormattedDate_dt(date: any) {
   }
 }
 
-interface shipment {
-  id: number;
-  trackingNumberUniqueId: string;
-  trackingNumber: string;
-  deliveryCompany: string | null;
-  storeId: string | null;
-  storeDivision: string;
-  storeZip: string | null;
-  shipDate: string;
-  accountNumber: string;
-  purchaseOrderNumber: string | null;
-  masterTrackingNumber: string | null;
-  status: string;
-  statusCode: string;
-  statusDescription: string;
-  shipperName: string;
-  shipperCompany: string;
-  shipperCity: string;
-  shipperState: string;
-  scheduledDeliveryDate: string | null;
-  scheduledDeliveryTimeBefore: string | null;
-  recipientContactName: string | null;
-  recipientCompany: string | null;
-  recipientAddress: string | null;
-  recipientCity: string;
-  recipientState: string;
-  recipientCountry: string;
-  reference: string | null;
-  direction: string | null;
-  fedExCompany: string;
-  numberOfAttemptedDeliveries: number;
-  deliveredTime: string | null;
-  packageWeightKg: string;
-  packageWeightLbs: string;
-  receivedBy: string | null;
-  recipientPostal: string;
-  shippedBy: string;
-  shippedTo: string | null;
-  shipperAddress: string;
-  shipperCountry: string;
-  shipperPostal: string;
-  specialHandling: string;
-  serviceType: string;
-  totalWeightInKg: number;
-  totalWeightInLbs: number;
-  packageCount: number;
-  insertedTime: string;
-  updatedTime: string;
-  isDelayed: boolean;
-  isException: boolean;
-  isOnTime: boolean;
-  isDelivered: boolean;
-  isEarly: boolean;
-  isCancelled: boolean;
-  isOutForDelivery: boolean;
-}
+
 
 function dashboardIconPack(iconName: string) {
   switch (iconName) {
@@ -780,6 +727,44 @@ export default function HomePage() {
                 </svg>
               </div>
             </button>
+          </div>
+        </div>
+        <div className="main__filtertab container mid-container">
+          <div>
+          <div className="frame_layout selected__layout">
+            Shipment Status
+            
+          </div>
+          
+          <div className="frame_layout">
+            Shipment Status
+          </div>
+          <div className="frame_layout">
+            Shipment Status
+          </div>
+          <div className="frame_layout">
+            Shipment Status
+          </div>
+          </div>
+          <div>
+            <div className="Expansion__tab"></div>
+          </div>
+        </div>
+        <div className="selected__filtertab container mid-container">
+          <div>
+            <div className="sel__filter__btn">
+              OnTime   
+              <button
+                    className="search__input-box-suffix"
+                    onClick={clearSearchValue}
+                  >  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <g id="&#240;&#159;&#147;&#141;Trailing Icon">
+                  <path id="Vector" d="M6.99996 1.1665C3.77413 1.1665 1.16663 3.774 1.16663 6.99984C1.16663 10.2257 3.77413 12.8332 6.99996 12.8332C10.2258 12.8332 12.8333 10.2257 12.8333 6.99984C12.8333 3.774 10.2258 1.1665 6.99996 1.1665ZM9.91663 9.094L9.09413 9.9165L6.99996 7.82234L4.90579 9.9165L4.08329 9.094L6.17746 6.99984L4.08329 4.90567L4.90579 4.08317L6.99996 6.17734L9.09413 4.08317L9.91663 4.90567L7.82246 6.99984L9.91663 9.094Z" fill="#0067B2"/>
+                  </g>
+                  </svg>
+                  
+              </button>
+            </div>
           </div>
         </div>
 
