@@ -566,6 +566,7 @@ export default function HomePage() {
             </div>
           </div>
         </nav>
+        <div className="body__content">
         <div className="hero-banner">
           <div className="container mid-container hero-banner__container">
             <div className="hero-banner__container--title">
@@ -1273,7 +1274,7 @@ export default function HomePage() {
                             <img src={transit} />
                           </>
                         )}
-                        {row.status === "Label" && (
+                        {row.status === "Initiated" && (
                           <>
                             <img src={labelImg} />
                           </>
@@ -1352,9 +1353,10 @@ export default function HomePage() {
             </TableContainer>
           </Paper>
         </div>
-        {/* <div className="footer__content"> */}
-        {/* d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5  */}
-        {/* <div className="footer__item">
+        </div>
+        {/* <div className="footer__content">
+          
+          <div className="footer__item">
             Help for Shipment tracking
           </div>
           <div className="footer__item">
@@ -1362,8 +1364,8 @@ export default function HomePage() {
             servicedesk@petsmart.com
           </div>
           <div className="footer__item"> 800.406.2155
-          </div> */}
-        {/* </div> */}
+          </div>
+        </div> */}
       </div>
     </>
   );

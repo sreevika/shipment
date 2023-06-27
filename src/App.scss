@@ -113,7 +113,26 @@ html {
   }
 }
 
+// .footer__content {
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   column-gap: 27px;
+//   height: 51px;
+//   padding: 15px 0px;
+//   background-color: #4F6D83;
+
+//   .footer__item {
+//     color: #FFF;
+//     font-family: var(--bs-lato-font-family);
+//     font-size: 12px;
+//     line-height: 21px;
+//     font-weight: 700;
+//   }
+// }
+
 .footer__content {
+  margin-top: auto;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -130,3 +149,8 @@ html {
     font-weight: 700;
   }
 }
+.body__content {
+  height: 100%;
+  margin-bottom: 30px;
+}
+
