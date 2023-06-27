@@ -6,6 +6,7 @@ import {
   dateTimeFormatToDisplay,
   dateFormatToDisplay,
   dateFormatForDb,
+  timeFormatToDisplay,
 } from "../../constants/dateFormatOptions";
 import petsmartImg from "../../assets/images/petsmart.png";
 import pangeaImg from "../../assets/images/pangea.png";
@@ -1303,10 +1304,15 @@ export default function HomePage() {
                           : "Pending"}
                       </TableCell>
                       <TableCell align="left">
-                        {row.scheduledDeliveryTimeBefore == null && <>-- </>}
-                        {row.scheduledDeliveryTimeBefore != null && (
-                          <> {row.scheduledDeliveryTimeBefore} </>
-                        )}{" "}
+                        {row.scheduledDeliveryDate !== "" &&
+                        row.scheduledDeliveryDate !== null
+                          ? formatDate(
+                              row.scheduledDeliveryDate,
+                              timeFormatToDisplay
+                            )
+                          : row.isDelivered
+                          ? ""
+                          : "Pending"}
                       </TableCell>
                       <TableCell align="left">{row.shipperName}</TableCell>
                       <TableCell align="left">{row.shipperCompany}</TableCell>
