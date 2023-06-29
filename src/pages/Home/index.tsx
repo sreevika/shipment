@@ -12,7 +12,7 @@ import petsmartImg from "../../assets/images/petsmart.png";
 import pangeaImg from "../../assets/images/pangea.png";
 import checkCircle from "../../assets/images/check_circle.png";
 import transit from "../../assets/images/transit.png";
-import labelImg from "../../assets/images/label-img.png";
+import labelImg from "../../assets/images/label.png";
 import redAlertImg from "../../assets/images/red-alert.png";
 import yellowAlertImg from "../../assets/images/yellow-alert.png";
 import { useNavigate } from "react-router-dom";
@@ -280,6 +280,8 @@ export default function HomePage() {
   const earlyDeliveryCount = Object.keys(
     originalRows.filter((item) => item.isEarly === true)
   ).length;
+
+ 
   const outForDeliveryCount = Object.keys(
     originalRows.filter((item) => item.isOutForDelivery === true)
   ).length;
