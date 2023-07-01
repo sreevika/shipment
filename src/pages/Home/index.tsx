@@ -36,10 +36,7 @@ function formatDate(dateTime: any, format: Intl.DateTimeFormatOptions): string {
   const formattedDateTime = tempDate.toLocaleString("en-US", format);
   return formattedDateTime;
 }
-interface filterTitle {
-  name : string;
-  value : number;
-}
+
 interface shipment {
   id: number;
   trackingNumberUniqueId: string;
@@ -219,7 +216,7 @@ export default function HomePage() {
   const [dropDown, setDropDown] = useState(false);
   const [storeId, setStoreId] = useState("");
   const dropdownRef = useRef(null);
-  const [selectedList, setSelectedList] = useState([]);
+  const [selectedList, setSelectedList] = useState<any[]>([]);
   const [showFilter, setShowFilter] = useState(false);
 
   const handleLogout = () => {
@@ -250,6 +247,7 @@ export default function HomePage() {
     
   };
   const clearFilter = (value: string) => {
+    value = value.trim();
     clearSearchValue();
   }
   
@@ -425,12 +423,12 @@ export default function HomePage() {
       
     }
   };
-  const [userinfo, setUserInfo] = useState([]);
+  const [userinfo, setUserInfo] = useState<any[]>([]);
  
   const shipperChange = (e :any)  => {
     e.preventDefault();
     const { value, checked } = e.target;
-    let tempArr = [];
+    let tempArr: any[] = [];
 
     if (checked) {
       tempArr = [...userinfo, value];
@@ -446,8 +444,7 @@ export default function HomePage() {
 
 
   //first layer filter selection
-  const [shipperInfo1, setShipperInfo1] = useState([]);
-  const [innerFilterJson1, setInnerFilterJson1] = useState([]);
+  const [innerFilterJson1, setInnerFilterJson1] = useState<any[]>([]);
   let accountNumberArr: any[] =[];
   let deliveredDateArr: any[] =[];
   let noOfAttemptArr :any[]=[];
@@ -542,15 +539,15 @@ export default function HomePage() {
   }
   
 //second layer filter
-const [filter__accountNo, set_filter__accountNo] = useState([]);
-const [filter__deliveredDate, set_filter__deliveredDate] = useState([]);
-const [filter__attemptDelivery, set_filter__attemptDelivery] = useState([]);
-const [filter__packageKg, set_filter__packageKg] = useState([]);
-const [filter__packageLbs, set_filter__packageLbs] = useState([]);
-const [filter__purchaseOrderNo, set_filter__purchaseOrderNo] = useState([]);
-const [filter__reference, set_filter__reference] = useState([]);
-const [filter_scheduledDeliveryDate, set_filter_scheduledDeliveryDate] = useState([]);
-const [filter_shipDate, set_filter_shipDate] = useState([]);
+const [filter__accountNo, set_filter__accountNo] = useState<any[]>([]);
+const [filter__deliveredDate, set_filter__deliveredDate] = useState<any[]>([]);
+const [filter__attemptDelivery, set_filter__attemptDelivery] = useState<any[]>([]);
+const [filter__packageKg, set_filter__packageKg] = useState<any[]>([]);
+const [filter__packageLbs, set_filter__packageLbs] = useState<any[]>([]);
+const [filter__purchaseOrderNo, set_filter__purchaseOrderNo] = useState<any[]>([]);
+const [filter__reference, set_filter__reference] = useState<any[]>([]);
+const [filter_scheduledDeliveryDate, set_filter_scheduledDeliveryDate] = useState<any[]>([]);
+const [filter_shipDate, set_filter_shipDate] = useState<any[]>([]);
   const valueBasedFilter = (e :any, type :any)  => {
    
     e.preventDefault();
@@ -682,8 +679,7 @@ const [filter_shipDate, set_filter_shipDate] = useState([]);
     setShowFilter(!showFilter);
   };
   const [innerFilter, setInnerFilter] = useState(1);
-  const [innerFilterJson, setInnerFilterJson] = useState([]);
-  const filterTitleArray = [];
+  const [innerFilterJson, setInnerFilterJson] = useState<any[]>([]);
 
   const showInnerFilter = (val : number) => {
     if(val == 1){
@@ -710,7 +706,6 @@ const [filter_shipDate, set_filter_shipDate] = useState([]);
     let filteredData :shipment[] =[];
     let filteredData_delayed, filteredData_delivered, filteredData_exception, filteredData_intransit,
     filteredData_label :shipment[] =[];
-   let filterConditions ="";
     if(userinfo.length >0) {
       if(userinfo.includes("delayed")) {
         filteredData_delayed = rows.filter((item) => {
