@@ -28,102 +28,16 @@ import {
 
 import axios from "axios";
 import _ from 'lodash';
+import moment from 'moment';
+
 
 import shipment from "../../components/Interfaces";
+import {dashboardIconPack,formatDate,getFilterValueforUI} from "../../components/commonFunctions";
 
 
-//generic method to format time
-function formatDate(dateTime: any, format: Intl.DateTimeFormatOptions): string {
-  if (dateTime == null) return "";
-  const tempDate = new Date(dateTime);
-  const formattedDateTime = tempDate.toLocaleString("en-US", format);
-  return formattedDateTime;
-}
 
 
-function dashboardIconPack(iconName: string) {
-  switch (iconName) {
-    case "onTime":
-      return (
-        <svg
-          width="28"
-          height="20"
-          viewBox="0 0 28 20"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M12.6665 19.3334V11.3334H0.666504V8.66675H12.6665V0.666748L27.3332 10.0001L12.6665 19.3334Z"
-            fill="#0067B2"
-          />
-        </svg>
-      );
-    case "error":
-      return (
-        <svg
-          width="28"
-          height="28"
-          viewBox="0 0 28 28"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M14.0001 20.6665C14.3334 20.6665 14.6113 20.5556 14.8337 20.3337C15.0556 20.1113 15.1665 19.8334 15.1665 19.5001C15.1665 19.1668 15.0556 18.8833 14.8337 18.6497C14.6113 18.4166 14.3334 18.3001 14.0001 18.3001C13.6668 18.3001 13.3889 18.4166 13.1665 18.6497C12.9446 18.8833 12.8337 19.1668 12.8337 19.5001C12.8337 19.8334 12.9446 20.1113 13.1665 20.3337C13.3889 20.5556 13.6668 20.6665 14.0001 20.6665ZM12.9665 15.5001H15.1665V7.2001H12.9665V15.5001ZM14.0001 27.3337C12.1558 27.3337 10.4281 26.9836 8.8169 26.2833C7.2057 25.5836 5.7945 24.6281 4.5833 23.4169C3.3721 22.2057 2.41664 20.7945 1.7169 19.1833C1.01664 17.5721 0.666504 15.8444 0.666504 14.0001C0.666504 12.1558 1.01664 10.4225 1.7169 8.8001C2.41664 7.1777 3.3721 5.7665 4.5833 4.5665C5.7945 3.3665 7.2057 2.41664 8.8169 1.7169C10.4281 1.01664 12.1558 0.666504 14.0001 0.666504C15.8444 0.666504 17.5777 1.01664 19.2001 1.7169C20.8225 2.41664 22.2337 3.3665 23.4337 4.5665C24.6337 5.7665 25.5836 7.1777 26.2833 8.8001C26.9836 10.4225 27.3337 12.1558 27.3337 14.0001C27.3337 15.8444 26.9836 17.5721 26.2833 19.1833C25.5836 20.7945 24.6337 22.2057 23.4337 23.4169C22.2337 24.6281 20.8225 25.5836 19.2001 26.2833C17.5777 26.9836 15.8444 27.3337 14.0001 27.3337Z"
-            fill="#E5002E"
-          />
-        </svg>
-      );
-    case "outbound":
-      return (
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M2.2336 24C1.6336 24 1.1112 23.7779 0.6664 23.3336C0.222134 22.8888 0 22.3664 0 21.7664V2.2336C0 1.6336 0.222134 1.1112 0.6664 0.6664C1.1112 0.222134 1.6336 0 2.2336 0H21.7664C22.3664 0 22.8888 0.222134 23.3336 0.6664C23.7779 1.1112 24 1.6336 24 2.2336V21.7664C24 22.3664 23.7779 22.8888 23.3336 23.3336C22.8888 23.7779 22.3664 24 21.7664 24H2.2336ZM5.3336 18.6664H12V16H5.3336V18.6664ZM6.6664 13.1L12 10.4336L17.3336 13.1V2.2336H6.6664V13.1Z"
-            fill="#4B1088"
-          />
-        </svg>
-      );
-    case "caution":
-      return (
-        <svg
-          width="28"
-          height="28"
-          viewBox="0 0 28 28"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M14.0001 20.6665C14.3334 20.6665 14.6113 20.5556 14.8337 20.3337C15.0556 20.1113 15.1665 19.8334 15.1665 19.5001C15.1665 19.1668 15.0556 18.8833 14.8337 18.6497C14.6113 18.4166 14.3334 18.3001 14.0001 18.3001C13.6668 18.3001 13.3889 18.4166 13.1665 18.6497C12.9446 18.8833 12.8337 19.1668 12.8337 19.5001C12.8337 19.8334 12.9446 20.1113 13.1665 20.3337C13.3889 20.5556 13.6668 20.6665 14.0001 20.6665ZM12.9665 15.5001H15.1665V7.2001H12.9665V15.5001ZM14.0001 27.3337C12.1558 27.3337 10.4281 26.9836 8.8169 26.2833C7.2057 25.5836 5.7945 24.6281 4.5833 23.4169C3.3721 22.2057 2.41664 20.7945 1.7169 19.1833C1.01664 17.5721 0.666504 15.8444 0.666504 14.0001C0.666504 12.1558 1.01664 10.4225 1.7169 8.8001C2.41664 7.1777 3.3721 5.7665 4.5833 4.5665C5.7945 3.3665 7.2057 2.41664 8.8169 1.7169C10.4281 1.01664 12.1558 0.666504 14.0001 0.666504C15.8444 0.666504 17.5777 1.01664 19.2001 1.7169C20.8225 2.41664 22.2337 3.3665 23.4337 4.5665C24.6337 5.7665 25.5836 7.1777 26.2833 8.8001C26.9836 10.4225 27.3337 12.1558 27.3337 14.0001C27.3337 15.8444 26.9836 17.5721 26.2833 19.1833C25.5836 20.7945 24.6337 22.2057 23.4337 23.4169C22.2337 24.6281 20.8225 25.5836 19.2001 26.2833C17.5777 26.9836 15.8444 27.3337 14.0001 27.3337Z"
-            fill="#E9B430"
-          />
-        </svg>
-      );
-    case "success":
-      return (
-        <svg
-          width="30"
-          height="28"
-          viewBox="0 0 30 28"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M10.4668 28L7.9335 23.7333L3.1335 22.6667L3.60016 17.7333L0.333496 14L3.60016 10.2667L3.1335 5.33333L7.9335 4.26667L10.4668 0L15.0002 1.93333L19.5335 0L22.0668 4.26667L26.8668 5.33333L26.4002 10.2667L29.6668 14L26.4002 17.7333L26.8668 22.6667L22.0668 23.7333L19.5335 28L15.0002 26.0667L10.4668 28ZM13.6002 18.7333L21.1335 11.2L19.2668 9.26667L13.6002 14.9333L10.7335 12.1333L8.86683 14L13.6002 18.7333Z"
-            fill="#008903"
-          />
-        </svg>
-      );
-  }
-}
 
-function getFilterValueforUI(value : string) {
-  return value;
-}
 
 let originalRows: shipment[] = [];
 let originalRows_backup: shipment[] = [];
@@ -268,24 +182,16 @@ export default function HomePage() {
           formatDate(new Date(), dateFormatToDisplay)
     )
   ).length;
- const accountNumberCount = _.uniqBy(originalRows, 'accountNumber').length;
- const deliveryDateCount = _.uniqBy(originalRows,  'deliveredTime').length;
- const attemptedDeliveryCount = _.uniqBy(originalRows, "numberOfAttemptedDeliveries").length;
- const packageKgCount = _.uniqBy(originalRows, "packageWeightKg").length;
- const packageLbsCount = _.uniqBy(originalRows, "packageWeightLbs").length;
- const purchaseOrderNumberCount = _.uniqBy(originalRows, "purchaseOrderNumber").length;
- const referenceCount = _.uniqBy(originalRows, "reference").length;
- const scheduledDeliveryDateCount = _.uniqBy(originalRows, "scheduledDeliveryDate").length;
- const shipDateCount = _.uniqBy(originalRows, "shipDate").length;
-  let ShipmentInformationArr = [{ name: 'Account Number', value: accountNumberCount},
-  { name: 'Delivered Date', value:deliveryDateCount },
-  { name: 'Number Of Attempted Deliveries', value: attemptedDeliveryCount },
-  { name: 'Package Weight (Kg)', value:packageKgCount },
-  { name: 'Package Weight (Lbs)', value: packageLbsCount },
-  { name: 'Purchase Order Number', value: purchaseOrderNumberCount },
-  { name: 'Reference', value:referenceCount },
-  { name: 'Scheduled Delivery Date', value: scheduledDeliveryDateCount },
-  { name: 'Ship Date', value: shipDateCount}
+ 
+  let ShipmentInformationArr = [{ name: 'Account Number', value: "accountNo"},
+  { name: 'Delivered Date', value:"deliveredDate" },
+  { name: 'Number Of Attempted Deliveries', value: "numberOfAttempt" },
+  { name: 'Package Weight (Kg)', value:"packageKg" },
+  { name: 'Package Weight (Lbs)', value: "packageLbs" },
+  { name: 'Purchase Order Number', value: "purchaseOrderNumber" },
+  { name: 'Reference', value:"reference" },
+  { name: 'Scheduled Delivery Date', value: "scheduledDeliveryDate" },
+  { name: 'Ship Date', value: "shipDate"}
 ];
 
   //FOR VALIDATION
@@ -392,97 +298,97 @@ export default function HomePage() {
 
   //first layer filter selection
   const [innerFilterJson1, setInnerFilterJson1] = useState<any[]>([]);
-  let accountNumberArr: any[] =[];
-  let deliveredDateArr: any[] =[];
-  let noOfAttemptArr :any[]=[];
-  let packageKgArr :any[]=[];
-  let packageLbsArr :any[] =[];
-  let purchaseOrderNumberArr :any[] =[];
-  let referenceArr :any[] =[];
-  let scheduledDeliveryDateArr :any[] =[]
-  let shipDateArr :any[] =[]
-  const shipperInfoChange = (e :any)  => {
-    e.preventDefault();
-    const { value, checked } = e.target;
-    let shipperInfoFilter =[];
-    if(checked) {
-     
-      shipperInfoFilter = userinfo.concat(value);
-      if(value == "Account Number") {
-  
+  const [li_accountNumber, set_li_accountNumber] = useState<any[]>([]);
+  const [li_deliveredDate, set_li_deliveredDate] = useState<any[]>([]);
+  const [li_noOfAttempt, set_li_noOfAttempt] = useState<any[]>([]);
+  const [li_packageKg, set_li_packageKg] = useState<any[]>([]);
+  const [li_packageLbs, set_li_packageLbs] = useState<any[]>([]);
+  const [li_purchaseOrderNumber, set_li_purchaseOrderNumber] = useState<any[]>([]);
+  const [li_reference, set_li_reference] = useState<any[]>([]);
+  const [li_scheduledDeliveryDate, set_li_scheduledDeliveryDate] = useState<any[]>([]);
+  const [li_shipDate, set_li_shipDate] = useState<any[]>([]);
+  const[selectedOption, setSelectedOption] = useState("");
+  const shipperInfoChange = (value: string)  => {
 
-         accountNumberArr = _.chain(originalRows)
-      .groupBy('accountNumber')
-      .map((items, name) => ({ name, count: items.length, type: 'accountNo' }))
+    setSelectedOption(value);
+    if(value == "accountNo") {
+      const  accountNumberArr = _.chain(originalRows)
+    .groupBy('accountNumber')
+    .map((items, name) => ({ name, count: items.length, type: 'accountNo' }))
+    .value();
+
+    set_li_accountNumber(accountNumberArr);
+    } else if(value == "deliveredDate") {
+      // const deliveredDateArr = _(originalRows)
+      // .groupBy('deliveredTime') 
+      // .map((items, name) => ({ name, count: items.length , type:"deliveredDate"}))
+      // .value();
+      const deliveredDateArr = _(originalRows)
+      .groupBy((item) => {
+        const formattedDate = moment(item.deliveredTime).format('YYYY-MM-DD');
+        return moment(formattedDate).isValid() ? formattedDate : '0000-00-00';
+      })
+      .map((items, name) => ({ name, count: items.length, type: 'deliveredDate' }))
       .value();
+      set_li_deliveredDate(deliveredDateArr);
 
-    setInnerFilterJson1(accountNumberArr);
-      } else if(value == "Delivered Date") {
-        deliveredDateArr = _(originalRows)
-        .groupBy('deliveredTime')
-        .map((items, name) => ({ name, count: items.length , type:"deliveredDate"}))
-        .value();
-        setInnerFilterJson1(deliveredDateArr);
-
-      } else if(value == "Number Of Attempted Deliveries") {
-         noOfAttemptArr = _(originalRows)
+    } else if(value == "numberOfAttempt") {
+        const  noOfAttemptArr = _(originalRows)
         .groupBy('numberOfAttemptedDeliveries')
         .map((items, name) => ({ name, count: items.length , type:"noOfAttempt"}))
         .value();
-        setInnerFilterJson1(noOfAttemptArr);
+        set_li_noOfAttempt(noOfAttemptArr);
 
-      } else if(value == "Package Weight (Kg)") {
-        packageKgArr = _(originalRows)
+      } else if(value == "packageKg") {
+        const packageKgArr = _(originalRows)
        .groupBy('packageWeightKg')
        .map((items, name) => ({ name, count: items.length , type:"packageKg"}))
        .value();
-       setInnerFilterJson1(packageKgArr);
+       set_li_packageKg(packageKgArr);
 
-     } else if(value == "Package Weight (Lbs)") {
-      packageLbsArr = _(originalRows)
+     } else if(value == "packageLbs") {
+      const packageLbsArr = _(originalRows)
       .groupBy('packageWeightLbs')
       .map((items, name) => ({ name, count: items.length , type:"packageLbs"}))
       .value();
-      setInnerFilterJson1(packageLbsArr);
+      set_li_packageLbs(packageLbsArr);
 
-     } else if(value == "Purchase Order Number") {
-      purchaseOrderNumberArr = _(originalRows)
+     } else if(value == "purchaseOrderNumber") {
+      const purchaseOrderNumberArr = _(originalRows)
       .groupBy('purchaseOrderNumber')
       .map((items, name) => ({ name, count: items.length , type:"purchaseOrderNumber"}))
       .value();
-      setInnerFilterJson1(purchaseOrderNumberArr);
+      set_li_purchaseOrderNumber(purchaseOrderNumberArr);
 
-     } else if(value == "Reference") {
-      referenceArr = _(originalRows)
+     } else if(value == "reference") {
+      const referenceArr = _(originalRows)
       .groupBy('reference')
       .map((items, name) => ({ name, count: items.length , type:"reference"}))
       .value();
-      setInnerFilterJson1(referenceArr);
+      set_li_reference(referenceArr);
 
-    } else if(value == "Scheduled Delivery Date") {
-     
-      scheduledDeliveryDateArr = _(originalRows)
-      .groupBy('scheduledDeliveryDate')
-      .map((items, name) => ({ name, count: items.length , type:"scheduledDeliveryDate"}))
+    } else if(value == "scheduledDeliveryDate") {
+
+      const scheduledDeliveryDateArr = _(originalRows)
+      .groupBy((item) => {
+        const formattedDate = moment(item.scheduledDeliveryDate).format('YYYY-MM-DD');
+        return moment(formattedDate).isValid() ? formattedDate : '0000-00-00';
+      })
+      .map((items, name) => ({ name, count: items.length, type: 'scheduledDeliveryDate' }))
       .value();
-      setInnerFilterJson1(scheduledDeliveryDateArr);
-
-     } else if(value == "Ship Date") {
      
-      shipDateArr = _(originalRows)
+     
+      set_li_scheduledDeliveryDate(scheduledDeliveryDateArr);
+
+     } else if(value == "shipDate") {
+     
+      const shipDateArr = _(originalRows)
       .groupBy('shipDate')
       .map((items, name) => ({ name, count: items.length , type:"shipDate"}))
       .value();
-      setInnerFilterJson1(shipDateArr);
+      set_li_shipDate(shipDateArr);
 
      }
-
-      
-    
-    } else {
-      shipperInfoFilter = userinfo.filter((e) => e !== value);
-    }
-    setUserInfo(shipperInfoFilter);
   }
   
 //second layer filter
@@ -495,8 +401,13 @@ const [filter__purchaseOrderNo, set_filter__purchaseOrderNo] = useState<any[]>([
 const [filter__reference, set_filter__reference] = useState<any[]>([]);
 const [filter_scheduledDeliveryDate, set_filter_scheduledDeliveryDate] = useState<any[]>([]);
 const [filter_shipDate, set_filter_shipDate] = useState<any[]>([]);
+const [filter_model, set_filter_model] = useState<any[]>([]);
   const valueBasedFilter = (e :any, type :any)  => {
    
+    let selectedOptionTemp = [];
+    selectedOptionTemp =filter_model.concat(type);
+    set_filter_model(selectedOptionTemp);
+
     e.preventDefault();
     const { value, checked } = e.target;
     let tempArr = [];
@@ -650,116 +561,107 @@ const [filter_shipDate, set_filter_shipDate] = useState<any[]>([]);
     
 
   
+    let filteredData_level1 :shipment[] =[];
+   
     let filteredData :shipment[] =[];
-    let filteredData_delayed, filteredData_delivered, filteredData_exception, filteredData_intransit,
-    filteredData_label :shipment[] =[];
     if(userinfo.length >0) {
+    
       if(userinfo.includes("delayed")) {
-        filteredData_delayed = rows.filter((item) => {
+        const filteredData_delayed = rows.filter((item) => {
           return Object.keys(item).some(() => item.isDelayed == true);
         });
-        console.log("FILL"+JSON.stringify(filteredData_delayed))
-        filteredData = filteredData.concat(filteredData_delayed)
-        console.log("FILL"+JSON.stringify(filteredData))
+      
+        filteredData_level1 = filteredData_level1.concat(filteredData_delayed)
+        
       }
 
       if(userinfo.includes("delivered")) {
-        filteredData_delivered = rows.filter((item) => {
+        const filteredData_delivered = rows.filter((item) => {
           return Object.keys(item).some(() => item.isDelivered == true);
         });
-        filteredData = filteredData.concat(filteredData_delivered)
+        filteredData_level1 = filteredData_level1.concat(filteredData_delivered)
       }
 
       if(userinfo.includes("exception")) {
-        filteredData_exception = rows.filter((item) => {
+        const filteredData_exception = rows.filter((item) => {
           return Object.keys(item).some(() => item.isException == true);
         });
-        filteredData =  filteredData.concat(filteredData_exception)
+        filteredData_level1 = filteredData_level1.concat(filteredData_exception)
       }
 
       
       if(userinfo.includes("inTransit")) {
-        filteredData_intransit = rows.filter((item) => {
+        const filteredData_intransit = rows.filter((item) => {
           return Object.keys(item).some(() => item.status == "In transit");
         }); 
-        filteredData =  filteredData.concat(filteredData_intransit)
+        filteredData_level1 = filteredData_level1.concat(filteredData_intransit)
       }
 
       if(userinfo.includes("label")) {
-        filteredData_label = rows.filter((item) => {
+        const filteredData_label = rows.filter((item) => {
           return Object.keys(item).some(() => item.status == "Initiated");
         }); 
-        filteredData =  filteredData.concat(filteredData_label)
+        filteredData_level1 = filteredData_level1.concat(filteredData_label)
       }
-      if(userinfo.includes("Account Number")) {
      
-        const filteredData_accountNo = rows.filter((item) => filter__accountNo.includes(item.accountNumber));
-       
-        filteredData =  filteredData.concat(filteredData_accountNo)
-      }
-      if(userinfo.includes("Delivered Date")) {
-     
-        const filteredData_deliveredDate = rows.filter((item) => filter__deliveredDate.includes(item.deliveredTime));
-       
-        filteredData =  filteredData.concat(filteredData_deliveredDate)
-      }
-
-      if(userinfo.includes("Number Of Attempted Deliveries")) {
-        let filter__attemptDelivery1 = filter__attemptDelivery.map((str) => parseInt(str));
-       
-        const filteredData_attemptDelivery = rows.filter((item) => filter__attemptDelivery1.includes(item.numberOfAttemptedDeliveries));
-       
-        filteredData =  filteredData.concat(filteredData_attemptDelivery)
-      }
-
-      if(userinfo.includes("Package Weight (Kg)")) {
-      
-     
-        const filteredData_packageKg = rows.filter((item) => filter__packageKg.includes(item.packageWeightKg));
-       
-        filteredData =  filteredData.concat(filteredData_packageKg)
-      }
-      if(userinfo.includes("Package Weight (Lbs)")) {
-      
-     
-        const filteredData_packageLbs = rows.filter((item) => filter__packageLbs.includes(item.packageWeightLbs));
-       
-        filteredData =  filteredData.concat(filteredData_packageLbs)
-      }
-
-      if(userinfo.includes("Purchase Order Number")) {
-      
-     
-        const filteredData_purchaseOrderNumber = rows.filter((item) => filter__purchaseOrderNo.includes(item.purchaseOrderNumber));
-       
-        filteredData =  filteredData.concat(filteredData_purchaseOrderNumber)
-      }
-
-      if(userinfo.includes("Reference")) {
-      
-     
-        const filteredData_reference = rows.filter((item) => filter__reference.includes(item.reference));
-       
-        filteredData =  filteredData.concat(filteredData_reference)
-      }
-      if(userinfo.includes("Scheduled Delivery Date")) {
-      
     
-        const filteredData_scheduledDeliveryDate = rows.filter((item) => filter_scheduledDeliveryDate.includes(item.scheduledDeliveryDate));
-       
-        filteredData =  filteredData.concat(filteredData_scheduledDeliveryDate)
-      }
-      if(userinfo.includes("Ship Date")) {
-      
+
+
+
+    }  else {
+      filteredData_level1 = rows;
+    }
+
+    if(filter_model.includes("deliveredDate")) {
     
-        const filteredData_shipDate = rows.filter((item) => filter_shipDate.includes(item.shipDate));
-       
-        filteredData =  filteredData.concat(filteredData_shipDate)
-      }
+      filteredData_level1 = filteredData_level1.filter((item) => filter__deliveredDate.includes(moment(moment(item.deliveredTime).format('YYYY-MM-DD')).isValid() ? moment(item.deliveredTime).format('YYYY-MM-DD') : "0000-00-00" ));
       
-    } 
+    }
+    if(filter_model.includes("accountNo")) {
+      
+      filteredData_level1 = filteredData_level1.filter((item) => filter__accountNo.includes(item.accountNumber));
+      
+    }
+
+    if(filter_model.includes("noOfAttempt")) {
+      
+      filteredData_level1 = filteredData_level1.filter((item) => filter__attemptDelivery.includes(item.numberOfAttemptedDeliveries));
+      
+    }
+
+    if(filter_model.includes("packageKg")) {
+      
+      filteredData_level1 = filteredData_level1.filter((item) =>filter__packageKg.includes(item.packageWeightKg));
+            
+    }
+
+    if(filter_model.includes("packageLbs")) {
+      
+      filteredData_level1 = filteredData_level1.filter((item) =>filter__packageLbs.includes(item.packageWeightLbs));
+            
+    }
+    if(filter_model.includes("purchaseOrderNumber")) {
+      
+      filteredData_level1 = filteredData_level1.filter((item) =>filter__purchaseOrderNo.includes(item.purchaseOrderNumber));
+    }
+
+    if(filter_model.includes("reference")) {
+      
+      filteredData_level1 = filteredData_level1.filter((item) => filter__reference.includes(item.reference));
+    }
+
+    if(filter_model.includes("scheduledDeliveryDate")) {
+      
+      
+      filteredData_level1 = filteredData_level1.filter((item) => filter_scheduledDeliveryDate.includes(moment(moment(item.scheduledDeliveryDate).format('YYYY-MM-DD')).isValid() ? moment(item.scheduledDeliveryDate).format('YYYY-MM-DD') : "0000-00-00" ));
+    }
+    if(filter_model.includes("shipDate")) {
+      
+      filteredData_level1 = filteredData_level1.filter((item) =>  filter_shipDate.includes(item.shipDate));
+    }
    
-    setRows(filteredData);
+   
+    setRows(filteredData_level1);
   }
   
 
@@ -899,38 +801,12 @@ const [filter_shipDate, set_filter_shipDate] = useState<any[]>([]);
                   </button>
                 </div>
 
-                {/* add active class below to show the dropdown */}
-                {/* <div  className={dropDown ? "search-select-dropdown active" : "search-select-dropdown "}>
-                <ul className="search-select-dp-wrapper">
-                  <li className="search-select-dp-item" onClick={() => onchangeSearchType("Store ID")}>
-                    <a >
-                      Store ID
-                    </a>
-                  </li>
-                  <li className="search-select-dp-item" onClick={() => onchangeSearchType("Tracking number")}>
-                    <a href="#">
-                      Tracking number
-                    </a>
-
-                  </li>
-                </ul>
-              </div> */}
+              
               </div>
             </div>
             <div className="header-navigation__profile">
               <ul className="header-navigation__actions">
-                {/* <li className="header-navigation__item-actions">
-                <a href="#" className="header-navigation__item-actions-anchor">
-                  <div className="header-navigation__item-actions-icon">
-                    <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M1.74999 11.583C1.37533 11.583 1.05933 11.4547 0.801992 11.198C0.545326 10.9407 0.416992 10.6247 0.416992 10.25V1.74999C0.416992 1.37533 0.545326 1.05933 0.801992 0.801992C1.05933 0.545326 1.37533 0.416992 1.74999 0.416992H14.25C14.6247 0.416992 14.9407 0.545326 15.198 0.801992C15.4547 1.05933 15.583 1.37533 15.583 1.74999V10.25C15.583 10.6247 15.4547 10.9407 15.198 11.198C14.9407 11.4547 14.6247 11.583 14.25 11.583H1.74999ZM7.99999 6.62499L1.49999 2.81199V10.25C1.49999 10.3193 1.52433 10.3783 1.57299 10.427C1.62166 10.4757 1.68066 10.5 1.74999 10.5H14.25C14.3193 10.5 14.3783 10.4757 14.427 10.427C14.4757 10.3783 14.5 10.3193 14.5 10.25V2.81199L7.99999 6.62499ZM7.99999 5.22899L14.375 1.49999H1.62499L7.99999 5.22899ZM1.49999 2.81199V1.49999V10.25C1.49999 10.3193 1.52433 10.3783 1.57299 10.427C1.62166 10.4757 1.68066 10.5 1.74999 10.5H1.49999V10.25V2.81199Z" fill="#0067B2" />
-                    </svg>
-                  </div>
-                  <div className="header-navigation__item-actions-text">
-                    Alerts
-                  </div>
-                </a>
-              </li> */}
+                
                 <li className="header-navigation__item-actions">
                   <a
                     href="#"
@@ -1246,7 +1122,8 @@ const [filter_shipDate, set_filter_shipDate] = useState<any[]>([]);
                       <button className="filter-section-btn selected">
                         <div className="filter-section-btn-icon">
                           <label className="checkbox">
-                            <input className="checkbox-input" type="checkbox" name="CheckShipper" onChange={shipperChange} value="delayed" />
+                            <input className="checkbox-input" type="checkbox" name="CheckShipper" onChange={shipperChange} value="delayed" 
+                            checked={userinfo.includes("delayed")}/>
                             <span className="checkbox-indicator">
                               <svg width="17" height="13" viewBox="0 0 17 13" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M5.7 12.025L0 6.325L1.425 4.9L5.7 9.175L14.875 0L16.3 1.425L5.7 12.025Z" fill="#0067B2" />
@@ -1266,7 +1143,7 @@ const [filter_shipDate, set_filter_shipDate] = useState<any[]>([]);
                       <button className="filter-section-btn">
                         <div className="filter-section-btn-icon">
                           <label className="checkbox">
-                            <input className="checkbox-input" type="checkbox" name="CheckShipper" onChange={shipperChange} value="delivered" />
+                            <input className="checkbox-input" type="checkbox" name="CheckShipper" onChange={shipperChange} value="delivered" checked={userinfo.includes("delivered")} />
                             <span className="checkbox-indicator">
                               <svg width="17" height="13" viewBox="0 0 17 13" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M5.7 12.025L0 6.325L1.425 4.9L5.7 9.175L14.875 0L16.3 1.425L5.7 12.025Z" fill="#0067B2" />
@@ -1286,7 +1163,7 @@ const [filter_shipDate, set_filter_shipDate] = useState<any[]>([]);
                       <button className="filter-section-btn">
                         <div className="filter-section-btn-icon">
                           <label className="checkbox">
-                            <input className="checkbox-input" type="checkbox" name="CheckShipper" onChange={shipperChange} value="exception" />
+                            <input className="checkbox-input" type="checkbox" name="CheckShipper" onChange={shipperChange} value="exception" checked={userinfo.includes("exception")} />
                             <span className="checkbox-indicator">
                               <svg width="17" height="13" viewBox="0 0 17 13" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M5.7 12.025L0 6.325L1.425 4.9L5.7 9.175L14.875 0L16.3 1.425L5.7 12.025Z" fill="#0067B2" />
@@ -1306,7 +1183,7 @@ const [filter_shipDate, set_filter_shipDate] = useState<any[]>([]);
                       <button className="filter-section-btn">
                         <div className="filter-section-btn-icon">
                           <label className="checkbox">
-                            <input className="checkbox-input" type="checkbox" name="CheckShipper" onChange={shipperChange} value="inTransit" />
+                            <input className="checkbox-input" type="checkbox" name="CheckShipper" onChange={shipperChange} value="inTransit" checked={userinfo.includes("inTransit")} />
                             <span className="checkbox-indicator">
                               <svg width="17" height="13" viewBox="0 0 17 13" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M5.7 12.025L0 6.325L1.425 4.9L5.7 9.175L14.875 0L16.3 1.425L5.7 12.025Z" fill="#0067B2" />
@@ -1326,7 +1203,7 @@ const [filter_shipDate, set_filter_shipDate] = useState<any[]>([]);
                       <button className="filter-section-btn">
                         <div className="filter-section-btn-icon">
                           <label className="checkbox">
-                            <input className="checkbox-input" type="checkbox" name="CheckShipper" onChange={shipperChange} value="label" />
+                            <input className="checkbox-input" type="checkbox" name="CheckShipper" onChange={shipperChange} value="label" checked={userinfo.includes("label")} />
                             <span className="checkbox-indicator">
                               <svg width="17" height="13" viewBox="0 0 17 13" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M5.7 12.025L0 6.325L1.425 4.9L5.7 9.175L14.875 0L16.3 1.425L5.7 12.025Z" fill="#0067B2" />
@@ -1351,22 +1228,15 @@ const [filter_shipDate, set_filter_shipDate] = useState<any[]>([]);
                       <li className="filter-section-item">
 
                         {/* add selected class if its selected */}
-                        <button className="filter-section-btn">
+                        <button className="filter-section-btn"  onClick={() => shipperInfoChange(item.value)}>
                           <div className="filter-section-btn-icon">
-                            <label className="checkbox">
-                              <input className="checkbox-input" type="checkbox" name="CheckShipper" onChange={shipperInfoChange} value= {item.name} />
-                              <span className="checkbox-indicator">
-                                <svg width="17" height="13" viewBox="0 0 17 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                  <path d="M5.7 12.025L0 6.325L1.425 4.9L5.7 9.175L14.875 0L16.3 1.425L5.7 12.025Z" fill="#0067B2" />
-                                </svg>
-                              </span>
-                            </label>
+                           
                           </div>
                           <div className="filter-section-btn-text">
                             {item.name}
                           </div>
                           <div className="filter-section-btn-count">
-                          {item.value}
+                         
                           </div>
                         </button>
                       </li>
@@ -1377,9 +1247,9 @@ const [filter_shipDate, set_filter_shipDate] = useState<any[]>([]);
                 
                     </ul>
                   </div><div className="filter-section__body-level-3">
-
+                   {selectedOption === "accountNo" ?
                       <ul className="filter-section-list">
-                      {innerFilterJson1.map((item) => (
+                      {li_accountNumber.map((item) => (
                         <li className="filter-section-item">
                           <button className="filter-section-btn">
                             <div className="filter-section-btn-icon">
@@ -1387,6 +1257,8 @@ const [filter_shipDate, set_filter_shipDate] = useState<any[]>([]);
                               <input
                                 className="checkbox-input"
                                 type="checkbox"
+                                checked={filter__accountNo.includes(item.name)}
+
                                 name="CheckShipper"
                                 onChange={(event) => valueBasedFilter(event, item.type)}
                                 value={item.name}
@@ -1413,6 +1285,279 @@ const [filter_shipDate, set_filter_shipDate] = useState<any[]>([]);
                       
                         
                       </ul>
+                    : selectedOption === "deliveredDate" ?
+                      <ul className="filter-section-list">
+                      {li_deliveredDate.map((item) => (
+                        <li className="filter-section-item">
+                          <button className="filter-section-btn">
+                            <div className="filter-section-btn-icon">
+                              <label className="checkbox">
+                              <input
+                                className="checkbox-input"
+                                type="checkbox"
+                                checked={filter__deliveredDate.includes(item.name)}
+
+                                name="CheckShipper"
+                                onChange={(event) => valueBasedFilter(event, item.type)}
+                                value={item.name}
+                              />
+
+                              
+                            
+                                <span className="checkbox-indicator">
+                                  <svg width="17" height="13" viewBox="0 0 17 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M5.7 12.025L0 6.325L1.425 4.9L5.7 9.175L14.875 0L16.3 1.425L5.7 12.025Z" fill="#0067B2" />
+                                  </svg>
+                                </span>
+                              </label>
+                            </div>
+                            <div className="filter-section-btn-text">
+                            {item.name}
+                            </div>
+                            <div className="filter-section-btn-count">
+                              {item.count}
+                            </div>
+                          </button>
+                        </li>
+                      ))}
+                      </ul>
+                       : selectedOption === "numberOfAttempt" ?
+                       <ul className="filter-section-list">
+                       {li_noOfAttempt.map((item) => (
+                         <li className="filter-section-item">
+                           <button className="filter-section-btn">
+                             <div className="filter-section-btn-icon">
+                               <label className="checkbox">
+                               <input
+                                 className="checkbox-input"
+                                 type="checkbox"
+                                 checked={filter__attemptDelivery.includes(item.name)}
+ 
+                                 name="CheckShipper"
+                                 onChange={(event) => valueBasedFilter(event, item.type)}
+                                 value={item.name}
+                               />
+ 
+                               
+                             
+                                 <span className="checkbox-indicator">
+                                   <svg width="17" height="13" viewBox="0 0 17 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                     <path d="M5.7 12.025L0 6.325L1.425 4.9L5.7 9.175L14.875 0L16.3 1.425L5.7 12.025Z" fill="#0067B2" />
+                                   </svg>
+                                 </span>
+                               </label>
+                             </div>
+                             <div className="filter-section-btn-text">
+                             {item.name}
+                             </div>
+                             <div className="filter-section-btn-count">
+                               {item.count}
+                             </div>
+                           </button>
+                         </li>
+                       ))}
+                       
+                         
+                       </ul>
+                        : selectedOption === "packageKg" ?
+                        <ul className="filter-section-list">
+                        {li_packageKg.map((item) => (
+                          <li className="filter-section-item">
+                            <button className="filter-section-btn">
+                              <div className="filter-section-btn-icon">
+                                <label className="checkbox">
+                                <input
+                                  className="checkbox-input"
+                                  type="checkbox"
+                                  checked={filter__packageKg.includes(item.name)}
+  
+                                  name="CheckShipper"
+                                  onChange={(event) => valueBasedFilter(event, item.type)}
+                                  value={item.name}
+                                />
+                                  <span className="checkbox-indicator">
+                                    <svg width="17" height="13" viewBox="0 0 17 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path d="M5.7 12.025L0 6.325L1.425 4.9L5.7 9.175L14.875 0L16.3 1.425L5.7 12.025Z" fill="#0067B2" />
+                                    </svg>
+                                  </span>
+                                </label>
+                              </div>
+                              <div className="filter-section-btn-text">
+                              {item.name}
+                              </div>
+                              <div className="filter-section-btn-count">
+                                {item.count}
+                              </div>
+                            </button>
+                          </li>
+                        ))}
+                        </ul>
+                        : selectedOption === "packageLbs" ?
+                        <ul className="filter-section-list">
+                        {li_packageLbs.map((item) => (
+                          <li className="filter-section-item">
+                            <button className="filter-section-btn">
+                              <div className="filter-section-btn-icon">
+                                <label className="checkbox">
+                                <input
+                                  className="checkbox-input"
+                                  type="checkbox"
+                                  checked={filter__packageLbs.includes(item.name)}
+  
+                                  name="CheckShipper"
+                                  onChange={(event) => valueBasedFilter(event, item.type)}
+                                  value={item.name}
+                                />
+                                  <span className="checkbox-indicator">
+                                    <svg width="17" height="13" viewBox="0 0 17 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path d="M5.7 12.025L0 6.325L1.425 4.9L5.7 9.175L14.875 0L16.3 1.425L5.7 12.025Z" fill="#0067B2" />
+                                    </svg>
+                                  </span>
+                                </label>
+                              </div>
+                              <div className="filter-section-btn-text">
+                              {item.name}
+                              </div>
+                              <div className="filter-section-btn-count">
+                                {item.count}
+                              </div>
+                            </button>
+                          </li>
+                        ))}
+                        </ul>
+                        : selectedOption === "purchaseOrderNumber" ?
+                        <ul className="filter-section-list">
+                        {li_purchaseOrderNumber.map((item) => (
+                          <li className="filter-section-item">
+                            <button className="filter-section-btn">
+                              <div className="filter-section-btn-icon">
+                                <label className="checkbox">
+                                <input
+                                  className="checkbox-input"
+                                  type="checkbox"
+                                  checked={filter__purchaseOrderNo.includes(item.name)}
+  
+                                  name="CheckShipper"
+                                  onChange={(event) => valueBasedFilter(event, item.type)}
+                                  value={item.name}
+                                />
+                                  <span className="checkbox-indicator">
+                                    <svg width="17" height="13" viewBox="0 0 17 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path d="M5.7 12.025L0 6.325L1.425 4.9L5.7 9.175L14.875 0L16.3 1.425L5.7 12.025Z" fill="#0067B2" />
+                                    </svg>
+                                  </span>
+                                </label>
+                              </div>
+                              <div className="filter-section-btn-text">
+                              {item.name}
+                              </div>
+                              <div className="filter-section-btn-count">
+                                {item.count}
+                              </div>
+                            </button>
+                          </li>
+                        ))}
+                        </ul>
+                        : selectedOption === "reference" ?
+                        <ul className="filter-section-list">
+                        {li_reference.map((item) => (
+                          <li className="filter-section-item">
+                            <button className="filter-section-btn">
+                              <div className="filter-section-btn-icon">
+                                <label className="checkbox">
+                                <input
+                                  className="checkbox-input"
+                                  type="checkbox"
+                                  checked={filter__reference.includes(item.name)}
+  
+                                  name="CheckShipper"
+                                  onChange={(event) => valueBasedFilter(event, item.type)}
+                                  value={item.name}
+                                />
+                                  <span className="checkbox-indicator">
+                                    <svg width="17" height="13" viewBox="0 0 17 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path d="M5.7 12.025L0 6.325L1.425 4.9L5.7 9.175L14.875 0L16.3 1.425L5.7 12.025Z" fill="#0067B2" />
+                                    </svg>
+                                  </span>
+                                </label>
+                              </div>
+                              <div className="filter-section-btn-text">
+                              {item.name}
+                              </div>
+                              <div className="filter-section-btn-count">
+                                {item.count}
+                              </div>
+                            </button>
+                          </li>
+                        ))}
+                        </ul>
+                        : selectedOption === "scheduledDeliveryDate" ?
+                        <ul className="filter-section-list">
+                        {li_scheduledDeliveryDate.map((item) => (
+                          <li className="filter-section-item">
+                            <button className="filter-section-btn">
+                              <div className="filter-section-btn-icon">
+                                <label className="checkbox">
+                                <input
+                                  className="checkbox-input"
+                                  type="checkbox"
+                                  checked={filter_scheduledDeliveryDate.includes(item.name)}
+  
+                                  name="CheckShipper"
+                                  onChange={(event) => valueBasedFilter(event, item.type)}
+                                  value={item.name}
+                                />
+                                  <span className="checkbox-indicator">
+                                    <svg width="17" height="13" viewBox="0 0 17 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path d="M5.7 12.025L0 6.325L1.425 4.9L5.7 9.175L14.875 0L16.3 1.425L5.7 12.025Z" fill="#0067B2" />
+                                    </svg>
+                                  </span>
+                                </label>
+                              </div>
+                              <div className="filter-section-btn-text">
+                              {item.name}
+                              </div>
+                              <div className="filter-section-btn-count">
+                                {item.count}
+                              </div>
+                            </button>
+                          </li>
+                        ))}
+                        </ul>
+                        : selectedOption === "shipDate" ?
+                        <ul className="filter-section-list">
+                        {li_shipDate.map((item) => (
+                          <li className="filter-section-item">
+                            <button className="filter-section-btn">
+                              <div className="filter-section-btn-icon">
+                                <label className="checkbox">
+                                <input
+                                  className="checkbox-input"
+                                  type="checkbox"
+                                  checked={filter_shipDate.includes(item.name)}
+  
+                                  name="CheckShipper"
+                                  onChange={(event) => valueBasedFilter(event, item.type)}
+                                  value={item.name}
+                                />
+                                  <span className="checkbox-indicator">
+                                    <svg width="17" height="13" viewBox="0 0 17 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path d="M5.7 12.025L0 6.325L1.425 4.9L5.7 9.175L14.875 0L16.3 1.425L5.7 12.025Z" fill="#0067B2" />
+                                    </svg>
+                                  </span>
+                                </label>
+                              </div>
+                              <div className="filter-section-btn-text">
+                              {item.name}
+                              </div>
+                              <div className="filter-section-btn-count">
+                                {item.count}
+                              </div>
+                            </button>
+                          </li>
+                        ))}
+                        </ul>
+                      : "" }
                     </div></>
                 }
                 
