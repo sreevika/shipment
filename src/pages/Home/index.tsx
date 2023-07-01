@@ -297,7 +297,7 @@ export default function HomePage() {
 
 
   //first layer filter selection
-  const [innerFilterJson1, setInnerFilterJson1] = useState<any[]>([]);
+
   const [li_accountNumber, set_li_accountNumber] = useState<any[]>([]);
   const [li_deliveredDate, set_li_deliveredDate] = useState<any[]>([]);
   const [li_noOfAttempt, set_li_noOfAttempt] = useState<any[]>([]);
@@ -563,7 +563,7 @@ const [filter_model, set_filter_model] = useState<any[]>([]);
   
     let filteredData_level1 :shipment[] =[];
    
-    let filteredData :shipment[] =[];
+
     if(userinfo.length >0) {
     
       if(userinfo.includes("delayed")) {
