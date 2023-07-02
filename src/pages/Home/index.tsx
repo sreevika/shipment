@@ -260,6 +260,15 @@ export default function HomePage() {
   { name: 'Ship Date', value: "shipDate"}
 ];
 
+let RecipientInfomationArr = [{ name: 'Recipient Contact Name', value: "recipientContactName"},
+{ name: 'Recipient Company', value:"recipientCompany" },
+{ name: 'Recipient Address', value: "recipientAddress" },
+{ name: 'Recipient City', value:"recipientCity" },
+{ name: 'Recipient State', value: "recipientState" },
+{ name: 'Recipient Country', value: "recipientCountry" },
+{ name: 'Recipient Postal', value: "recipientPostal" },
+];
+
   //FOR VALIDATION
   originalRows.forEach((item) => {
     const deliveredTime = formatDate(item.deliveredTime, dateFormatToDisplay);
@@ -292,13 +301,18 @@ export default function HomePage() {
   const [isCardSelected, setCardSelected] = useState("");
   const [anyFilter, setAnyFilter] = useState(false);
   const filterByBlock = (value: string) => {
+
+    if(value == isCardSelected)  {
+      setCardSelected("")
+      clearFilter(value);
+    } else {
     resetFilters();
     setAnyFilter(true);
     let tempArr = [];
     tempArr.push(getFilterValueforUI(value));
     setSelectedList(tempArr);
 
-
+    
     setCardSelected(value);
     if (searchType != "Store ID") {
       setSearchValue("");
@@ -357,6 +371,7 @@ export default function HomePage() {
       console.log("FILLL"+JSON.stringify(filterBlockData))
       
     }
+  }
   };
   const [selectedDiv, setSelectedDiv] = useState();
 
@@ -368,18 +383,23 @@ export default function HomePage() {
     e.preventDefault();
     const { value, checked } = e.target;
     let tempArr: any[] = [];
-
+    console.log("CHCEKKK"+ checked+"--"+value)
     if (checked) {
       tempArr = [...userinfo, value];
+      
+      setTimeout(() => {
+        // Perform additional actions after the delay
+        console.log('Checkbox value after delay:', userinfo);
+      }, 100);
     } else {
       tempArr = userinfo.filter((e) => e !== value);
     }
-
+    
     setUserInfo(tempArr);
   };
-  useEffect(() => {
+  // useEffect(() => {
     
-  }, [userinfo]);
+  // }, [userinfo]);
 
 
   //first layer filter selection
@@ -393,6 +413,16 @@ export default function HomePage() {
   const [li_reference, set_li_reference] = useState<any[]>([]);
   const [li_scheduledDeliveryDate, set_li_scheduledDeliveryDate] = useState<any[]>([]);
   const [li_shipDate, set_li_shipDate] = useState<any[]>([]);
+  const [li_recipientName, set_li_recipientName] = useState<any[]>([]);
+  const [li_recipientCompany, set_li_recipientCompany] = useState<any[]>([]);
+
+  const [li_recipientAddress, set_li_recipientAddress] = useState<any[]>([]);
+  const [li_recipientCity, set_li_recipientCity] = useState<any[]>([]);
+  const [li_recipientState, set_li_recipientState] = useState<any[]>([]);
+  const [li_recipientCountry, set_li_recipientCountry] = useState<any[]>([]);
+  const [li_recipientPostal, set_li_recipientPostal] = useState<any[]>([]);
+
+
   const[selectedOption, setSelectedOption] = useState("");
   const shipperInfoChange = (value: string)  => {
 
@@ -474,6 +504,72 @@ export default function HomePage() {
       .value();
       set_li_shipDate(shipDateArr);
 
+     } else if(value == "recipientContactName") {
+     
+      const recipientContactNameArr = _(originalRows)
+      .groupBy('recipientContactName')
+      .map((items, name) => ({ name, count: items.length , type:"recipientContactName"}))
+      .value();
+      set_li_recipientName(recipientContactNameArr);
+
+     } else if(value == "recipientCompany") {
+     
+      const recipientCompanyArr = _(originalRows)
+      .groupBy('recipientCompany')
+      .map((items, name) => ({ name, count: items.length , type:"recipientCompany"}))
+      .value();
+      set_li_recipientCompany(recipientCompanyArr);
+
+     }
+
+     else if(value == "recipientAddress") {
+     
+      const recipientAddressArr = _(originalRows)
+      .groupBy('recipientAddress')
+      .map((items, name) => ({ name, count: items.length , type:"recipientAddress"}))
+      .value();
+      set_li_recipientAddress(recipientAddressArr);
+
+     }
+
+     else if(value == "recipientCity") {
+     
+      const recipientCityArr = _(originalRows)
+      .groupBy('recipientCity')
+      .map((items, name) => ({ name, count: items.length , type:"recipientCity"}))
+      .value();
+      set_li_recipientCity(recipientCityArr);
+
+     }
+
+     else if(value == "recipientState") {
+     
+      const recipientStateArr = _(originalRows)
+      .groupBy('recipientState')
+      .map((items, name) => ({ name, count: items.length , type:"recipientState"}))
+      .value();
+      set_li_recipientState(recipientStateArr);
+
+     }
+
+     else if(value == "recipientCountry") {
+     
+      const recipientCountryArr = _(originalRows)
+      .groupBy('recipientCountry')
+      .map((items, name) => ({ name, count: items.length , type:"recipientCountry"}))
+      .value();
+      set_li_recipientCountry(recipientCountryArr);
+
+     }
+
+     else if(value == "recipientPostal") {
+     
+      const recipientPostalArr = _(originalRows)
+      .groupBy('recipientPostal')
+      .map((items, name) => ({ name, count: items.length , type:"recipientPostal"}))
+      .value();
+      set_li_recipientPostal(recipientPostalArr);
+
      }
   }
   
@@ -487,6 +583,17 @@ const [filter__purchaseOrderNo, set_filter__purchaseOrderNo] = useState<any[]>([
 const [filter__reference, set_filter__reference] = useState<any[]>([]);
 const [filter_scheduledDeliveryDate, set_filter_scheduledDeliveryDate] = useState<any[]>([]);
 const [filter_shipDate, set_filter_shipDate] = useState<any[]>([]);
+
+//third layer filter
+// const [filter__accountNo, set_filter__accountNo] = useState<any[]>([]);
+// const [filter__deliveredDate, set_filter__deliveredDate] = useState<any[]>([]);
+// const [filter__attemptDelivery, set_filter__attemptDelivery] = useState<any[]>([]);
+// const [filter__packageKg, set_filter__packageKg] = useState<any[]>([]);
+// const [filter__packageLbs, set_filter__packageLbs] = useState<any[]>([]);
+// const [filter__purchaseOrderNo, set_filter__purchaseOrderNo] = useState<any[]>([]);
+// const [filter__reference, set_filter__reference] = useState<any[]>([]);
+// const [filter_scheduledDeliveryDate, set_filter_scheduledDeliveryDate] = useState<any[]>([]);
+// const [filter_shipDate, set_filter_shipDate] = useState<any[]>([]);
 
   const valueBasedFilter = (e :any, type :any)  => {
    
@@ -622,15 +729,22 @@ const [filter_shipDate, set_filter_shipDate] = useState<any[]>([]);
   const toggleFilter = () => {
     setShowFilter(!showFilter);
   };
-  const [innerFilter, setInnerFilter] = useState(1);
+  const [innerFilter, setInnerFilter] = useState(0);
   const [innerFilterJson, setInnerFilterJson] = useState<any[]>([]);
 
+  // first layer filter
   const showInnerFilter = (val : number) => {
+    // shipment status
     if(val == 1){
       setInnerFilter(1);
     } else if(val == 2) {
+      // shipment info
       setInnerFilterJson(ShipmentInformationArr);
       setInnerFilter(2);
+    }  else if(val == 4) {
+      //recipient
+      setInnerFilterJson(RecipientInfomationArr);
+      setInnerFilter(4);
     }
   }
   const applyFilter = () => {
@@ -1260,7 +1374,7 @@ const [filter_shipDate, set_filter_shipDate] = useState<any[]>([]);
                         </div>
                       </button>
                     </li>
-                    <li className="filter-section-item">
+                    <li className={innerFilter == 4 ?"filter-section-item active" : "filter-section-item" } onClick={() => showInnerFilter(4)}>
                       <button className="filter-section-btn">
                         <div className="filter-section-btn-icon">
 
@@ -1279,14 +1393,17 @@ const [filter_shipDate, set_filter_shipDate] = useState<any[]>([]);
                     </li>
                   </ul>
                 </div>
-                {innerFilter == 1 ?
+                {innerFilter <= 1 ?
                 <div className="filter-section__body-level-2 shipper___info__tab">
+                  {innerFilter ==1 ?
                   <ul className="filter-section-list">
                     <li className="filter-section-item" onClick={()=>clickedItem("delayed")}>
 
                       {/* add selected class if its selected */}
+                   
                       <button className={selectedDiv == "delayed" ? "filter-section-btn selected" : "filter-section-btn" } >
                         <div className="filter-section-btn-icon">
+
                           <label className="checkbox">
                             <input className="checkbox-input" type="checkbox" name="CheckShipper" onChange={shipperChange} value="delayed" 
                             checked={userinfo.includes("delayed")}/>
@@ -1386,6 +1503,7 @@ const [filter_shipDate, set_filter_shipDate] = useState<any[]>([]);
                       </button>
                     </li>
                   </ul>
+                  : "" }
                 </div>
                 : 
                 <><div className="filter-section__body-level-2">
@@ -1723,6 +1841,238 @@ const [filter_shipDate, set_filter_shipDate] = useState<any[]>([]);
                           </li>
                         ))}
                         </ul>
+                        : selectedOption === "recipientContactName" ?
+                        <ul className="filter-section-list">
+                        {li_recipientName.map((item) => (
+                          <li className="filter-section-item" onClick={()=>clickedItem(item.name)}>
+                          <button className={selectedDiv == item.name ? "filter-section-btn selected" : "filter-section-btn" }>
+                              <div className="filter-section-btn-icon">
+                                <label className="checkbox">
+                                <input
+                                  className="checkbox-input"
+                                  type="checkbox"
+                                  checked={filter_shipDate.includes(item.name)}
+  
+                                  name="CheckShipper"
+                                  onChange={(event) => valueBasedFilter(event, item.type)}
+                                  value={item.name}
+                                />
+                                  <span className="checkbox-indicator">
+                                    <svg width="17" height="13" viewBox="0 0 17 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path d="M5.7 12.025L0 6.325L1.425 4.9L5.7 9.175L14.875 0L16.3 1.425L5.7 12.025Z" fill="#0067B2" />
+                                    </svg>
+                                  </span>
+                                </label>
+                              </div>
+                              <div className="filter-section-btn-text">
+                              {item.name}
+                              </div>
+                              <div className="filter-section-btn-count">
+                                {item.count}
+                              </div>
+                            </button>
+                          </li>
+                        ))}
+                        </ul>
+                        : selectedOption === "recipientCompany" ?
+                        <ul className="filter-section-list">
+                        {li_recipientCompany.map((item) => (
+                          <li className="filter-section-item" onClick={()=>clickedItem(item.name)}>
+                          <button className={selectedDiv == item.name ? "filter-section-btn selected" : "filter-section-btn" }>
+                              <div className="filter-section-btn-icon">
+                                <label className="checkbox">
+                                <input
+                                  className="checkbox-input"
+                                  type="checkbox"
+                                  checked={filter_shipDate.includes(item.name)}
+  
+                                  name="CheckShipper"
+                                  onChange={(event) => valueBasedFilter(event, item.type)}
+                                  value={item.name}
+                                />
+                                  <span className="checkbox-indicator">
+                                    <svg width="17" height="13" viewBox="0 0 17 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path d="M5.7 12.025L0 6.325L1.425 4.9L5.7 9.175L14.875 0L16.3 1.425L5.7 12.025Z" fill="#0067B2" />
+                                    </svg>
+                                  </span>
+                                </label>
+                              </div>
+                              <div className="filter-section-btn-text">
+                              {item.name}
+                              </div>
+                              <div className="filter-section-btn-count">
+                                {item.count}
+                              </div>
+                            </button>
+                          </li>
+                        ))}
+                        </ul>
+                         : selectedOption === "recipientAddress" ?
+                         <ul className="filter-section-list">
+                         {li_recipientAddress.map((item) => (
+                           <li className="filter-section-item" onClick={()=>clickedItem(item.name)}>
+                           <button className={selectedDiv == item.name ? "filter-section-btn selected" : "filter-section-btn" }>
+                               <div className="filter-section-btn-icon">
+                                 <label className="checkbox">
+                                 <input
+                                   className="checkbox-input"
+                                   type="checkbox"
+                                   checked={filter_shipDate.includes(item.name)}
+   
+                                   name="CheckShipper"
+                                   onChange={(event) => valueBasedFilter(event, item.type)}
+                                   value={item.name}
+                                 />
+                                   <span className="checkbox-indicator">
+                                     <svg width="17" height="13" viewBox="0 0 17 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                       <path d="M5.7 12.025L0 6.325L1.425 4.9L5.7 9.175L14.875 0L16.3 1.425L5.7 12.025Z" fill="#0067B2" />
+                                     </svg>
+                                   </span>
+                                 </label>
+                               </div>
+                               <div className="filter-section-btn-text">
+                               {item.name}
+                               </div>
+                               <div className="filter-section-btn-count">
+                                 {item.count}
+                               </div>
+                             </button>
+                           </li>
+                         ))}
+                         </ul>
+                          : selectedOption === "recipientCity" ?
+                          <ul className="filter-section-list">
+                          {li_recipientCity.map((item) => (
+                            <li className="filter-section-item" onClick={()=>clickedItem(item.name)}>
+                            <button className={selectedDiv == item.name ? "filter-section-btn selected" : "filter-section-btn" }>
+                                <div className="filter-section-btn-icon">
+                                  <label className="checkbox">
+                                  <input
+                                    className="checkbox-input"
+                                    type="checkbox"
+                                    checked={filter_shipDate.includes(item.name)}
+    
+                                    name="CheckShipper"
+                                    onChange={(event) => valueBasedFilter(event, item.type)}
+                                    value={item.name}
+                                  />
+                                    <span className="checkbox-indicator">
+                                      <svg width="17" height="13" viewBox="0 0 17 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M5.7 12.025L0 6.325L1.425 4.9L5.7 9.175L14.875 0L16.3 1.425L5.7 12.025Z" fill="#0067B2" />
+                                      </svg>
+                                    </span>
+                                  </label>
+                                </div>
+                                <div className="filter-section-btn-text">
+                                {item.name}
+                                </div>
+                                <div className="filter-section-btn-count">
+                                  {item.count}
+                                </div>
+                              </button>
+                            </li>
+                          ))}
+                          </ul>
+                           : selectedOption === "recipientState" ?
+                           <ul className="filter-section-list">
+                           {li_recipientState.map((item) => (
+                             <li className="filter-section-item" onClick={()=>clickedItem(item.name)}>
+                             <button className={selectedDiv == item.name ? "filter-section-btn selected" : "filter-section-btn" }>
+                                 <div className="filter-section-btn-icon">
+                                   <label className="checkbox">
+                                   <input
+                                     className="checkbox-input"
+                                     type="checkbox"
+                                     checked={filter_shipDate.includes(item.name)}
+     
+                                     name="CheckShipper"
+                                     onChange={(event) => valueBasedFilter(event, item.type)}
+                                     value={item.name}
+                                   />
+                                     <span className="checkbox-indicator">
+                                       <svg width="17" height="13" viewBox="0 0 17 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                         <path d="M5.7 12.025L0 6.325L1.425 4.9L5.7 9.175L14.875 0L16.3 1.425L5.7 12.025Z" fill="#0067B2" />
+                                       </svg>
+                                     </span>
+                                   </label>
+                                 </div>
+                                 <div className="filter-section-btn-text">
+                                 {item.name}
+                                 </div>
+                                 <div className="filter-section-btn-count">
+                                   {item.count}
+                                 </div>
+                               </button>
+                             </li>
+                           ))}
+                           </ul>
+                            : selectedOption === "recipientCountry" ?
+                        <ul className="filter-section-list">
+                        {li_recipientCountry.map((item) => (
+                          <li className="filter-section-item" onClick={()=>clickedItem(item.name)}>
+                          <button className={selectedDiv == item.name ? "filter-section-btn selected" : "filter-section-btn" }>
+                              <div className="filter-section-btn-icon">
+                                <label className="checkbox">
+                                <input
+                                  className="checkbox-input"
+                                  type="checkbox"
+                                  checked={filter_shipDate.includes(item.name)}
+  
+                                  name="CheckShipper"
+                                  onChange={(event) => valueBasedFilter(event, item.type)}
+                                  value={item.name}
+                                />
+                                  <span className="checkbox-indicator">
+                                    <svg width="17" height="13" viewBox="0 0 17 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path d="M5.7 12.025L0 6.325L1.425 4.9L5.7 9.175L14.875 0L16.3 1.425L5.7 12.025Z" fill="#0067B2" />
+                                    </svg>
+                                  </span>
+                                </label>
+                              </div>
+                              <div className="filter-section-btn-text">
+                              {item.name}
+                              </div>
+                              <div className="filter-section-btn-count">
+                                {item.count}
+                              </div>
+                            </button>
+                          </li>
+                        ))}
+                        </ul>
+                         : selectedOption === "recipientPostal" ?
+                         <ul className="filter-section-list">
+                         {li_recipientPostal.map((item) => (
+                           <li className="filter-section-item" onClick={()=>clickedItem(item.name)}>
+                           <button className={selectedDiv == item.name ? "filter-section-btn selected" : "filter-section-btn" }>
+                               <div className="filter-section-btn-icon">
+                                 <label className="checkbox">
+                                 <input
+                                   className="checkbox-input"
+                                   type="checkbox"
+                                   checked={filter_shipDate.includes(item.name)}
+   
+                                   name="CheckShipper"
+                                   onChange={(event) => valueBasedFilter(event, item.type)}
+                                   value={item.name}
+                                 />
+                                   <span className="checkbox-indicator">
+                                     <svg width="17" height="13" viewBox="0 0 17 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                       <path d="M5.7 12.025L0 6.325L1.425 4.9L5.7 9.175L14.875 0L16.3 1.425L5.7 12.025Z" fill="#0067B2" />
+                                     </svg>
+                                   </span>
+                                 </label>
+                               </div>
+                               <div className="filter-section-btn-text">
+                               {item.name}
+                               </div>
+                               <div className="filter-section-btn-count">
+                                 {item.count}
+                               </div>
+                             </button>
+                           </li>
+                         ))}
+                         </ul>
+                      
                       : "" }
                     </div></>
                 }

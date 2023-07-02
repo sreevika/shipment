@@ -386,24 +386,24 @@ html {
   cursor: pointer;
 
   .checkbox-input {
-    //all: unset;
+    all: unset;
     position: absolute;
     top: 0;
     left: 0;
     height: 100%;
     width: 100%;
 
-    // &:checked~.checkbox-indicator {
-    //   border-color: var(--checkbox-active-color);
+    &:checked~.checkbox-indicator {
+      border-color: var(--checkbox-active-color);
 
-    //   svg {
-    //     opacity: 1;
-    //   }
-    // }
+      svg {
+        opacity: 1;
+      }
+    }
 
-    // &:disabled~.checkbox-indicator {
-    //   opacity: 0.5;
-    // }
+    &:disabled~.checkbox-indicator {
+      opacity: 0.5;
+    }
   }
 
   .checkbox-indicator {
