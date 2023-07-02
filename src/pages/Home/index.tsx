@@ -277,7 +277,18 @@ export default function HomePage() {
   const [isCardSelected, setCardSelected] = useState("");
   const [anyFilter, setAnyFilter] = useState(false);
   const filterByBlock = (value: string) => {
-   
+     filterSection =[];
+     filter_layer1_accountNo =[];
+   filter_layer1_deliveredDate=[];
+ filter_layer1_attemptDelivery=[];
+     filter_layer1_packageKg=[];
+     filter_layer1_packageLbs=[];
+     filter_layer1_purchaseOrderNumber =[];
+     filter_layer1_reference=[];
+     filter_layer1_scheduledDeliveryDate=[];
+     filter_layer1_shipDate =[];
+    
+     setUserInfo([])
     setAnyFilter(true);
     let tempArr = [];
     tempArr.push(getFilterValueforUI(value));
