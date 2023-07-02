@@ -35,10 +35,6 @@ import shipment from "../../components/Interfaces";
 import {dashboardIconPack,formatDate,getFilterValueforUI} from "../../components/commonFunctions";
 
 
-
-
-
-
 let originalRows: shipment[] = [];
 let originalRows_backup: shipment[] = [];
 const EDUCONNECT_URL = `https://shipmenttrackingapi-qa.signsharecloud.com/api`;
@@ -80,11 +76,26 @@ export default function HomePage() {
   const [selectedList, setSelectedList] = useState<any[]>([]);
   const [showFilter, setShowFilter] = useState(false);
 
+  const [userinfo, setUserInfo] = useState<any[]>([]);
+  const [filter_model, set_filter_model] = useState<any[]>([]);
+
   const handleLogout = () => {
     navigate("/login"); // Use the navigate function to navigate to the login page
   };
   let originalRows1 = originalRows;
   let filterBlockData = originalRows
+  let filterSection :any[]= [];
+  let filter_layer1_accountNo :any[]= [];
+  let filter_layer1_deliveredDate :any[]= [];
+  let filter_layer1_attemptDelivery :any[]= [];
+  let filter_layer1_packageKg :any[]= [];
+  let filter_layer1_packageLbs :any[]= [];
+  let filter_layer1_purchaseOrderNumber :any[]= [];
+  let filter_layer1_reference :any[]= [];
+  let filter_layer1_scheduledDeliveryDate :any[]= [];
+  let filter_layer1_shipDate :any[]= [];
+
+
   const selectSearchType = () => {
     setDropDown(!dropDown);
   };
@@ -97,23 +108,78 @@ export default function HomePage() {
     setSearchValue(e.target.value);
   };
   const clearSearchValue = () => {
+  
     setSearchValue("");
     console.log(JSON.stringify(originalRows_backup));
     originalRows = originalRows_backup;
     setRows(originalRows);
+   
     setStoreId("");
     setSelectedList([]);
     setCardSelected("");
 
     
   };
+
   const clearFilter = (value: string) => {
-    value = value.trim();
-    clearSearchValue();
+    if(value.includes("Delivered date -")) {
+      value = value.split("Delivered date -")[1];
+      filter_layer1_deliveredDate = filter__deliveredDate.filter((e) => e !== value);
+    }
+    if(value.includes("Account No -")) {
+      value = value.split("Account No -")[1];
+      filter_layer1_accountNo = filter__accountNo.filter((e) => e !== value);
+    }
+    if(value.includes("No of attempt -")) {
+      value = value.split("No of attempt -")[1];
+      filter_layer1_attemptDelivery = filter__attemptDelivery.filter((e) => e !== value);
+
+    }
+    if(value.includes("Package Weight (Kg) -")) {
+      value = value.split("Package Weight (Kg) -")[1];
+      filter_layer1_packageKg= filter__packageKg.filter((e) => e !== value);
+
+    }
+    if(value.includes("Package Weight (Lbs) -")) {
+      value = value.split("Package Weight (Lbs) -")[1];
+      filter_layer1_packageLbs= filter__packageLbs.filter((e) => e !== value);
+
+    }
+    if(value.includes("Puchase Order No -")) {
+      value = value.split("Puchase Order No -")[1];
+      filter_layer1_purchaseOrderNumber= filter__purchaseOrderNo.filter((e) => e !== value);
+
+    }
+    if(value.includes("Reference -")) {
+      value = value.split("Reference -")[1];
+      filter_layer1_reference= filter__reference.filter((e) => e !== value);
+
+    }
+  
+    if(value.includes("Scheduled Delivery Date -")) {
+      value = value.split("Scheduled Delivery Date -")[1];
+      filter_layer1_scheduledDeliveryDate= filter__reference.filter((e) => e !== value);
+
+    }
+    if(value.includes("Ship Date -")) {
+      value = value.split("Ship Date -")[1];
+      filter_layer1_shipDate= filter_layer1_shipDate.filter((e) => e !== value);
+
+    }
+
+    let filterArr = userinfo.filter((e) => e !== value);
+    filterSection = filterArr;
+  
+  applyFilter();
+  
   }
+
+
   
 
   const searchData = (event: { key: string }) => {
+    setAnyFilter(true);
+
     if (event.key === "Enter") {
       setCardSelected("");
 
@@ -209,9 +275,10 @@ export default function HomePage() {
   // console.log("sasaas" + todayDate);
 
   const [isCardSelected, setCardSelected] = useState("");
-
+  const [anyFilter, setAnyFilter] = useState(false);
   const filterByBlock = (value: string) => {
    
+    setAnyFilter(true);
     let tempArr = [];
     tempArr.push(getFilterValueforUI(value));
     setSelectedList(tempArr);
@@ -276,7 +343,11 @@ export default function HomePage() {
       
     }
   };
-  const [userinfo, setUserInfo] = useState<any[]>([]);
+  const [selectedDiv, setSelectedDiv] = useState();
+
+  const clickedItem= (value :any)  => {
+    setSelectedDiv(value)
+  }
  
   const shipperChange = (e :any)  => {
     e.preventDefault();
@@ -401,7 +472,7 @@ const [filter__purchaseOrderNo, set_filter__purchaseOrderNo] = useState<any[]>([
 const [filter__reference, set_filter__reference] = useState<any[]>([]);
 const [filter_scheduledDeliveryDate, set_filter_scheduledDeliveryDate] = useState<any[]>([]);
 const [filter_shipDate, set_filter_shipDate] = useState<any[]>([]);
-const [filter_model, set_filter_model] = useState<any[]>([]);
+
   const valueBasedFilter = (e :any, type :any)  => {
    
     let selectedOptionTemp = [];
@@ -548,26 +619,26 @@ const [filter_model, set_filter_model] = useState<any[]>([]);
     }
   }
   const applyFilter = () => {
-    if(selectedList.length >0) {
-      const combinedArray = selectedList.concat(userinfo);
-      const uniqueArray = combinedArray.filter((value, index, self) => {
-        return self.indexOf(value) === index;
-      });
-      setSelectedList(uniqueArray)
-    } else {
-      const combinedArray = userinfo;
-      setSelectedList(combinedArray)
-    }
-    
+    setAnyFilter(true);
+    setShowFilter(false);
 
+    clearSearchValue();
   
+    let tempArray = [];
     let filteredData_level1 :shipment[] =[];
+    if(filterSection.length >0) {
+       tempArray = filterSection;
+    } else {
+       tempArray = userinfo;
+      filterSection = userinfo;
+    }
    
 
-    if(userinfo.length >0) {
+  
+    if(filterSection.length >0) {
     
-      if(userinfo.includes("delayed")) {
-        const filteredData_delayed = rows.filter((item) => {
+      if(filterSection.includes("delayed")) {
+        const filteredData_delayed = originalRows.filter((item) => {
           return Object.keys(item).some(() => item.isDelayed == true);
         });
       
@@ -575,30 +646,30 @@ const [filter_model, set_filter_model] = useState<any[]>([]);
         
       }
 
-      if(userinfo.includes("delivered")) {
-        const filteredData_delivered = rows.filter((item) => {
+      if(filterSection.includes("delivered")) {
+        const filteredData_delivered = originalRows.filter((item) => {
           return Object.keys(item).some(() => item.isDelivered == true);
         });
         filteredData_level1 = filteredData_level1.concat(filteredData_delivered)
       }
 
-      if(userinfo.includes("exception")) {
-        const filteredData_exception = rows.filter((item) => {
+      if(filterSection.includes("exception")) {
+        const filteredData_exception = originalRows.filter((item) => {
           return Object.keys(item).some(() => item.isException == true);
         });
         filteredData_level1 = filteredData_level1.concat(filteredData_exception)
       }
 
       
-      if(userinfo.includes("inTransit")) {
-        const filteredData_intransit = rows.filter((item) => {
+      if(filterSection.includes("inTransit")) {
+        const filteredData_intransit = originalRows.filter((item) => {
           return Object.keys(item).some(() => item.status == "In transit");
         }); 
         filteredData_level1 = filteredData_level1.concat(filteredData_intransit)
       }
 
-      if(userinfo.includes("label")) {
-        const filteredData_label = rows.filter((item) => {
+      if(filterSection.includes("label")) {
+        const filteredData_label = originalRows.filter((item) => {
           return Object.keys(item).some(() => item.status == "Initiated");
         }); 
         filteredData_level1 = filteredData_level1.concat(filteredData_label)
@@ -609,57 +680,137 @@ const [filter_model, set_filter_model] = useState<any[]>([]);
 
 
     }  else {
-      filteredData_level1 = rows;
+      filteredData_level1 = originalRows;
     }
 
     if(filter_model.includes("deliveredDate")) {
-    
-      filteredData_level1 = filteredData_level1.filter((item) => filter__deliveredDate.includes(moment(moment(item.deliveredTime).format('YYYY-MM-DD')).isValid() ? moment(item.deliveredTime).format('YYYY-MM-DD') : "0000-00-00" ));
-      
+      if(filter_layer1_deliveredDate.length >0) {
+        filter_layer1_deliveredDate = filter_layer1_deliveredDate;
+      } else {
+        filter_layer1_deliveredDate = filter__deliveredDate
+      }
+      const newArray = filter_layer1_deliveredDate.map((variable) => "Delivered date -" + variable);
+      tempArray = tempArray.concat(newArray);
+      filteredData_level1 = filteredData_level1.filter((item) => filter_layer1_deliveredDate.includes(moment(moment(item.deliveredTime).format('YYYY-MM-DD')).isValid() ? moment(item.deliveredTime).format('YYYY-MM-DD') : "0000-00-00" ));
     }
     if(filter_model.includes("accountNo")) {
-      
-      filteredData_level1 = filteredData_level1.filter((item) => filter__accountNo.includes(item.accountNumber));
+      if(filter_layer1_accountNo.length >0) {
+        filter_layer1_accountNo = filter_layer1_accountNo;
+      } else {
+        filter_layer1_accountNo = filter__accountNo
+      }
+      const newArray = filter_layer1_accountNo.map((variable) => "Account No -" + variable);
+      tempArray = tempArray.concat(newArray);
+
+      filteredData_level1 = filteredData_level1.filter((item) => filter_layer1_accountNo.includes(item.accountNumber));
       
     }
-
+   
     if(filter_model.includes("noOfAttempt")) {
+
+      if(filter_layer1_attemptDelivery.length >0) {
+        filter_layer1_attemptDelivery = filter_layer1_attemptDelivery;
+      } else {
+        filter_layer1_attemptDelivery = filter__accountNo
+      }
       
-      filteredData_level1 = filteredData_level1.filter((item) => filter__attemptDelivery.includes(item.numberOfAttemptedDeliveries));
+      const newArray = filter_layer1_attemptDelivery.map((variable) => "No of attempt -" + variable);
+      tempArray = tempArray.concat(newArray);
+
+      filteredData_level1 = filteredData_level1.filter((item) => filter_layer1_attemptDelivery.includes(item.numberOfAttemptedDeliveries));
       
     }
 
     if(filter_model.includes("packageKg")) {
+
+      if(filter_layer1_packageKg.length >0) {
+        filter_layer1_packageKg = filter_layer1_packageKg;
+      } else {
+        filter_layer1_packageKg = filter__accountNo
+      }
+
+      const newArray = filter_layer1_packageKg.map((variable) => "Package Weight (Kg) -" + variable);
+      tempArray = tempArray.concat(newArray);
       
-      filteredData_level1 = filteredData_level1.filter((item) =>filter__packageKg.includes(item.packageWeightKg));
+      filteredData_level1 = filteredData_level1.filter((item) =>filter_layer1_packageKg.includes(item.packageWeightKg));
             
     }
 
     if(filter_model.includes("packageLbs")) {
+      if(filter_layer1_packageLbs.length >0) {
+        filter_layer1_packageLbs = filter_layer1_packageLbs;
+      } else {
+        filter_layer1_packageLbs = filter__accountNo
+      }
+
+
+      const newArray = filter_layer1_packageLbs.map((variable) => "Package Weight (Lbs) -" + variable);
+      tempArray = tempArray.concat(newArray);
       
-      filteredData_level1 = filteredData_level1.filter((item) =>filter__packageLbs.includes(item.packageWeightLbs));
+      filteredData_level1 = filteredData_level1.filter((item) =>filter_layer1_packageLbs.includes(item.packageWeightLbs));
             
     }
+   
     if(filter_model.includes("purchaseOrderNumber")) {
+
+      if(filter_layer1_purchaseOrderNumber.length >0) {
+        filter_layer1_purchaseOrderNumber = filter_layer1_purchaseOrderNumber;
+      } else {
+        filter_layer1_purchaseOrderNumber = filter__accountNo
+      }
+
+      const newArray = filter_layer1_purchaseOrderNumber.map((variable) => "Puchase Order No -" + variable);
+      tempArray = tempArray.concat(newArray);
       
-      filteredData_level1 = filteredData_level1.filter((item) =>filter__purchaseOrderNo.includes(item.purchaseOrderNumber));
+      filteredData_level1 = filteredData_level1.filter((item) =>filter_layer1_purchaseOrderNumber.includes(item.purchaseOrderNumber));
     }
 
     if(filter_model.includes("reference")) {
+
+      if(filter_layer1_reference.length >0) {
+        filter_layer1_reference = filter_layer1_reference;
+      } else {
+        filter_layer1_reference = filter__accountNo
+      }
+
+      const newArray = filter_layer1_reference.map((variable) => "Reference -" + variable);
+      tempArray = tempArray.concat(newArray);
       
-      filteredData_level1 = filteredData_level1.filter((item) => filter__reference.includes(item.reference));
+      filteredData_level1 = filteredData_level1.filter((item) => filter_layer1_reference.includes(item.reference));
     }
 
     if(filter_model.includes("scheduledDeliveryDate")) {
+
+      if(filter_layer1_scheduledDeliveryDate.length >0) {
+        filter_layer1_scheduledDeliveryDate = filter_layer1_scheduledDeliveryDate;
+      } else {
+        filter_layer1_scheduledDeliveryDate = filter__accountNo
+      }
+
+
+      const newArray = filter_layer1_scheduledDeliveryDate.map((variable) => "Scheduled Delivery Date -" + variable);
+      tempArray = tempArray.concat(newArray);
       
       
-      filteredData_level1 = filteredData_level1.filter((item) => filter_scheduledDeliveryDate.includes(moment(moment(item.scheduledDeliveryDate).format('YYYY-MM-DD')).isValid() ? moment(item.scheduledDeliveryDate).format('YYYY-MM-DD') : "0000-00-00" ));
+      filteredData_level1 = filteredData_level1.filter((item) => filter_layer1_scheduledDeliveryDate.includes(moment(moment(item.scheduledDeliveryDate).format('YYYY-MM-DD')).isValid() ? moment(item.scheduledDeliveryDate).format('YYYY-MM-DD') : "0000-00-00" ));
     }
     if(filter_model.includes("shipDate")) {
+
+      if(filter_layer1_shipDate.length >0) {
+        filter_layer1_shipDate = filter_layer1_shipDate;
+      } else {
+        filter_layer1_shipDate = filter__accountNo
+      }
+
+      const newArray = filter_layer1_shipDate.map((variable) => "Ship Date -" + variable);
+      tempArray = tempArray.concat(newArray);
       
-      filteredData_level1 = filteredData_level1.filter((item) =>  filter_shipDate.includes(item.shipDate));
+      filteredData_level1 = filteredData_level1.filter((item) =>  filter_layer1_shipDate.includes(item.shipDate));
     }
-   
+    const uniqueArray = tempArray.filter((value, index, self) => {
+      return self.indexOf(value) === index;
+    });
+    setSelectedList(uniqueArray);
    
     setRows(filteredData_level1);
   }
@@ -1116,10 +1267,10 @@ const [filter_model, set_filter_model] = useState<any[]>([]);
                 {innerFilter == 1 ?
                 <div className="filter-section__body-level-2 shipper___info__tab">
                   <ul className="filter-section-list">
-                    <li className="filter-section-item">
+                    <li className="filter-section-item" onClick={()=>clickedItem("delayed")}>
 
                       {/* add selected class if its selected */}
-                      <button className="filter-section-btn selected">
+                      <button className={selectedDiv == "delayed" ? "filter-section-btn selected" : "filter-section-btn" } >
                         <div className="filter-section-btn-icon">
                           <label className="checkbox">
                             <input className="checkbox-input" type="checkbox" name="CheckShipper" onChange={shipperChange} value="delayed" 
@@ -1139,8 +1290,8 @@ const [filter_model, set_filter_model] = useState<any[]>([]);
                         </div>
                       </button>
                     </li>
-                    <li className="filter-section-item">
-                      <button className="filter-section-btn">
+                    <li className="filter-section-item" onClick={()=>clickedItem("delivered")}>
+                      <button className={selectedDiv == "delivered" ? "filter-section-btn selected" : "filter-section-btn" }  >
                         <div className="filter-section-btn-icon">
                           <label className="checkbox">
                             <input className="checkbox-input" type="checkbox" name="CheckShipper" onChange={shipperChange} value="delivered" checked={userinfo.includes("delivered")} />
@@ -1159,8 +1310,8 @@ const [filter_model, set_filter_model] = useState<any[]>([]);
                         </div>
                       </button>
                     </li>
-                    <li className="filter-section-item">
-                      <button className="filter-section-btn">
+                    <li className="filter-section-item"  onClick={()=>clickedItem("exception")}>
+                      <button className={selectedDiv == "exception" ? "filter-section-btn selected" : "filter-section-btn" }>
                         <div className="filter-section-btn-icon">
                           <label className="checkbox">
                             <input className="checkbox-input" type="checkbox" name="CheckShipper" onChange={shipperChange} value="exception" checked={userinfo.includes("exception")} />
@@ -1179,8 +1330,8 @@ const [filter_model, set_filter_model] = useState<any[]>([]);
                         </div>
                       </button>
                     </li>
-                    <li className="filter-section-item">
-                      <button className="filter-section-btn">
+                    <li className="filter-section-item" onClick={()=>clickedItem("inTransit")}>
+                      <button className={selectedDiv == "inTransit" ? "filter-section-btn selected" : "filter-section-btn" }>
                         <div className="filter-section-btn-icon">
                           <label className="checkbox">
                             <input className="checkbox-input" type="checkbox" name="CheckShipper" onChange={shipperChange} value="inTransit" checked={userinfo.includes("inTransit")} />
@@ -1199,8 +1350,8 @@ const [filter_model, set_filter_model] = useState<any[]>([]);
                         </div>
                       </button>
                     </li>
-                    <li className="filter-section-item">
-                      <button className="filter-section-btn">
+                    <li className="filter-section-item" onClick={()=>clickedItem("label")}>
+                      <button className={selectedDiv == "label" ? "filter-section-btn selected" : "filter-section-btn" }>
                         <div className="filter-section-btn-icon">
                           <label className="checkbox">
                             <input className="checkbox-input" type="checkbox" name="CheckShipper" onChange={shipperChange} value="label" checked={userinfo.includes("label")} />
@@ -1225,10 +1376,10 @@ const [filter_model, set_filter_model] = useState<any[]>([]);
                 <><div className="filter-section__body-level-2">
                     <ul className="filter-section-list">
                     {innerFilterJson.map((item) => (
-                      <li className="filter-section-item">
+                      <li className="filter-section-item" onClick={()=>clickedItem(item.value)}>
 
                         {/* add selected class if its selected */}
-                        <button className="filter-section-btn"  onClick={() => shipperInfoChange(item.value)}>
+                        <button className={selectedDiv == item.value ? "filter-section-btn selected" : "filter-section-btn" }  onClick={() => shipperInfoChange(item.value)}>
                           <div className="filter-section-btn-icon">
                            
                           </div>
@@ -1250,8 +1401,8 @@ const [filter_model, set_filter_model] = useState<any[]>([]);
                    {selectedOption === "accountNo" ?
                       <ul className="filter-section-list">
                       {li_accountNumber.map((item) => (
-                        <li className="filter-section-item">
-                          <button className="filter-section-btn">
+                        <li className="filter-section-item" onClick={()=>clickedItem(item.name)}>
+                          <button className={selectedDiv == item.name ? "filter-section-btn selected" : "filter-section-btn" }>
                             <div className="filter-section-btn-icon">
                               <label className="checkbox">
                               <input
@@ -1288,8 +1439,8 @@ const [filter_model, set_filter_model] = useState<any[]>([]);
                     : selectedOption === "deliveredDate" ?
                       <ul className="filter-section-list">
                       {li_deliveredDate.map((item) => (
-                        <li className="filter-section-item">
-                          <button className="filter-section-btn">
+                       <li className="filter-section-item" onClick={()=>clickedItem(item.name)}>
+                          <button className={selectedDiv == item.name ? "filter-section-btn selected" : "filter-section-btn" }>
                             <div className="filter-section-btn-icon">
                               <label className="checkbox">
                               <input
@@ -1324,8 +1475,8 @@ const [filter_model, set_filter_model] = useState<any[]>([]);
                        : selectedOption === "numberOfAttempt" ?
                        <ul className="filter-section-list">
                        {li_noOfAttempt.map((item) => (
-                         <li className="filter-section-item">
-                           <button className="filter-section-btn">
+                        <li className="filter-section-item" onClick={()=>clickedItem(item.name)}>
+                          <button className={selectedDiv == item.name ? "filter-section-btn selected" : "filter-section-btn" }>
                              <div className="filter-section-btn-icon">
                                <label className="checkbox">
                                <input
@@ -1362,8 +1513,8 @@ const [filter_model, set_filter_model] = useState<any[]>([]);
                         : selectedOption === "packageKg" ?
                         <ul className="filter-section-list">
                         {li_packageKg.map((item) => (
-                          <li className="filter-section-item">
-                            <button className="filter-section-btn">
+                           <li className="filter-section-item" onClick={()=>clickedItem(item.name)}>
+                           <button className={selectedDiv == item.name ? "filter-section-btn selected" : "filter-section-btn" }>
                               <div className="filter-section-btn-icon">
                                 <label className="checkbox">
                                 <input
@@ -1395,8 +1546,8 @@ const [filter_model, set_filter_model] = useState<any[]>([]);
                         : selectedOption === "packageLbs" ?
                         <ul className="filter-section-list">
                         {li_packageLbs.map((item) => (
-                          <li className="filter-section-item">
-                            <button className="filter-section-btn">
+                           <li className="filter-section-item" onClick={()=>clickedItem(item.name)}>
+                          <button className={selectedDiv == item.name ? "filter-section-btn selected" : "filter-section-btn" }>
                               <div className="filter-section-btn-icon">
                                 <label className="checkbox">
                                 <input
@@ -1428,8 +1579,8 @@ const [filter_model, set_filter_model] = useState<any[]>([]);
                         : selectedOption === "purchaseOrderNumber" ?
                         <ul className="filter-section-list">
                         {li_purchaseOrderNumber.map((item) => (
-                          <li className="filter-section-item">
-                            <button className="filter-section-btn">
+                          <li className="filter-section-item" onClick={()=>clickedItem(item.name)}>
+                              <button className={selectedDiv == item.name ? "filter-section-btn selected" : "filter-section-btn" }>
                               <div className="filter-section-btn-icon">
                                 <label className="checkbox">
                                 <input
@@ -1461,8 +1612,8 @@ const [filter_model, set_filter_model] = useState<any[]>([]);
                         : selectedOption === "reference" ?
                         <ul className="filter-section-list">
                         {li_reference.map((item) => (
-                          <li className="filter-section-item">
-                            <button className="filter-section-btn">
+                          <li className="filter-section-item" onClick={()=>clickedItem(item.name)}>
+                              <button className={selectedDiv == item.name ? "filter-section-btn selected" : "filter-section-btn" }>
                               <div className="filter-section-btn-icon">
                                 <label className="checkbox">
                                 <input
@@ -1494,8 +1645,8 @@ const [filter_model, set_filter_model] = useState<any[]>([]);
                         : selectedOption === "scheduledDeliveryDate" ?
                         <ul className="filter-section-list">
                         {li_scheduledDeliveryDate.map((item) => (
-                          <li className="filter-section-item">
-                            <button className="filter-section-btn">
+                          <li className="filter-section-item" onClick={()=>clickedItem(item.name)}>
+                            <button className={selectedDiv == item.name ? "filter-section-btn selected" : "filter-section-btn" }>
                               <div className="filter-section-btn-icon">
                                 <label className="checkbox">
                                 <input
@@ -1527,8 +1678,8 @@ const [filter_model, set_filter_model] = useState<any[]>([]);
                         : selectedOption === "shipDate" ?
                         <ul className="filter-section-list">
                         {li_shipDate.map((item) => (
-                          <li className="filter-section-item">
-                            <button className="filter-section-btn">
+                          <li className="filter-section-item" onClick={()=>clickedItem(item.name)}>
+                          <button className={selectedDiv == item.name ? "filter-section-btn selected" : "filter-section-btn" }>
                               <div className="filter-section-btn-icon">
                                 <label className="checkbox">
                                 <input
@@ -1587,12 +1738,13 @@ const [filter_model, set_filter_model] = useState<any[]>([]);
                 </div>
               </li>
               )}
-          
+              {anyFilter == true ? 
               <li className="filter-section__applied-list">
                 <button className="btn btn-close-reset" onClick={clearSearchValue}>
                   Reset
                 </button>
               </li>
+              : "" }
             </ul>
         </div>
 

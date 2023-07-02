@@ -90,3 +90,15 @@ export function formatDate(dateTime: any, format: Intl.DateTimeFormatOptions): s
   export function getFilterValueforUI(value : string) {
     return value;
   }
+
+  export function removePrefixes(array: any[], prefixes: any[]) {
+    return array.map((item: any) => {
+      let newItem = item;
+      prefixes.forEach((prefix: string | any[]) => {
+        if (newItem.startsWith(prefix)) {
+          newItem = newItem.substring(prefix.length);
+        }
+      });
+      return newItem;
+    });
+  };
