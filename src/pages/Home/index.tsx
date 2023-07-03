@@ -117,6 +117,7 @@ export default function HomePage() {
     setStoreId("");
     setSelectedList([]);
     setCardSelected("");
+    setUserInfo([]);
 
     
   };
