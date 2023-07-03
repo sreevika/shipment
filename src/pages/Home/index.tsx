@@ -1393,7 +1393,8 @@ const [filter_shipDate, set_filter_shipDate] = useState<any[]>([]);
                     </li>
                   </ul>
                 </div>
-                {innerFilter <= 1 ?
+                {innerFilter == 0 ? ""
+                : innerFilter ===1 ?
                 <div className="filter-section__body-level-2 shipper___info__tab">
                   {innerFilter ==1 ?
                   <ul className="filter-section-list">
@@ -1505,7 +1506,7 @@ const [filter_shipDate, set_filter_shipDate] = useState<any[]>([]);
                   </ul>
                   : "" }
                 </div>
-                : 
+                :
                 <><div className="filter-section__body-level-2">
                     <ul className="filter-section-list">
                     {innerFilterJson.map((item) => (
