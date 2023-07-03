@@ -6,6 +6,7 @@ interface CheckboxProps {
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   name: string;
   count: number;
+  value:string;
 }
 
 const Checkbox: React.FC<CheckboxProps> = ({
@@ -14,8 +15,9 @@ const Checkbox: React.FC<CheckboxProps> = ({
   onChange,
   name,
   count,
+  value
 }) => {
-  console.log("ddddddddddd" + checked);
+  console.log("ddddddddddd" + value);
   return (
     <>
       <div className="filter-section-btn-icon">
@@ -25,6 +27,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
             checked={checked}
             onChange={onChange}
             name={name}
+            value={value}
           />
           {/* <span className="checkbox-indicator">
             <svg

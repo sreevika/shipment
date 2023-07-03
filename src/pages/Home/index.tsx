@@ -99,7 +99,7 @@ export default function HomePage() {
   let filter_layer1_shipDate: any[] = [];
 
   //checkbox changes
-  const [checkboxes, setCheckboxes] = useState({
+  const [shipmentInfo, setShipmentInfo] = useState({
     chk_delayed: false,
     chk_delivered: false,
     chk_exception: false,
@@ -107,12 +107,70 @@ export default function HomePage() {
     chk_labelCreated: false,
   });
 
-  const handleCheckboxChange = (event: {
-    target: { name: any; checked: any };
-  }) => {
-    const { name, checked } = event.target;
-    setCheckboxes({ ...checkboxes, [name]: checked });
+  const resetShipmentInfo = () => {
+    setShipmentInfo({
+      chk_delayed: false,
+      chk_delivered: false,
+      chk_exception: false,
+      chk_inTranist: false,
+      chk_labelCreated: false,
+    });
   };
+
+  const clearShipmentInfoByValue =(value:any) =>{
+    if(value == "delayed") {
+      setShipmentInfo((prevState) => ({
+        ...prevState,
+        chk_delayed: false,
+      }));
+    } 
+    if(value == "delivered") {
+      setShipmentInfo((prevState) => ({
+        ...prevState,
+        chk_delivered: false,
+      }));
+    } 
+    if(value == "exception") {
+      setShipmentInfo((prevState) => ({
+        ...prevState,
+        chk_exception: false,
+      }));
+    } 
+    if(value == "inTransit") {
+      setShipmentInfo((prevState) => ({
+        ...prevState,
+        chk_inTranist: false,
+      }));
+    } 
+    if(value == "label") {
+      setShipmentInfo((prevState) => ({
+        ...prevState,
+        chk_labelCreated: false,
+      }));
+    } 
+  }
+  const handleCheckboxChange = (event: {
+    target: { name: any; checked: any; value:any;};
+  }) => {
+    const { name, checked, value} = event.target;
+      setShipmentInfo({ ...shipmentInfo, [name]: checked });
+      let tempArr =[];
+     
+      if (checked) {
+        tempArr = [...userinfo, value] ; 
+      } else {
+        tempArr = userinfo.filter((e) => e !== value);
+      }
+      setUserInfo(tempArr);
+  };
+  useEffect(() => {
+    console.log("TTTTTTTT"+JSON.stringify(shipmentInfo))
+
+  }, [shipmentInfo]);
+  useEffect(() => {
+    console.log("TTTTTTTT"+JSON.stringify(userinfo))
+
+  }, [userinfo]);
 
   const selectSearchType = () => {
     setDropDown(!dropDown);
@@ -134,6 +192,7 @@ export default function HomePage() {
     setStoreId("");
     setSelectedList([]);
     setCardSelected("");
+    resetFilters();
   };
 
   const clearFilter = (value: string) => {
@@ -187,6 +246,7 @@ export default function HomePage() {
 
     let filterArr = userinfo.filter((e) => e !== value);
     filterSection = filterArr;
+    clearShipmentInfoByValue(value)
 
     applyFilter();
   };
@@ -316,6 +376,7 @@ export default function HomePage() {
     filter_layer1_scheduledDeliveryDate = [];
     filter_layer1_shipDate = [];
     setUserInfo([]);
+    resetShipmentInfo();
   };
 
   const [isCardSelected, setCardSelected] = useState("");
@@ -405,6 +466,14 @@ export default function HomePage() {
   //   let tempArr: any[] = [];
   //   console.log("CHCEKKK" + checked + "--" + value);
   //   if (checked) {
+  //     tempArr = [...userinfo, value];
+
+  //     setTimeout(() => {
+  //       // Perform additional actions after the delay
+  //       console.log("Checkbox value after delay:", userinfo);
+  //     }, 100);
+  //   } else {
+  //     tempArr = userinfo.filter((e) => e !== value);if (checked) {
   //     tempArr = [...userinfo, value];
 
   //     setTimeout(() => {
@@ -776,7 +845,15 @@ export default function HomePage() {
     setAnyFilter(true);
     setShowFilter(false);
 
-    clearSearchValue();
+    setSearchValue("");
+    originalRows = originalRows_backup;
+    setRows(originalRows);
+
+    setStoreId("");
+    setSelectedList([]);
+    setCardSelected("");
+
+    //clearSearchValue();
 
     let tempArray = [];
     let filteredData_level1: shipment[] = [];
@@ -1545,7 +1622,7 @@ export default function HomePage() {
                       </li>
                     </ul>
                   </div>
-                  {innerFilter <= 1 ? (
+                  {innerFilter == 1 ? (
                     <div className="filter-section__body-level-2 shipper___info__tab">
                       {innerFilter == 1 ? (
                         <ul className="filter-section-list">
@@ -1563,10 +1640,11 @@ export default function HomePage() {
                             >
                               <Checkbox
                                 label="Delayed"
-                                checked={checkboxes.chk_delayed}
+                                checked={shipmentInfo.chk_delayed}
                                 onChange={handleCheckboxChange}
                                 name="chk_delayed"
                                 count={delayedCount}
+                                value="delayed"
                               />
                             </button>
                           </li>
@@ -1583,10 +1661,11 @@ export default function HomePage() {
                             >
                               <Checkbox
                                 label="Delivered"
-                                checked={checkboxes.chk_delivered}
+                                checked={shipmentInfo.chk_delivered}
                                 onChange={handleCheckboxChange}
                                 name="chk_delivered"
                                 count={deliveredCount}
+                                value="delivered"
                               />
                             </button>
                           </li>
@@ -1603,10 +1682,11 @@ export default function HomePage() {
                             >
                               <Checkbox
                                 label="Exception"
-                                checked={checkboxes.chk_exception}
+                                checked={shipmentInfo.chk_exception}
                                 onChange={handleCheckboxChange}
                                 name="chk_exception"
                                 count={exceptionCount}
+                                value="exception"
                               />
                             </button>
                           </li>
@@ -1623,10 +1703,11 @@ export default function HomePage() {
                             >
                               <Checkbox
                                 label="In Transit"
-                                checked={checkboxes.chk_inTranist}
+                                checked={shipmentInfo.chk_inTranist}
                                 onChange={handleCheckboxChange}
                                 name="chk_inTranist"
                                 count={inTransitCount}
+                                value="inTransit"
                               />
                             </button>
                           </li>
@@ -1643,10 +1724,11 @@ export default function HomePage() {
                             >
                               <Checkbox
                                 label="Label Created"
-                                checked={checkboxes.chk_labelCreated}
+                                checked={shipmentInfo.chk_labelCreated}
                                 onChange={handleCheckboxChange}
                                 name="chk_labelCreated"
                                 count={labelCreatedCount}
+                                value="label"
                               />
                             </button>
                           </li>
@@ -1655,7 +1737,7 @@ export default function HomePage() {
                         ""
                       )}
                     </div>
-                  ) : (
+                  ) : innerFilter > 1 ? (
                     <>
                       <div className="filter-section__body-level-2">
                         <ul className="filter-section-list">
@@ -2556,7 +2638,7 @@ export default function HomePage() {
                         )}
                       </div>
                     </>
-                  )}
+                  ): ""}
                 </div>
                 <div className="filter-section__footer">
                   <div className="filter-section-action">
