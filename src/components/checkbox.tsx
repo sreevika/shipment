@@ -21,15 +21,16 @@ const Checkbox: React.FC<CheckboxProps> = ({
   return (
     <>
       <div className="filter-section-btn-icon">
-        <label>
+        <label className="checkbox">
           <input
+            className="checkbox-input"
             type="checkbox"
             checked={checked}
             onChange={onChange}
             name={name}
             value={value}
           />
-          {/* <span className="checkbox-indicator">
+          <span className="checkbox-indicator">
             <svg
               width="17"
               height="13"
@@ -42,7 +43,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
                 fill="#0067B2"
               />
             </svg>
-          </span> */}
+          </span>
         </label>
       </div>
       <div className="filter-section-btn-text">{label}</div>

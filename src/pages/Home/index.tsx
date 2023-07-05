@@ -82,6 +82,25 @@ export default function HomePage() {
   const [userinfo, setUserInfo] = useState<any[]>([]);
   const [filter_model, set_filter_model] = useState<any[]>([]);
 
+
+    //second layer filter
+    const [filter__accountNo, set_filter__accountNo] = useState<any[]>([]);
+    const [filter__deliveredDate, set_filter__deliveredDate] = useState<any[]>(
+      []
+    );
+    const [filter__attemptDelivery, set_filter__attemptDelivery] = useState<
+      any[]
+    >([]);
+    const [filter__packageKg, set_filter__packageKg] = useState<any[]>([]);
+    const [filter__packageLbs, set_filter__packageLbs] = useState<any[]>([]);
+    const [filter__purchaseOrderNo, set_filter__purchaseOrderNo] = useState<
+      any[]
+    >([]);
+    const [filter__reference, set_filter__reference] = useState<any[]>([]);
+    const [filter__scheduledDeliveryDate, set_filter__scheduledDeliveryDate] =
+      useState<any[]>([]);
+    const [filter__shipDate, set_filter__shipDate] = useState<any[]>([]);
+
   const handleLogout = () => {
     navigate("/login"); // Use the navigate function to navigate to the login page
   };
@@ -99,7 +118,7 @@ export default function HomePage() {
   let filter_layer1_shipDate: any[] = [];
 
   //checkbox changes
-  const [shipmentInfo, setShipmentInfo] = useState({
+  const [shipmentStatus, setShipmentStatus] = useState({
     chk_delayed: false,
     chk_delivered: false,
     chk_exception: false,
@@ -107,8 +126,8 @@ export default function HomePage() {
     chk_labelCreated: false,
   });
 
-  const resetShipmentInfo = () => {
-    setShipmentInfo({
+  const resetShipmentStatus = () => {
+    setShipmentStatus({
       chk_delayed: false,
       chk_delivered: false,
       chk_exception: false,
@@ -117,43 +136,44 @@ export default function HomePage() {
     });
   };
 
-  const clearShipmentInfoByValue =(value:any) =>{
+  const clearShipmentStatusByValue =(value:any) =>{
     if(value == "delayed") {
-      setShipmentInfo((prevState) => ({
+      setShipmentStatus((prevState) => ({
         ...prevState,
         chk_delayed: false,
       }));
     } 
     if(value == "delivered") {
-      setShipmentInfo((prevState) => ({
+      setShipmentStatus((prevState) => ({
         ...prevState,
         chk_delivered: false,
       }));
     } 
     if(value == "exception") {
-      setShipmentInfo((prevState) => ({
+      setShipmentStatus((prevState) => ({
         ...prevState,
         chk_exception: false,
       }));
     } 
     if(value == "inTransit") {
-      setShipmentInfo((prevState) => ({
+      setShipmentStatus((prevState) => ({
         ...prevState,
         chk_inTranist: false,
       }));
     } 
     if(value == "label") {
-      setShipmentInfo((prevState) => ({
+      setShipmentStatus((prevState) => ({
         ...prevState,
         chk_labelCreated: false,
       }));
     } 
   }
+  
   const handleCheckboxChange = (event: {
     target: { name: any; checked: any; value:any;};
   }) => {
     const { name, checked, value} = event.target;
-      setShipmentInfo({ ...shipmentInfo, [name]: checked });
+      setShipmentStatus({ ...shipmentStatus, [name]: checked });
       let tempArr =[];
      
       if (checked) {
@@ -164,9 +184,9 @@ export default function HomePage() {
       setUserInfo(tempArr);
   };
   useEffect(() => {
-    console.log("TTTTTTTT"+JSON.stringify(shipmentInfo))
+    console.log("TTTTTTTT"+JSON.stringify(shipmentStatus))
 
-  }, [shipmentInfo]);
+  }, [shipmentStatus]);
   useEffect(() => {
     console.log("TTTTTTTT"+JSON.stringify(userinfo))
 
@@ -196,60 +216,86 @@ export default function HomePage() {
   };
 
   const clearFilter = (value: string) => {
+  
     if (value.includes("Delivered date -")) {
       value = value.split("Delivered date -")[1];
+    
       filter_layer1_deliveredDate = filter__deliveredDate.filter(
         (e) => e !== value
       );
+      set_filter__deliveredDate(filter_layer1_deliveredDate)
+    
+      
     }
     if (value.includes("Account No -")) {
       value = value.split("Account No -")[1];
       filter_layer1_accountNo = filter__accountNo.filter((e) => e !== value);
+      set_filter__accountNo(filter_layer1_accountNo);
     }
     if (value.includes("No of attempt -")) {
       value = value.split("No of attempt -")[1];
       filter_layer1_attemptDelivery = filter__attemptDelivery.filter(
         (e) => e !== value
       );
+      set_filter__attemptDelivery(filter_layer1_attemptDelivery);
     }
     if (value.includes("Package Weight (Kg) -")) {
       value = value.split("Package Weight (Kg) -")[1];
       filter_layer1_packageKg = filter__packageKg.filter((e) => e !== value);
+      set_filter__packageKg(filter_layer1_packageKg);
     }
     if (value.includes("Package Weight (Lbs) -")) {
       value = value.split("Package Weight (Lbs) -")[1];
       filter_layer1_packageLbs = filter__packageLbs.filter((e) => e !== value);
+      set_filter__packageLbs(filter_layer1_packageLbs);
     }
     if (value.includes("Puchase Order No -")) {
       value = value.split("Puchase Order No -")[1];
       filter_layer1_purchaseOrderNumber = filter__purchaseOrderNo.filter(
         (e) => e !== value
       );
+      set_filter__purchaseOrderNo(filter_layer1_purchaseOrderNumber);
     }
     if (value.includes("Reference -")) {
       value = value.split("Reference -")[1];
       filter_layer1_reference = filter__reference.filter((e) => e !== value);
+      set_filter__reference(filter_layer1_reference);
     }
 
     if (value.includes("Scheduled Delivery Date -")) {
       value = value.split("Scheduled Delivery Date -")[1];
-      filter_layer1_scheduledDeliveryDate = filter__reference.filter(
+      filter_layer1_scheduledDeliveryDate = filter__scheduledDeliveryDate.filter(
         (e) => e !== value
       );
+      set_filter__scheduledDeliveryDate(filter_layer1_scheduledDeliveryDate);
     }
     if (value.includes("Ship Date -")) {
+      
       value = value.split("Ship Date -")[1];
-      filter_layer1_shipDate = filter_layer1_shipDate.filter(
+     
+      filter_layer1_shipDate = filter__shipDate.filter(
         (e) => e !== value
       );
+      set_filter__shipDate(filter_layer1_shipDate);
     }
 
     let filterArr = userinfo.filter((e) => e !== value);
     filterSection = filterArr;
-    clearShipmentInfoByValue(value)
+    clearShipmentStatusByValue(value)
 
-    applyFilter();
+    applyFilter(1);
   };
+
+  useEffect(() => { 
+  }, [filter__accountNo]);
+  useEffect(() => {}, [filter__attemptDelivery]);
+  useEffect(() => {}, [filter__deliveredDate]);
+  useEffect(() => {}, [filter__packageKg]);
+  useEffect(() => {}, [filter__packageLbs]);
+  useEffect(() => {}, [filter__reference]);
+  useEffect(() => {}, [filter__scheduledDeliveryDate]);
+  useEffect(() => {}, [filter__shipDate]);
+  
 
   const searchData = (event: { key: string }) => {
     setAnyFilter(true);
@@ -376,7 +422,7 @@ export default function HomePage() {
     filter_layer1_scheduledDeliveryDate = [];
     filter_layer1_shipDate = [];
     setUserInfo([]);
-    resetShipmentInfo();
+    resetShipmentStatus();
   };
 
   const [isCardSelected, setCardSelected] = useState("");
@@ -494,7 +540,7 @@ export default function HomePage() {
 
   const [li_accountNumber, set_li_accountNumber] = useState<any[]>([]);
   const [li_deliveredDate, set_li_deliveredDate] = useState<any[]>([]);
-  const [li_noOfAttempt, set_li_noOfAttempt] = useState<any[]>([]);
+  const [li_numberOfAttempt, set_li_numberOfAttempt] = useState<any[]>([]);
   const [li_packageKg, set_li_packageKg] = useState<any[]>([]);
   const [li_packageLbs, set_li_packageLbs] = useState<any[]>([]);
   const [li_purchaseOrderNumber, set_li_purchaseOrderNumber] = useState<any[]>(
@@ -518,6 +564,7 @@ export default function HomePage() {
   const shipperInfoChange = (value: string) => {
     setSelectedOption(value);
     if (value == "accountNo") {
+   
       const accountNumberArr = _.chain(originalRows)
         .groupBy("accountNumber")
         .map((items, name) => ({
@@ -546,15 +593,15 @@ export default function HomePage() {
         .value();
       set_li_deliveredDate(deliveredDateArr);
     } else if (value == "numberOfAttempt") {
-      const noOfAttemptArr = _(originalRows)
+      const numberOfAttemptArr = _(originalRows)
         .groupBy("numberOfAttemptedDeliveries")
         .map((items, name) => ({
           name,
           count: items.length,
-          type: "noOfAttempt",
+          type: "numberOfAttempt",
         }))
         .value();
-      set_li_noOfAttempt(noOfAttemptArr);
+      set_li_numberOfAttempt(numberOfAttemptArr);
     } else if (value == "packageKg") {
       const packageKgArr = _(originalRows)
         .groupBy("packageWeightKg")
@@ -690,23 +737,7 @@ export default function HomePage() {
     }
   };
 
-  //second layer filter
-  const [filter__accountNo, set_filter__accountNo] = useState<any[]>([]);
-  const [filter__deliveredDate, set_filter__deliveredDate] = useState<any[]>(
-    []
-  );
-  const [filter__attemptDelivery, set_filter__attemptDelivery] = useState<
-    any[]
-  >([]);
-  const [filter__packageKg, set_filter__packageKg] = useState<any[]>([]);
-  const [filter__packageLbs, set_filter__packageLbs] = useState<any[]>([]);
-  const [filter__purchaseOrderNo, set_filter__purchaseOrderNo] = useState<
-    any[]
-  >([]);
-  const [filter__reference, set_filter__reference] = useState<any[]>([]);
-  const [filter_scheduledDeliveryDate, set_filter_scheduledDeliveryDate] =
-    useState<any[]>([]);
-  const [filter_shipDate, set_filter_shipDate] = useState<any[]>([]);
+
 
   //third layer filter
   // const [filter__accountNo, set_filter__accountNo] = useState<any[]>([]);
@@ -719,15 +750,31 @@ export default function HomePage() {
   // const [filter_scheduledDeliveryDate, set_filter_scheduledDeliveryDate] = useState<any[]>([]);
   // const [filter_shipDate, set_filter_shipDate] = useState<any[]>([]);
 
-  const valueBasedFilter = (e: any, type: any) => {
-    let selectedOptionTemp = [];
-    selectedOptionTemp = filter_model.concat(type);
-    set_filter_model(selectedOptionTemp);
+  const handleCheckboxChange1 = (event: {
+    target: { name: any; checked: any; value:any;};
+  }) => {
+    const { name, checked, value} = event.target;
+      setShipmentStatus({ ...shipmentStatus, [name]: checked });
+      let tempArr =[];
+     
+      if (checked) {
+        tempArr = [...userinfo, value] ; 
+      } else {
+        tempArr = userinfo.filter((e) => e !== value);
+      }
+      setUserInfo(tempArr);
+  };
 
-    e.preventDefault();
-    const { value, checked } = e.target;
+  const valueBasedFilter = (event: {
+    target: { name: any; checked: any; value:any;};
+  }) => {
+    const { name, checked, value} = event.target;
+    let selectedOptionTemp = [];
+    selectedOptionTemp = filter_model.concat(name);
+    set_filter_model(selectedOptionTemp);
+  
     let tempArr = [];
-    if (type == "accountNo") {
+    if (name == "accountNo") {
       if (checked) {
         tempArr = [...filter__accountNo, value];
       } else {
@@ -736,7 +783,7 @@ export default function HomePage() {
 
       set_filter__accountNo(tempArr);
     }
-    if (type == "deliveredDate") {
+    if (name == "deliveredDate") {
       if (checked) {
         tempArr = [...filter__deliveredDate, value];
       } else {
@@ -745,7 +792,7 @@ export default function HomePage() {
 
       set_filter__deliveredDate(tempArr);
     }
-    if (type == "noOfAttempt") {
+    if (name == "numberOfAttempt") {
       if (checked) {
         tempArr = [...filter__attemptDelivery, value];
       } else {
@@ -755,7 +802,7 @@ export default function HomePage() {
       set_filter__attemptDelivery(tempArr);
     }
 
-    if (type == "packageKg") {
+    if (name == "packageKg") {
       if (checked) {
         tempArr = [...filter__packageKg, value];
       } else {
@@ -764,7 +811,7 @@ export default function HomePage() {
 
       set_filter__packageKg(tempArr);
     }
-    if (type == "packageLbs") {
+    if (name == "packageLbs") {
       if (checked) {
         tempArr = [...filter__packageLbs, value];
       } else {
@@ -773,7 +820,7 @@ export default function HomePage() {
 
       set_filter__packageLbs(tempArr);
     }
-    if (type == "purchaseOrderNumber") {
+    if (name == "purchaseOrderNumber") {
       if (checked) {
         tempArr = [...filter__purchaseOrderNo, value];
       } else {
@@ -783,7 +830,7 @@ export default function HomePage() {
       set_filter__purchaseOrderNo(tempArr);
     }
 
-    if (type == "reference") {
+    if (name == "reference") {
       if (checked) {
         tempArr = [...filter__reference, value];
       } else {
@@ -792,33 +839,35 @@ export default function HomePage() {
 
       set_filter__reference(tempArr);
     }
-    if (type == "scheduledDeliveryDate") {
+    if (name == "scheduledDeliveryDate") {
       if (checked) {
-        tempArr = [...filter_scheduledDeliveryDate, value];
+        tempArr = [...filter__scheduledDeliveryDate, value];
       } else {
-        tempArr = filter_scheduledDeliveryDate.filter((e) => e !== value);
+        tempArr = filter__scheduledDeliveryDate.filter((e) => e !== value);
       }
 
-      set_filter_scheduledDeliveryDate(tempArr);
+      set_filter__scheduledDeliveryDate(tempArr);
     }
-    if (type == "shipDate") {
+    if (name == "shipDate") {
       if (checked) {
-        tempArr = [...filter_shipDate, value];
+        tempArr = [...filter__shipDate, value];
       } else {
-        tempArr = filter_shipDate.filter((e) => e !== value);
+        tempArr = filter__shipDate.filter((e) => e !== value);
       }
 
-      set_filter_shipDate(tempArr);
+      set_filter__shipDate(tempArr);
     }
   };
-  useEffect(() => {}, [filter__accountNo]);
+  useEffect(() => { 
+    console.log("TTTTT"+JSON.stringify(filter__accountNo))
+  }, [filter__accountNo]);
   useEffect(() => {}, [filter__attemptDelivery]);
   useEffect(() => {}, [filter__deliveredDate]);
   useEffect(() => {}, [filter__packageKg]);
   useEffect(() => {}, [filter__packageLbs]);
   useEffect(() => {}, [filter__reference]);
-  useEffect(() => {}, [filter_scheduledDeliveryDate]);
-  useEffect(() => {}, [filter_shipDate]);
+  useEffect(() => {}, [filter__scheduledDeliveryDate]);
+  useEffect(() => {}, [filter__shipDate]);
 
   const toggleFilter = () => {
     setShowFilter(!showFilter);
@@ -841,7 +890,9 @@ export default function HomePage() {
       setInnerFilter(4);
     }
   };
-  const applyFilter = () => {
+  // type 0- apply, 1- clear
+  const applyFilter = (type:number) => {
+
     setAnyFilter(true);
     setShowFilter(false);
 
@@ -907,29 +958,39 @@ export default function HomePage() {
         filteredData_level1 = filteredData_level1.concat(filteredData_label);
       }
     } else {
+   
       filteredData_level1 = originalRows;
     }
 
     if (filter_model.includes("deliveredDate")) {
-      if (filter_layer1_deliveredDate.length > 0) {
+   
+      if (filter_layer1_deliveredDate.length > 0 || type ==1) {
+        
         filter_layer1_deliveredDate = filter_layer1_deliveredDate;
       } else {
+       
         filter_layer1_deliveredDate = filter__deliveredDate;
       }
       const newArray = filter_layer1_deliveredDate.map(
         (variable) => "Delivered date -" + variable
       );
       tempArray = tempArray.concat(newArray);
-      filteredData_level1 = filteredData_level1.filter((item) =>
-        filter_layer1_deliveredDate.includes(
-          moment(moment(item.deliveredTime).format("YYYY-MM-DD")).isValid()
-            ? moment(item.deliveredTime).format("YYYY-MM-DD")
-            : "0000-00-00"
-        )
-      );
+      // if empty array of filters
+      if(filter_layer1_deliveredDate.length == 0) {
+        filteredData_level1 = filteredData_level1;
+      } else {
+        filteredData_level1 = filteredData_level1.filter((item) =>
+          filter_layer1_deliveredDate.includes(
+            moment(moment(item.deliveredTime).format("YYYY-MM-DD")).isValid()
+              ? moment(item.deliveredTime).format("YYYY-MM-DD")
+              : "0000-00-00"
+          )
+        );
+      }
+      set_filter__deliveredDate(filter_layer1_deliveredDate);
     }
     if (filter_model.includes("accountNo")) {
-      if (filter_layer1_accountNo.length > 0) {
+      if (filter_layer1_accountNo.length > 0  || type ==1) {
         filter_layer1_accountNo = filter_layer1_accountNo;
       } else {
         filter_layer1_accountNo = filter__accountNo;
@@ -938,51 +999,70 @@ export default function HomePage() {
         (variable) => "Account No -" + variable
       );
       tempArray = tempArray.concat(newArray);
-
-      filteredData_level1 = filteredData_level1.filter((item) =>
+      // if empty array of filters
+      if(filter_layer1_accountNo.length == 0) {
+        filteredData_level1 = filteredData_level1;
+      } else {
+        filteredData_level1 = filteredData_level1.filter((item) =>
         filter_layer1_accountNo.includes(item.accountNumber)
       );
+
+      }
+
+    
     }
 
-    if (filter_model.includes("noOfAttempt")) {
-      if (filter_layer1_attemptDelivery.length > 0) {
+    if (filter_model.includes("numberOfAttempt")) {
+      if (filter_layer1_attemptDelivery.length > 0  || type ==1) {
         filter_layer1_attemptDelivery = filter_layer1_attemptDelivery;
       } else {
-        filter_layer1_attemptDelivery = filter__accountNo;
+        filter_layer1_attemptDelivery = filter__attemptDelivery;
       }
 
       const newArray = filter_layer1_attemptDelivery.map(
         (variable) => "No of attempt -" + variable
       );
       tempArray = tempArray.concat(newArray);
+      // if empty array of filters
+      if(filter_layer1_attemptDelivery.length == 0) {
+        filteredData_level1 = filteredData_level1;
+      } else {
+        console.log("EEEEEEE"+JSON.stringify(filter_layer1_attemptDelivery))
+       
 
-      filteredData_level1 = filteredData_level1.filter((item) =>
-        filter_layer1_attemptDelivery.includes(item.numberOfAttemptedDeliveries)
+        filteredData_level1 = filteredData_level1.filter((item) =>
+        filter_layer1_attemptDelivery.map((str) => parseInt(str, 10)).includes(item.numberOfAttemptedDeliveries)
       );
+      }
     }
 
     if (filter_model.includes("packageKg")) {
-      if (filter_layer1_packageKg.length > 0) {
+    
+      if (filter_layer1_packageKg.length > 0  || type ==1) {
         filter_layer1_packageKg = filter_layer1_packageKg;
       } else {
-        filter_layer1_packageKg = filter__accountNo;
+        filter_layer1_packageKg = filter__packageKg;
       }
-
       const newArray = filter_layer1_packageKg.map(
         (variable) => "Package Weight (Kg) -" + variable
       );
       tempArray = tempArray.concat(newArray);
-
-      filteredData_level1 = filteredData_level1.filter((item) =>
+      // if empty array of filters
+      if(filter_layer1_packageKg.length == 0) {
+        filteredData_level1 = filteredData_level1;
+      } else {
+      
+        filteredData_level1 = filteredData_level1.filter((item) =>
         filter_layer1_packageKg.includes(item.packageWeightKg)
       );
+      }
     }
 
     if (filter_model.includes("packageLbs")) {
-      if (filter_layer1_packageLbs.length > 0) {
+      if (filter_layer1_packageLbs.length > 0  || type ==1) {
         filter_layer1_packageLbs = filter_layer1_packageLbs;
       } else {
-        filter_layer1_packageLbs = filter__accountNo;
+        filter_layer1_packageLbs = filter__packageLbs;
       }
 
       const newArray = filter_layer1_packageLbs.map(
@@ -990,16 +1070,20 @@ export default function HomePage() {
       );
       tempArray = tempArray.concat(newArray);
 
-      filteredData_level1 = filteredData_level1.filter((item) =>
+      if(filter_layer1_packageLbs.length == 0) {
+        filteredData_level1 = filteredData_level1;
+      } else {
+        filteredData_level1 = filteredData_level1.filter((item) =>
         filter_layer1_packageLbs.includes(item.packageWeightLbs)
       );
+      }
     }
 
     if (filter_model.includes("purchaseOrderNumber")) {
-      if (filter_layer1_purchaseOrderNumber.length > 0) {
+      if (filter_layer1_purchaseOrderNumber.length > 0 || type==1) {
         filter_layer1_purchaseOrderNumber = filter_layer1_purchaseOrderNumber;
       } else {
-        filter_layer1_purchaseOrderNumber = filter__accountNo;
+        filter_layer1_purchaseOrderNumber = filter__purchaseOrderNo;
       }
 
       const newArray = filter_layer1_purchaseOrderNumber.map(
@@ -1007,34 +1091,42 @@ export default function HomePage() {
       );
       tempArray = tempArray.concat(newArray);
 
-      filteredData_level1 = filteredData_level1.filter((item) =>
+      if(filter_layer1_purchaseOrderNumber.length == 0) {
+        filteredData_level1 = filteredData_level1;
+      } else {
+        filteredData_level1 = filteredData_level1.filter((item) =>
         filter_layer1_purchaseOrderNumber.includes(item.purchaseOrderNumber)
       );
+      }
     }
 
     if (filter_model.includes("reference")) {
-      if (filter_layer1_reference.length > 0) {
+      if (filter_layer1_reference.length > 0 || type ==1) {
         filter_layer1_reference = filter_layer1_reference;
       } else {
-        filter_layer1_reference = filter__accountNo;
+        filter_layer1_reference = filter__reference;
       }
 
       const newArray = filter_layer1_reference.map(
         (variable) => "Reference -" + variable
       );
       tempArray = tempArray.concat(newArray);
-
-      filteredData_level1 = filteredData_level1.filter((item) =>
+      if(filter_layer1_reference.length == 0) {
+        filteredData_level1 = filteredData_level1;
+      } else {
+        filteredData_level1 = filteredData_level1.filter((item) =>
         filter_layer1_reference.includes(item.reference)
       );
+      }
+    
     }
 
     if (filter_model.includes("scheduledDeliveryDate")) {
-      if (filter_layer1_scheduledDeliveryDate.length > 0) {
+      if (filter_layer1_scheduledDeliveryDate.length > 0 || type ==1) {
         filter_layer1_scheduledDeliveryDate =
           filter_layer1_scheduledDeliveryDate;
       } else {
-        filter_layer1_scheduledDeliveryDate = filter__accountNo;
+        filter_layer1_scheduledDeliveryDate = filter__scheduledDeliveryDate;
       }
 
       const newArray = filter_layer1_scheduledDeliveryDate.map(
@@ -1042,7 +1134,10 @@ export default function HomePage() {
       );
       tempArray = tempArray.concat(newArray);
 
-      filteredData_level1 = filteredData_level1.filter((item) =>
+      if(filter_layer1_scheduledDeliveryDate.length == 0) {
+        filteredData_level1 = filteredData_level1;
+      } else {
+        filteredData_level1 = filteredData_level1.filter((item) =>
         filter_layer1_scheduledDeliveryDate.includes(
           moment(
             moment(item.scheduledDeliveryDate).format("YYYY-MM-DD")
@@ -1051,12 +1146,14 @@ export default function HomePage() {
             : "0000-00-00"
         )
       );
+      }
+      
     }
     if (filter_model.includes("shipDate")) {
-      if (filter_layer1_shipDate.length > 0) {
+      if (filter_layer1_shipDate.length > 0 || type ==1 ) {
         filter_layer1_shipDate = filter_layer1_shipDate;
       } else {
-        filter_layer1_shipDate = filter__accountNo;
+        filter_layer1_shipDate = filter__shipDate;
       }
 
       const newArray = filter_layer1_shipDate.map(
@@ -1064,9 +1161,15 @@ export default function HomePage() {
       );
       tempArray = tempArray.concat(newArray);
 
-      filteredData_level1 = filteredData_level1.filter((item) =>
+      if(filter_layer1_shipDate.length == 0) {
+        filteredData_level1 = filteredData_level1;
+      } else {
+      
+        filteredData_level1 = filteredData_level1.filter((item) =>
         filter_layer1_shipDate.includes(item.shipDate)
       );
+      }
+
     }
     const uniqueArray = tempArray.filter((value, index, self) => {
       return self.indexOf(value) === index;
@@ -1542,42 +1645,7 @@ export default function HomePage() {
                           </div>
                         </button>
                       </li>
-                      <li className="filter-section-item">
-                        <button className="filter-section-btn">
-                          <div className="filter-section-btn-icon">
-                            <svg
-                              className="default-icon"
-                              width="30"
-                              height="23"
-                              viewBox="0 0 30 23"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M6.6336 22.1335C5.54454 22.1335 4.61654 21.75 3.8496 20.9831C3.0832 20.2167 2.7 19.289 2.7 18.1999H0.333603V3.0663C0.333603 2.4663 0.555736 1.94416 1 1.4999C1.44427 1.05563 1.9664 0.833496 2.5664 0.833496H21.6336V6.3335H25.3L29.6664 12.1335V18.1999H27.2C27.2 19.289 26.8165 20.2167 26.0496 20.9831C25.2832 21.75 24.3445 22.1335 23.2336 22.1335C22.1445 22.1335 21.2165 21.75 20.4496 20.9831C19.6832 20.2167 19.3 19.289 19.3 18.1999H10.6C10.6 19.289 10.2165 20.2167 9.4496 20.9831C8.6832 21.75 7.74454 22.1335 6.6336 22.1335ZM6.6336 19.9335C7.12214 19.9335 7.53307 19.7612 7.8664 19.4167C8.19974 19.0722 8.3664 18.6666 8.3664 18.1999C8.3664 17.7108 8.19974 17.2996 7.8664 16.9663C7.53307 16.633 7.12214 16.4663 6.6336 16.4663C6.16694 16.4663 5.76134 16.633 5.4168 16.9663C5.07227 17.2996 4.9 17.7108 4.9 18.1999C4.9 18.6666 5.07227 19.0722 5.4168 19.4167C5.76134 19.7612 6.16694 19.9335 6.6336 19.9335ZM2.5664 15.9663H3.4C3.7776 15.433 4.23867 15.0052 4.7832 14.6831C5.32774 14.361 5.94454 14.1999 6.6336 14.1999C7.30027 14.1999 7.9112 14.3666 8.4664 14.6999C9.02214 15.0332 9.4888 15.4554 9.8664 15.9663H19.4336V3.0663H2.5664V15.9663ZM23.2336 19.9335C23.7221 19.9335 24.1331 19.7612 24.4664 19.4167C24.7997 19.0722 24.9664 18.6666 24.9664 18.1999C24.9664 17.7108 24.7997 17.2996 24.4664 16.9663C24.1331 16.633 23.7221 16.4663 23.2336 16.4663C22.7669 16.4663 22.3613 16.633 22.0168 16.9663C21.6723 17.2996 21.5 17.7108 21.5 18.1999C21.5 18.6666 21.6723 19.0722 22.0168 19.4167C22.3613 19.7612 22.7669 19.9335 23.2336 19.9335ZM21.6336 13.1663H27.6664L24.2 8.5335H21.6336V13.1663Z"
-                                fill="#1C1B1F"
-                              />
-                            </svg>
-
-                            <svg
-                              className="active-icon"
-                              width="30"
-                              height="23"
-                              viewBox="0 0 30 23"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M6.63362 22.1335C5.54455 22.1335 4.61655 21.75 3.84962 20.9831C3.08322 20.2167 2.70002 19.289 2.70002 18.1999H0.333618V3.0663C0.333618 2.4663 0.555751 1.94416 1.00002 1.4999C1.44428 1.05563 1.96642 0.833496 2.56642 0.833496H21.6336V6.3335H25.3L29.6664 12.1335V18.1999H27.2C27.2 19.289 26.8166 20.2167 26.0496 20.9831C25.2832 21.75 24.3446 22.1335 23.2336 22.1335C22.1446 22.1335 21.2166 21.75 20.4496 20.9831C19.6832 20.2167 19.3 19.289 19.3 18.1999H10.6C10.6 19.289 10.2166 20.2167 9.44962 20.9831C8.68322 21.75 7.74455 22.1335 6.63362 22.1335ZM6.63362 19.9335C7.12215 19.9335 7.53309 19.7612 7.86642 19.4167C8.19975 19.0722 8.36642 18.6666 8.36642 18.1999C8.36642 17.7108 8.19975 17.2996 7.86642 16.9663C7.53309 16.633 7.12215 16.4663 6.63362 16.4663C6.16695 16.4663 5.76135 16.633 5.41682 16.9663C5.07229 17.2996 4.90002 17.7108 4.90002 18.1999C4.90002 18.6666 5.07229 19.0722 5.41682 19.4167C5.76135 19.7612 6.16695 19.9335 6.63362 19.9335ZM23.2336 19.9335C23.7222 19.9335 24.1331 19.7612 24.4664 19.4167C24.7998 19.0722 24.9664 18.6666 24.9664 18.1999C24.9664 17.7108 24.7998 17.2996 24.4664 16.9663C24.1331 16.633 23.7222 16.4663 23.2336 16.4663C22.767 16.4663 22.3614 16.633 22.0168 16.9663C21.6723 17.2996 21.5 17.7108 21.5 18.1999C21.5 18.6666 21.6723 19.0722 22.0168 19.4167C22.3614 19.7612 22.767 19.9335 23.2336 19.9335ZM21.6336 13.1663H27.6664L24.2 8.5335H21.6336V13.1663Z"
-                                fill="#0067B2"
-                              />
-                            </svg>
-                          </div>
-                          <div className="filter-section-btn-text">
-                            Shipper Information
-                          </div>
-                        </button>
-                      </li>
+                     
                       <li
                         className={
                           innerFilter == 4
@@ -1640,7 +1708,7 @@ export default function HomePage() {
                             >
                               <Checkbox
                                 label="Delayed"
-                                checked={shipmentInfo.chk_delayed}
+                                checked={shipmentStatus.chk_delayed}
                                 onChange={handleCheckboxChange}
                                 name="chk_delayed"
                                 count={delayedCount}
@@ -1661,7 +1729,7 @@ export default function HomePage() {
                             >
                               <Checkbox
                                 label="Delivered"
-                                checked={shipmentInfo.chk_delivered}
+                                checked={shipmentStatus.chk_delivered}
                                 onChange={handleCheckboxChange}
                                 name="chk_delivered"
                                 count={deliveredCount}
@@ -1682,7 +1750,7 @@ export default function HomePage() {
                             >
                               <Checkbox
                                 label="Exception"
-                                checked={shipmentInfo.chk_exception}
+                                checked={shipmentStatus.chk_exception}
                                 onChange={handleCheckboxChange}
                                 name="chk_exception"
                                 count={exceptionCount}
@@ -1703,7 +1771,7 @@ export default function HomePage() {
                             >
                               <Checkbox
                                 label="In Transit"
-                                checked={shipmentInfo.chk_inTranist}
+                                checked={shipmentStatus.chk_inTranist}
                                 onChange={handleCheckboxChange}
                                 name="chk_inTranist"
                                 count={inTransitCount}
@@ -1724,7 +1792,7 @@ export default function HomePage() {
                             >
                               <Checkbox
                                 label="Label Created"
-                                checked={shipmentInfo.chk_labelCreated}
+                                checked={shipmentStatus.chk_labelCreated}
                                 onChange={handleCheckboxChange}
                                 name="chk_labelCreated"
                                 count={labelCreatedCount}
@@ -1780,43 +1848,17 @@ export default function HomePage() {
                                       : "filter-section-btn"
                                   }
                                 >
-                                  <div className="filter-section-btn-icon">
-                                    <label className="checkbox">
-                                      <input
-                                        className="checkbox-input"
-                                        type="checkbox"
-                                        checked={filter__accountNo.includes(
-                                          item.name
-                                        )}
-                                        name="CheckShipper"
-                                        onChange={(event) =>
-                                          valueBasedFilter(event, item.type)
-                                        }
-                                        value={item.name}
-                                      />
-
-                                      <span className="checkbox-indicator">
-                                        <svg
-                                          width="17"
-                                          height="13"
-                                          viewBox="0 0 17 13"
-                                          fill="none"
-                                          xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                          <path
-                                            d="M5.7 12.025L0 6.325L1.425 4.9L5.7 9.175L14.875 0L16.3 1.425L5.7 12.025Z"
-                                            fill="#0067B2"
-                                          />
-                                        </svg>
-                                      </span>
-                                    </label>
-                                  </div>
-                                  <div className="filter-section-btn-text">
-                                    {item.name}
-                                  </div>
-                                  <div className="filter-section-btn-count">
-                                    {item.count}
-                                  </div>
+                                <Checkbox
+                                label={item.name}
+                                checked={filter__accountNo.includes(
+                                  item.name
+                                )}
+                                onChange={valueBasedFilter}
+                                name="accountNo"
+                                count={item.count}
+                                value={item.name}
+                              />
+                                 
                                 </button>
                               </li>
                             ))}
@@ -1835,50 +1877,23 @@ export default function HomePage() {
                                       : "filter-section-btn"
                                   }
                                 >
-                                  <div className="filter-section-btn-icon">
-                                    <label className="checkbox">
-                                      <input
-                                        className="checkbox-input"
-                                        type="checkbox"
-                                        checked={filter__deliveredDate.includes(
-                                          item.name
-                                        )}
-                                        name="CheckShipper"
-                                        onChange={(event) =>
-                                          valueBasedFilter(event, item.type)
-                                        }
-                                        value={item.name}
-                                      />
-
-                                      <span className="checkbox-indicator">
-                                        <svg
-                                          width="17"
-                                          height="13"
-                                          viewBox="0 0 17 13"
-                                          fill="none"
-                                          xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                          <path
-                                            d="M5.7 12.025L0 6.325L1.425 4.9L5.7 9.175L14.875 0L16.3 1.425L5.7 12.025Z"
-                                            fill="#0067B2"
-                                          />
-                                        </svg>
-                                      </span>
-                                    </label>
-                                  </div>
-                                  <div className="filter-section-btn-text">
-                                    {item.name}
-                                  </div>
-                                  <div className="filter-section-btn-count">
-                                    {item.count}
-                                  </div>
+                                    <Checkbox
+                                label={item.name}
+                                checked={filter__deliveredDate.includes(
+                                  item.name
+                                )}
+                                onChange={valueBasedFilter}
+                                name="deliveredDate"
+                                count={item.count}
+                                value={item.name}
+                                  />
                                 </button>
                               </li>
                             ))}
                           </ul>
                         ) : selectedOption === "numberOfAttempt" ? (
                           <ul className="filter-section-list">
-                            {li_noOfAttempt.map((item) => (
+                            {li_numberOfAttempt.map((item) => (
                               <li
                                 className="filter-section-item"
                                 onClick={() => clickedItem(item.name)}
@@ -1890,43 +1905,17 @@ export default function HomePage() {
                                       : "filter-section-btn"
                                   }
                                 >
-                                  <div className="filter-section-btn-icon">
-                                    <label className="checkbox">
-                                      <input
-                                        className="checkbox-input"
-                                        type="checkbox"
-                                        checked={filter__attemptDelivery.includes(
-                                          item.name
-                                        )}
-                                        name="CheckShipper"
-                                        onChange={(event) =>
-                                          valueBasedFilter(event, item.type)
-                                        }
-                                        value={item.name}
-                                      />
-
-                                      <span className="checkbox-indicator">
-                                        <svg
-                                          width="17"
-                                          height="13"
-                                          viewBox="0 0 17 13"
-                                          fill="none"
-                                          xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                          <path
-                                            d="M5.7 12.025L0 6.325L1.425 4.9L5.7 9.175L14.875 0L16.3 1.425L5.7 12.025Z"
-                                            fill="#0067B2"
-                                          />
-                                        </svg>
-                                      </span>
-                                    </label>
-                                  </div>
-                                  <div className="filter-section-btn-text">
-                                    {item.name}
-                                  </div>
-                                  <div className="filter-section-btn-count">
-                                    {item.count}
-                                  </div>
+                                     <Checkbox
+                                label={item.name}
+                                checked={filter__attemptDelivery.includes(
+                                  item.name
+                                )}
+                                onChange={valueBasedFilter}
+                                name="numberOfAttempt"
+                                count={item.count}
+                                value={item.name}
+                                  />
+                                
                                 </button>
                               </li>
                             ))}
@@ -1945,42 +1934,16 @@ export default function HomePage() {
                                       : "filter-section-btn"
                                   }
                                 >
-                                  <div className="filter-section-btn-icon">
-                                    <label className="checkbox">
-                                      <input
-                                        className="checkbox-input"
-                                        type="checkbox"
-                                        checked={filter__packageKg.includes(
-                                          item.name
-                                        )}
-                                        name="CheckShipper"
-                                        onChange={(event) =>
-                                          valueBasedFilter(event, item.type)
-                                        }
-                                        value={item.name}
-                                      />
-                                      <span className="checkbox-indicator">
-                                        <svg
-                                          width="17"
-                                          height="13"
-                                          viewBox="0 0 17 13"
-                                          fill="none"
-                                          xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                          <path
-                                            d="M5.7 12.025L0 6.325L1.425 4.9L5.7 9.175L14.875 0L16.3 1.425L5.7 12.025Z"
-                                            fill="#0067B2"
-                                          />
-                                        </svg>
-                                      </span>
-                                    </label>
-                                  </div>
-                                  <div className="filter-section-btn-text">
-                                    {item.name}
-                                  </div>
-                                  <div className="filter-section-btn-count">
-                                    {item.count}
-                                  </div>
+                            <Checkbox
+                                label={item.name}
+                                checked={filter__packageKg.includes(
+                                  item.name
+                                )}
+                                onChange={valueBasedFilter}
+                                name="packageKg"
+                                count={item.count}
+                                value={item.name}
+                              />
                                 </button>
                               </li>
                             ))}
@@ -1999,42 +1962,16 @@ export default function HomePage() {
                                       : "filter-section-btn"
                                   }
                                 >
-                                  <div className="filter-section-btn-icon">
-                                    <label className="checkbox">
-                                      <input
-                                        className="checkbox-input"
-                                        type="checkbox"
-                                        checked={filter__packageLbs.includes(
-                                          item.name
-                                        )}
-                                        name="CheckShipper"
-                                        onChange={(event) =>
-                                          valueBasedFilter(event, item.type)
-                                        }
-                                        value={item.name}
-                                      />
-                                      <span className="checkbox-indicator">
-                                        <svg
-                                          width="17"
-                                          height="13"
-                                          viewBox="0 0 17 13"
-                                          fill="none"
-                                          xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                          <path
-                                            d="M5.7 12.025L0 6.325L1.425 4.9L5.7 9.175L14.875 0L16.3 1.425L5.7 12.025Z"
-                                            fill="#0067B2"
-                                          />
-                                        </svg>
-                                      </span>
-                                    </label>
-                                  </div>
-                                  <div className="filter-section-btn-text">
-                                    {item.name}
-                                  </div>
-                                  <div className="filter-section-btn-count">
-                                    {item.count}
-                                  </div>
+                                <Checkbox
+                                label={item.name}
+                                checked={filter__packageLbs.includes(
+                                  item.name
+                                )}
+                                onChange={valueBasedFilter}
+                                name="packageLbs"
+                                count={item.count}
+                                value={item.name}
+                                />
                                 </button>
                               </li>
                             ))}
@@ -2053,42 +1990,16 @@ export default function HomePage() {
                                       : "filter-section-btn"
                                   }
                                 >
-                                  <div className="filter-section-btn-icon">
-                                    <label className="checkbox">
-                                      <input
-                                        className="checkbox-input"
-                                        type="checkbox"
-                                        checked={filter__purchaseOrderNo.includes(
-                                          item.name
-                                        )}
-                                        name="CheckShipper"
-                                        onChange={(event) =>
-                                          valueBasedFilter(event, item.type)
-                                        }
-                                        value={item.name}
-                                      />
-                                      <span className="checkbox-indicator">
-                                        <svg
-                                          width="17"
-                                          height="13"
-                                          viewBox="0 0 17 13"
-                                          fill="none"
-                                          xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                          <path
-                                            d="M5.7 12.025L0 6.325L1.425 4.9L5.7 9.175L14.875 0L16.3 1.425L5.7 12.025Z"
-                                            fill="#0067B2"
-                                          />
-                                        </svg>
-                                      </span>
-                                    </label>
-                                  </div>
-                                  <div className="filter-section-btn-text">
-                                    {item.name}
-                                  </div>
-                                  <div className="filter-section-btn-count">
-                                    {item.count}
-                                  </div>
+                                 <Checkbox
+                                label={item.name}
+                                checked={filter__purchaseOrderNo.includes(
+                                  item.name
+                                )}
+                                onChange={valueBasedFilter}
+                                name="purchaseOrderNumber"
+                                count={item.count}
+                                value={item.name}
+                                />
                                 </button>
                               </li>
                             ))}
@@ -2107,42 +2018,16 @@ export default function HomePage() {
                                       : "filter-section-btn"
                                   }
                                 >
-                                  <div className="filter-section-btn-icon">
-                                    <label className="checkbox">
-                                      <input
-                                        className="checkbox-input"
-                                        type="checkbox"
-                                        checked={filter__reference.includes(
-                                          item.name
-                                        )}
-                                        name="CheckShipper"
-                                        onChange={(event) =>
-                                          valueBasedFilter(event, item.type)
-                                        }
-                                        value={item.name}
-                                      />
-                                      <span className="checkbox-indicator">
-                                        <svg
-                                          width="17"
-                                          height="13"
-                                          viewBox="0 0 17 13"
-                                          fill="none"
-                                          xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                          <path
-                                            d="M5.7 12.025L0 6.325L1.425 4.9L5.7 9.175L14.875 0L16.3 1.425L5.7 12.025Z"
-                                            fill="#0067B2"
-                                          />
-                                        </svg>
-                                      </span>
-                                    </label>
-                                  </div>
-                                  <div className="filter-section-btn-text">
-                                    {item.name}
-                                  </div>
-                                  <div className="filter-section-btn-count">
-                                    {item.count}
-                                  </div>
+                                  <Checkbox
+                                label={item.name}
+                                checked={filter__reference.includes(
+                                  item.name
+                                )}
+                                onChange={valueBasedFilter}
+                                name="reference"
+                                count={item.count}
+                                value={item.name}
+                                />
                                 </button>
                               </li>
                             ))}
@@ -2161,42 +2046,17 @@ export default function HomePage() {
                                       : "filter-section-btn"
                                   }
                                 >
-                                  <div className="filter-section-btn-icon">
-                                    <label className="checkbox">
-                                      <input
-                                        className="checkbox-input"
-                                        type="checkbox"
-                                        checked={filter_scheduledDeliveryDate.includes(
-                                          item.name
-                                        )}
-                                        name="CheckShipper"
-                                        onChange={(event) =>
-                                          valueBasedFilter(event, item.type)
-                                        }
-                                        value={item.name}
-                                      />
-                                      <span className="checkbox-indicator">
-                                        <svg
-                                          width="17"
-                                          height="13"
-                                          viewBox="0 0 17 13"
-                                          fill="none"
-                                          xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                          <path
-                                            d="M5.7 12.025L0 6.325L1.425 4.9L5.7 9.175L14.875 0L16.3 1.425L5.7 12.025Z"
-                                            fill="#0067B2"
-                                          />
-                                        </svg>
-                                      </span>
-                                    </label>
-                                  </div>
-                                  <div className="filter-section-btn-text">
-                                    {item.name}
-                                  </div>
-                                  <div className="filter-section-btn-count">
-                                    {item.count}
-                                  </div>
+                                    <Checkbox
+                                label={item.name}
+                                checked={filter__scheduledDeliveryDate.includes(
+                                  item.name
+                                )}
+                                onChange={valueBasedFilter}
+                                name="scheduledDeliveryDate"
+                                count={item.count}
+                                value={item.name}
+                                />
+                               
                                 </button>
                               </li>
                             ))}
@@ -2215,42 +2075,17 @@ export default function HomePage() {
                                       : "filter-section-btn"
                                   }
                                 >
-                                  <div className="filter-section-btn-icon">
-                                    <label className="checkbox">
-                                      <input
-                                        className="checkbox-input"
-                                        type="checkbox"
-                                        checked={filter_shipDate.includes(
-                                          item.name
-                                        )}
-                                        name="CheckShipper"
-                                        onChange={(event) =>
-                                          valueBasedFilter(event, item.type)
-                                        }
-                                        value={item.name}
-                                      />
-                                      <span className="checkbox-indicator">
-                                        <svg
-                                          width="17"
-                                          height="13"
-                                          viewBox="0 0 17 13"
-                                          fill="none"
-                                          xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                          <path
-                                            d="M5.7 12.025L0 6.325L1.425 4.9L5.7 9.175L14.875 0L16.3 1.425L5.7 12.025Z"
-                                            fill="#0067B2"
-                                          />
-                                        </svg>
-                                      </span>
-                                    </label>
-                                  </div>
-                                  <div className="filter-section-btn-text">
-                                    {item.name}
-                                  </div>
-                                  <div className="filter-section-btn-count">
-                                    {item.count}
-                                  </div>
+                                     <Checkbox
+                                label={item.name}
+                                checked={filter__shipDate.includes(
+                                  item.name
+                                )}
+                                onChange={valueBasedFilter}
+                                name="shipDate"
+                                count={item.count}
+                                value={item.name}
+                                />
+                               
                                 </button>
                               </li>
                             ))}
@@ -2274,7 +2109,7 @@ export default function HomePage() {
                                       <input
                                         className="checkbox-input"
                                         type="checkbox"
-                                        checked={filter_shipDate.includes(
+                                        checked={filter__shipDate.includes(
                                           item.name
                                         )}
                                         name="CheckShipper"
@@ -2328,7 +2163,7 @@ export default function HomePage() {
                                       <input
                                         className="checkbox-input"
                                         type="checkbox"
-                                        checked={filter_shipDate.includes(
+                                        checked={filter__shipDate.includes(
                                           item.name
                                         )}
                                         name="CheckShipper"
@@ -2382,7 +2217,7 @@ export default function HomePage() {
                                       <input
                                         className="checkbox-input"
                                         type="checkbox"
-                                        checked={filter_shipDate.includes(
+                                        checked={filter__shipDate.includes(
                                           item.name
                                         )}
                                         name="CheckShipper"
@@ -2436,7 +2271,7 @@ export default function HomePage() {
                                       <input
                                         className="checkbox-input"
                                         type="checkbox"
-                                        checked={filter_shipDate.includes(
+                                        checked={filter__shipDate.includes(
                                           item.name
                                         )}
                                         name="CheckShipper"
@@ -2490,7 +2325,7 @@ export default function HomePage() {
                                       <input
                                         className="checkbox-input"
                                         type="checkbox"
-                                        checked={filter_shipDate.includes(
+                                        checked={filter__shipDate.includes(
                                           item.name
                                         )}
                                         name="CheckShipper"
@@ -2544,7 +2379,7 @@ export default function HomePage() {
                                       <input
                                         className="checkbox-input"
                                         type="checkbox"
-                                        checked={filter_shipDate.includes(
+                                        checked={filter__shipDate.includes(
                                           item.name
                                         )}
                                         name="CheckShipper"
@@ -2598,7 +2433,7 @@ export default function HomePage() {
                                       <input
                                         className="checkbox-input"
                                         type="checkbox"
-                                        checked={filter_shipDate.includes(
+                                        checked={filter__shipDate.includes(
                                           item.name
                                         )}
                                         name="CheckShipper"
@@ -2650,7 +2485,7 @@ export default function HomePage() {
                     </button>
                     <button
                       className="btn btn-ship--primary"
-                      onClick={() => applyFilter()}
+                      onClick={() => applyFilter(0)}
                     >
                       APPLY
                     </button>
