@@ -101,6 +101,13 @@ export default function HomePage() {
       useState<any[]>([]);
     const [filter__shipDate, set_filter__shipDate] = useState<any[]>([]);
 
+    const [filter__recipientContactName, set_filter__recipientContactName] = useState<any[]>([]);
+    const [filter__recipientCompany, set_filter__recipientCompany] = useState<any[]>([]);
+    const [filter__recipientAddress, set_filter__recipientAddress] = useState<any[]>([]);
+    const [filter__recipientCity, set_filter__recipientCity] = useState<any[]>([]);
+    const [filter__recipientState, set_filter__recipientState] = useState<any[]>([]);
+    const [filter__recipientCountry, set_filter__recipientCountry] = useState<any[]>([]);
+    const [filter__recipientPostal, set_filter__recipientPostal] = useState<any[]>([]);
   const handleLogout = () => {
     navigate("/login"); // Use the navigate function to navigate to the login page
   };
@@ -117,6 +124,13 @@ export default function HomePage() {
   let filter_layer1_scheduledDeliveryDate: any[] = [];
   let filter_layer1_shipDate: any[] = [];
 
+  let filter_layer1_recipientContactName: any[] = [];
+  let filter_layer1_recipientCompany: any[] = [];
+  let filter_layer1_recipientAddress: any[] = [];
+  let filter_layer1_recipientCity: any[] = [];
+  let filter_layer1_recipientState: any[] = [];
+  let filter_layer1_recipientCountry: any[] = [];
+  let filter_layer1_recipientPostal: any[] = [];
   //checkbox changes
   const [shipmentStatus, setShipmentStatus] = useState({
     chk_delayed: false,
@@ -278,7 +292,76 @@ export default function HomePage() {
       );
       set_filter__shipDate(filter_layer1_shipDate);
     }
+    if (value.includes("RecipientName -")) {
+      
+      value = value.split("RecipientName -")[1];
+     
+      filter_layer1_recipientContactName = filter__recipientContactName.filter(
+        (e) => e !== value
+      );
+      set_filter__recipientContactName(filter_layer1_recipientContactName);
+    }
+    if (value.includes("RecipientCompany -")) {
+      
+      value = value.split("RecipientCompany -")[1];
+     
+      filter_layer1_recipientCompany = filter__recipientCompany.filter(
+        (e) => e !== value
+      );
+      set_filter__recipientCompany(filter_layer1_recipientCompany);
+    }
 
+    if (value.includes("RecipientAddress -")) {
+      
+      value = value.split("RecipientAddress -")[1];
+     
+      filter_layer1_recipientAddress = filter__recipientAddress.filter(
+        (e) => e !== value
+      );
+      set_filter__recipientAddress(filter_layer1_recipientAddress);
+    }
+
+    if (value.includes("RecipientCity -")) {
+      
+      value = value.split("RecipientCity -")[1];
+     
+      filter_layer1_recipientCity = filter__recipientCity.filter(
+        (e) => e !== value
+      );
+      set_filter__recipientCity(filter_layer1_recipientCity);
+    }
+
+    if (value.includes("RecipientState -")) {
+      
+      value = value.split("RecipientState -")[1];
+     
+      filter_layer1_recipientState = filter__recipientState.filter(
+        (e) => e !== value
+      );
+      set_filter__recipientState(filter_layer1_recipientState);
+    }
+
+    if (value.includes("RecipientCountry -")) {
+      
+      value = value.split("RecipientCountry -")[1];
+     
+      filter_layer1_recipientCountry = filter__recipientCountry.filter(
+        (e) => e !== value
+      );
+      set_filter__recipientCountry(filter_layer1_recipientCountry);
+    }
+
+    if (value.includes("RecipientPostal -")) {
+      
+      value = value.split("RecipientPostal -")[1];
+     
+      filter_layer1_recipientPostal = filter__recipientPostal.filter(
+        (e) => e !== value
+      );
+      set_filter__recipientPostal(filter_layer1_recipientPostal);
+    }
+
+    
     let filterArr = userinfo.filter((e) => e !== value);
     filterSection = filterArr;
     clearShipmentStatusByValue(value)
@@ -295,8 +378,13 @@ export default function HomePage() {
   useEffect(() => {}, [filter__reference]);
   useEffect(() => {}, [filter__scheduledDeliveryDate]);
   useEffect(() => {}, [filter__shipDate]);
-  
-
+  useEffect(() => {}, [filter__recipientContactName]);
+  useEffect(() => {}, [filter__recipientCompany]);
+  useEffect(() => {}, [filter__recipientAddress]);
+  useEffect(() => {}, [filter__recipientCity]);
+  useEffect(() => {}, [filter__recipientState]);
+  useEffect(() => {}, [filter__recipientCountry]);
+  useEffect(() => {}, [filter__recipientPostal]);
   const searchData = (event: { key: string }) => {
     setAnyFilter(true);
 
@@ -421,6 +509,30 @@ export default function HomePage() {
     filter_layer1_reference = [];
     filter_layer1_scheduledDeliveryDate = [];
     filter_layer1_shipDate = [];
+    filter_layer1_recipientContactName = [];
+    filter_layer1_recipientCompany = [];
+    filter_layer1_recipientAddress = [];
+    filter_layer1_recipientCity = [];
+    filter_layer1_recipientState = [];
+    filter_layer1_recipientCountry = [];
+    filter_layer1_recipientPostal = [];
+
+    set_filter__accountNo([]);
+    set_filter__deliveredDate([]);
+    set_filter__attemptDelivery([]);
+    set_filter__packageKg([]);
+    set_filter__packageLbs([]);
+    set_filter__purchaseOrderNo([]);
+    set_filter__reference([]);
+    set_filter__scheduledDeliveryDate([]);
+    set_filter__shipDate([]);
+    set_filter__recipientContactName([]);
+    set_filter__recipientCompany([]);
+    set_filter__recipientAddress([]);
+    set_filter__recipientCity([]);
+    set_filter__recipientState([]);
+    set_filter__recipientCountry([]);
+    set_filter__recipientPostal([]);
     setUserInfo([]);
     resetShipmentStatus();
   };
@@ -505,36 +617,6 @@ export default function HomePage() {
   const clickedItem = (value: any) => {
     setSelectedDiv(value);
   };
-
-  // const shipperChange = (e: any) => {
-  //   e.preventDefault();
-  //   const { value, checked } = e.target;
-  //   let tempArr: any[] = [];
-  //   console.log("CHCEKKK" + checked + "--" + value);
-  //   if (checked) {
-  //     tempArr = [...userinfo, value];
-
-  //     setTimeout(() => {
-  //       // Perform additional actions after the delay
-  //       console.log("Checkbox value after delay:", userinfo);
-  //     }, 100);
-  //   } else {
-  //     tempArr = userinfo.filter((e) => e !== value);if (checked) {
-  //     tempArr = [...userinfo, value];
-
-  //     setTimeout(() => {
-  //       // Perform additional actions after the delay
-  //       console.log("Checkbox value after delay:", userinfo);
-  //     }, 100);
-  //   } else {
-  //     tempArr = userinfo.filter((e) => e !== value);
-  //   }
-
-  //   setUserInfo(tempArr);
-  // };
-  // useEffect(() => {
-
-  // }, [userinfo]);
 
   //first layer filter selection
 
@@ -659,9 +741,19 @@ export default function HomePage() {
 
       set_li_scheduledDeliveryDate(scheduledDeliveryDateArr);
     } else if (value == "shipDate") {
+
       const shipDateArr = _(originalRows)
-        .groupBy("shipDate")
-        .map((items, name) => ({ name, count: items.length, type: "shipDate" }))
+        .groupBy((item) => {
+          const formattedDate = moment(item.shipDate).format(
+            "YYYY-MM-DD"
+          );
+          return moment(formattedDate).isValid() ? formattedDate : "0000-00-00";
+        })
+        .map((items, name) => ({
+          name,
+          count: items.length,
+          type: "shipDate",
+        }))
         .value();
       set_li_shipDate(shipDateArr);
     } else if (value == "recipientContactName") {
@@ -738,32 +830,7 @@ export default function HomePage() {
   };
 
 
-
-  //third layer filter
-  // const [filter__accountNo, set_filter__accountNo] = useState<any[]>([]);
-  // const [filter__deliveredDate, set_filter__deliveredDate] = useState<any[]>([]);
-  // const [filter__attemptDelivery, set_filter__attemptDelivery] = useState<any[]>([]);
-  // const [filter__packageKg, set_filter__packageKg] = useState<any[]>([]);
-  // const [filter__packageLbs, set_filter__packageLbs] = useState<any[]>([]);
-  // const [filter__purchaseOrderNo, set_filter__purchaseOrderNo] = useState<any[]>([]);
-  // const [filter__reference, set_filter__reference] = useState<any[]>([]);
-  // const [filter_scheduledDeliveryDate, set_filter_scheduledDeliveryDate] = useState<any[]>([]);
-  // const [filter_shipDate, set_filter_shipDate] = useState<any[]>([]);
-
-  const handleCheckboxChange1 = (event: {
-    target: { name: any; checked: any; value:any;};
-  }) => {
-    const { name, checked, value} = event.target;
-      setShipmentStatus({ ...shipmentStatus, [name]: checked });
-      let tempArr =[];
-     
-      if (checked) {
-        tempArr = [...userinfo, value] ; 
-      } else {
-        tempArr = userinfo.filter((e) => e !== value);
-      }
-      setUserInfo(tempArr);
-  };
+ 
 
   const valueBasedFilter = (event: {
     target: { name: any; checked: any; value:any;};
@@ -857,7 +924,78 @@ export default function HomePage() {
 
       set_filter__shipDate(tempArr);
     }
+
+    if (name == "recipientContactName") {
+      if (checked) {
+        tempArr = [...filter__recipientContactName, value];
+      } else {
+        tempArr = filter__recipientContactName.filter((e) => e !== value);
+      }
+
+      set_filter__recipientContactName(tempArr);
+    }
+    if (name == "recipientCompany") {
+      if (checked) {
+        tempArr = [...filter__recipientCompany, value];
+      } else {
+        tempArr = filter__recipientCompany.filter((e) => e !== value);
+      }
+
+      set_filter__recipientCompany(tempArr);
+    }
+
+    if (name == "recipientAddress") {
+      if (checked) {
+        tempArr = [...filter__recipientAddress, value];
+      } else {
+        tempArr = filter__recipientAddress.filter((e) => e !== value);
+      }
+
+      set_filter__recipientAddress(tempArr);
+    }
+
+    if (name == "recipientCity") {
+      if (checked) {
+        tempArr = [...filter__recipientCity, value];
+      } else {
+        tempArr = filter__recipientCity.filter((e) => e !== value);
+      }
+
+      set_filter__recipientCity(tempArr);
+    }
+
+    if (name == "recipientState") {
+      if (checked) {
+        tempArr = [...filter__recipientState, value];
+      } else {
+        tempArr = filter__recipientState.filter((e) => e !== value);
+      }
+
+      set_filter__recipientState(tempArr);
+    }
+
+    if (name == "recipientCountry") {
+      if (checked) {
+        tempArr = [...filter__recipientCountry, value];
+      } else {
+        tempArr = filter__recipientCountry.filter((e) => e !== value);
+      }
+
+      set_filter__recipientCountry(tempArr);
+    }
+
+    if (name == "recipientPostal") {
+      if (checked) {
+        tempArr = [...filter__recipientPostal, value];
+      } else {
+        tempArr = filter__recipientPostal.filter((e) => e !== value);
+      }
+
+      set_filter__recipientPostal(tempArr);
+    }
   };
+
+  
   useEffect(() => { 
     console.log("TTTTT"+JSON.stringify(filter__accountNo))
   }, [filter__accountNo]);
@@ -868,7 +1006,13 @@ export default function HomePage() {
   useEffect(() => {}, [filter__reference]);
   useEffect(() => {}, [filter__scheduledDeliveryDate]);
   useEffect(() => {}, [filter__shipDate]);
-
+  useEffect(() => {}, [filter__recipientContactName]);
+  useEffect(() => {}, [filter__recipientCompany]);
+  useEffect(() => {}, [filter__recipientAddress]);
+  useEffect(() => {}, [filter__recipientCity]);
+  useEffect(() => {}, [filter__recipientState]);
+  useEffect(() => {}, [filter__recipientCountry]);
+  useEffect(() => {}, [filter__recipientPostal]);
   const toggleFilter = () => {
     setShowFilter(!showFilter);
   };
@@ -896,9 +1040,20 @@ export default function HomePage() {
     setAnyFilter(true);
     setShowFilter(false);
 
+    if (searchValue != "") {
+      if (searchType == "Store ID") {
+      
+
+        setRows(originalRows);
+      }
+    } else {
+      
     setSearchValue("");
     originalRows = originalRows_backup;
     setRows(originalRows);
+
+    }
+
 
     setStoreId("");
     setSelectedList([]);
@@ -1164,13 +1319,190 @@ export default function HomePage() {
       if(filter_layer1_shipDate.length == 0) {
         filteredData_level1 = filteredData_level1;
       } else {
-      
+       
+
         filteredData_level1 = filteredData_level1.filter((item) =>
-        filter_layer1_shipDate.includes(item.shipDate)
+        filter_layer1_shipDate.includes(
+          moment(
+            moment(item.shipDate).format("YYYY-MM-DD")
+          ).isValid()
+            ? moment(item.shipDate).format("YYYY-MM-DD")
+            : "0000-00-00"
+        )
       );
+        
       }
 
     }
+
+
+    if (filter_model.includes("recipientContactName")) {
+      if (filter_layer1_recipientContactName.length > 0 || type ==1 ) {
+        filter_layer1_recipientContactName = filter_layer1_recipientContactName;
+      } else {
+        filter_layer1_recipientContactName = filter__recipientContactName;
+      }
+
+      const newArray = filter_layer1_recipientContactName.map(
+        (variable) => "RecipientName -" + variable
+      );
+      tempArray = tempArray.concat(newArray);
+
+      if(filter_layer1_recipientContactName.length == 0) {
+        filteredData_level1 = filteredData_level1;
+      } else {
+        const nullConvertedArray = filter_layer1_recipientContactName.map((str) => str === 'null' ? null : str);
+
+        filteredData_level1 = filteredData_level1.filter((item) =>
+        (nullConvertedArray.includes(item.recipientContactName))
+      );
+      }
+
+    }    
+
+    if (filter_model.includes("recipientCompany")) {
+      if (filter_layer1_recipientCompany.length > 0 || type ==1 ) {
+        filter_layer1_recipientCompany = filter_layer1_recipientCompany;
+      } else {
+        filter_layer1_recipientCompany = filter__recipientCompany;
+      }
+
+      const newArray = filter_layer1_recipientCompany.map(
+        (variable) => "RecipientCompany -" + variable
+      );
+      tempArray = tempArray.concat(newArray);
+
+      if(filter_layer1_recipientCompany.length == 0) {
+        filteredData_level1 = filteredData_level1;
+      } else {
+        const nullConvertedArray = filter_layer1_recipientCompany.map((str) => str === 'null' ? null : str);
+
+        filteredData_level1 = filteredData_level1.filter((item) =>
+        (nullConvertedArray.includes(item.recipientCompany))
+      );
+      }
+
+    }    
+
+    if (filter_model.includes("recipientAddress")) {
+      if (filter_layer1_recipientAddress.length > 0 || type ==1 ) {
+        filter_layer1_recipientAddress = filter_layer1_recipientAddress;
+      } else {
+        filter_layer1_recipientAddress = filter__recipientAddress;
+      }
+
+      const newArray = filter_layer1_recipientAddress.map(
+        (variable) => "RecipientAddress -" + variable
+      );
+      tempArray = tempArray.concat(newArray);
+
+      if(filter_layer1_recipientAddress.length == 0) {
+        filteredData_level1 = filteredData_level1;
+      } else {
+        const nullConvertedArray = filter_layer1_recipientAddress.map((str) => str === 'null' ? null : str);
+
+        filteredData_level1 = filteredData_level1.filter((item) =>
+        (nullConvertedArray.includes(item.recipientAddress))
+      );
+      }
+
+    }   
+
+    if (filter_model.includes("recipientCity")) {
+      if (filter_layer1_recipientCity.length > 0 || type ==1 ) {
+        filter_layer1_recipientCity = filter_layer1_recipientCity;
+      } else {
+        filter_layer1_recipientCity = filter__recipientCity;
+      }
+
+      const newArray = filter_layer1_recipientCity.map(
+        (variable) => "RecipientCity -" + variable
+      );
+      tempArray = tempArray.concat(newArray);
+
+      if(filter_layer1_recipientCity.length == 0) {
+        filteredData_level1 = filteredData_level1;
+      } else {
+        const nullConvertedArray = filter_layer1_recipientCity.map((str) => str === 'null' ? null : str);
+
+        filteredData_level1 = filteredData_level1.filter((item) =>
+        (nullConvertedArray.includes(item.recipientCity))
+      );
+      }
+
+    } 
+
+    if (filter_model.includes("recipientState")) {
+      if (filter_layer1_recipientState.length > 0 || type ==1 ) {
+        filter_layer1_recipientState = filter_layer1_recipientState;
+      } else {
+        filter_layer1_recipientState = filter__recipientState;
+      }
+
+      const newArray = filter_layer1_recipientState.map(
+        (variable) => "RecipientState -" + variable
+      );
+      tempArray = tempArray.concat(newArray);
+
+      if(filter_layer1_recipientState.length == 0) {
+        filteredData_level1 = filteredData_level1;
+      } else {
+        const nullConvertedArray = filter_layer1_recipientState.map((str) => str === 'null' ? null : str);
+
+        filteredData_level1 = filteredData_level1.filter((item) =>
+        (nullConvertedArray.includes(item.recipientState))
+      );
+      }
+
+    } 
+
+    if (filter_model.includes("recipientCountry")) {
+      if (filter_layer1_recipientCountry.length > 0 || type ==1 ) {
+        filter_layer1_recipientCountry = filter_layer1_recipientCountry;
+      } else {
+        filter_layer1_recipientCountry = filter__recipientCountry;
+      }
+
+      const newArray = filter_layer1_recipientCountry.map(
+        (variable) => "RecipientCountry -" + variable
+      );
+      tempArray = tempArray.concat(newArray);
+
+      if(filter_layer1_recipientCountry.length == 0) {
+        filteredData_level1 = filteredData_level1;
+      } else {
+        const nullConvertedArray = filter_layer1_recipientCountry.map((str) => str === 'null' ? null : str);
+
+        filteredData_level1 = filteredData_level1.filter((item) =>
+        (nullConvertedArray.includes(item.recipientCountry))
+      );
+      }
+
+    } 
+
+    if (filter_model.includes("recipientPostal")) {
+      if (filter_layer1_recipientPostal.length > 0 || type ==1 ) {
+        filter_layer1_recipientPostal = filter_layer1_recipientPostal;
+      } else {
+        filter_layer1_recipientPostal = filter__recipientPostal;
+      }
+
+      const newArray = filter_layer1_recipientPostal.map(
+        (variable) => "RecipientPostal -" + variable
+      );
+      tempArray = tempArray.concat(newArray);
+
+      if(filter_layer1_recipientPostal.length == 0) {
+        filteredData_level1 = filteredData_level1;
+      } else {
+        const nullConvertedArray = filter_layer1_recipientPostal.map((str) => str === 'null' ? null : str);
+
+        filteredData_level1 = filteredData_level1.filter((item) =>
+        (nullConvertedArray.includes(item.recipientPostal))
+      );
+      }
+
+    } 
     const uniqueArray = tempArray.filter((value, index, self) => {
       return self.indexOf(value) === index;
     });
@@ -2104,42 +2436,16 @@ export default function HomePage() {
                                       : "filter-section-btn"
                                   }
                                 >
-                                  <div className="filter-section-btn-icon">
-                                    <label className="checkbox">
-                                      <input
-                                        className="checkbox-input"
-                                        type="checkbox"
-                                        checked={filter__shipDate.includes(
-                                          item.name
-                                        )}
-                                        name="CheckShipper"
-                                        onChange={(event) =>
-                                          valueBasedFilter(event, item.type)
-                                        }
-                                        value={item.name}
-                                      />
-                                      <span className="checkbox-indicator">
-                                        <svg
-                                          width="17"
-                                          height="13"
-                                          viewBox="0 0 17 13"
-                                          fill="none"
-                                          xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                          <path
-                                            d="M5.7 12.025L0 6.325L1.425 4.9L5.7 9.175L14.875 0L16.3 1.425L5.7 12.025Z"
-                                            fill="#0067B2"
-                                          />
-                                        </svg>
-                                      </span>
-                                    </label>
-                                  </div>
-                                  <div className="filter-section-btn-text">
-                                    {item.name}
-                                  </div>
-                                  <div className="filter-section-btn-count">
-                                    {item.count}
-                                  </div>
+                                   <Checkbox
+                                label={item.name}
+                                checked={filter__recipientContactName.includes(
+                                  item.name
+                                )}
+                                onChange={valueBasedFilter}
+                                name="recipientContactName"
+                                count={item.count}
+                                value={item.name}
+                                />
                                 </button>
                               </li>
                             ))}
@@ -2158,42 +2464,16 @@ export default function HomePage() {
                                       : "filter-section-btn"
                                   }
                                 >
-                                  <div className="filter-section-btn-icon">
-                                    <label className="checkbox">
-                                      <input
-                                        className="checkbox-input"
-                                        type="checkbox"
-                                        checked={filter__shipDate.includes(
-                                          item.name
-                                        )}
-                                        name="CheckShipper"
-                                        onChange={(event) =>
-                                          valueBasedFilter(event, item.type)
-                                        }
-                                        value={item.name}
-                                      />
-                                      <span className="checkbox-indicator">
-                                        <svg
-                                          width="17"
-                                          height="13"
-                                          viewBox="0 0 17 13"
-                                          fill="none"
-                                          xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                          <path
-                                            d="M5.7 12.025L0 6.325L1.425 4.9L5.7 9.175L14.875 0L16.3 1.425L5.7 12.025Z"
-                                            fill="#0067B2"
-                                          />
-                                        </svg>
-                                      </span>
-                                    </label>
-                                  </div>
-                                  <div className="filter-section-btn-text">
-                                    {item.name}
-                                  </div>
-                                  <div className="filter-section-btn-count">
-                                    {item.count}
-                                  </div>
+                                   <Checkbox
+                                label={item.name}
+                                checked={filter__recipientCompany.includes(
+                                  item.name
+                                )}
+                                onChange={valueBasedFilter}
+                                name="recipientCompany"
+                                count={item.count}
+                                value={item.name}
+                                />
                                 </button>
                               </li>
                             ))}
@@ -2212,42 +2492,16 @@ export default function HomePage() {
                                       : "filter-section-btn"
                                   }
                                 >
-                                  <div className="filter-section-btn-icon">
-                                    <label className="checkbox">
-                                      <input
-                                        className="checkbox-input"
-                                        type="checkbox"
-                                        checked={filter__shipDate.includes(
-                                          item.name
-                                        )}
-                                        name="CheckShipper"
-                                        onChange={(event) =>
-                                          valueBasedFilter(event, item.type)
-                                        }
-                                        value={item.name}
-                                      />
-                                      <span className="checkbox-indicator">
-                                        <svg
-                                          width="17"
-                                          height="13"
-                                          viewBox="0 0 17 13"
-                                          fill="none"
-                                          xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                          <path
-                                            d="M5.7 12.025L0 6.325L1.425 4.9L5.7 9.175L14.875 0L16.3 1.425L5.7 12.025Z"
-                                            fill="#0067B2"
-                                          />
-                                        </svg>
-                                      </span>
-                                    </label>
-                                  </div>
-                                  <div className="filter-section-btn-text">
-                                    {item.name}
-                                  </div>
-                                  <div className="filter-section-btn-count">
-                                    {item.count}
-                                  </div>
+                                   <Checkbox
+                                label={item.name}
+                                checked={filter__recipientAddress.includes(
+                                  item.name
+                                )}
+                                onChange={valueBasedFilter}
+                                name="recipientAddress"
+                                count={item.count}
+                                value={item.name}
+                                />
                                 </button>
                               </li>
                             ))}
@@ -2266,42 +2520,16 @@ export default function HomePage() {
                                       : "filter-section-btn"
                                   }
                                 >
-                                  <div className="filter-section-btn-icon">
-                                    <label className="checkbox">
-                                      <input
-                                        className="checkbox-input"
-                                        type="checkbox"
-                                        checked={filter__shipDate.includes(
-                                          item.name
-                                        )}
-                                        name="CheckShipper"
-                                        onChange={(event) =>
-                                          valueBasedFilter(event, item.type)
-                                        }
-                                        value={item.name}
-                                      />
-                                      <span className="checkbox-indicator">
-                                        <svg
-                                          width="17"
-                                          height="13"
-                                          viewBox="0 0 17 13"
-                                          fill="none"
-                                          xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                          <path
-                                            d="M5.7 12.025L0 6.325L1.425 4.9L5.7 9.175L14.875 0L16.3 1.425L5.7 12.025Z"
-                                            fill="#0067B2"
-                                          />
-                                        </svg>
-                                      </span>
-                                    </label>
-                                  </div>
-                                  <div className="filter-section-btn-text">
-                                    {item.name}
-                                  </div>
-                                  <div className="filter-section-btn-count">
-                                    {item.count}
-                                  </div>
+                                  <Checkbox
+                                label={item.name}
+                                checked={filter__recipientCity.includes(
+                                  item.name
+                                )}
+                                onChange={valueBasedFilter}
+                                name="recipientCity"
+                                count={item.count}
+                                value={item.name}
+                                />
                                 </button>
                               </li>
                             ))}
@@ -2320,42 +2548,16 @@ export default function HomePage() {
                                       : "filter-section-btn"
                                   }
                                 >
-                                  <div className="filter-section-btn-icon">
-                                    <label className="checkbox">
-                                      <input
-                                        className="checkbox-input"
-                                        type="checkbox"
-                                        checked={filter__shipDate.includes(
-                                          item.name
-                                        )}
-                                        name="CheckShipper"
-                                        onChange={(event) =>
-                                          valueBasedFilter(event, item.type)
-                                        }
-                                        value={item.name}
-                                      />
-                                      <span className="checkbox-indicator">
-                                        <svg
-                                          width="17"
-                                          height="13"
-                                          viewBox="0 0 17 13"
-                                          fill="none"
-                                          xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                          <path
-                                            d="M5.7 12.025L0 6.325L1.425 4.9L5.7 9.175L14.875 0L16.3 1.425L5.7 12.025Z"
-                                            fill="#0067B2"
-                                          />
-                                        </svg>
-                                      </span>
-                                    </label>
-                                  </div>
-                                  <div className="filter-section-btn-text">
-                                    {item.name}
-                                  </div>
-                                  <div className="filter-section-btn-count">
-                                    {item.count}
-                                  </div>
+                                <Checkbox
+                                label={item.name}
+                                checked={filter__recipientState.includes(
+                                  item.name
+                                )}
+                                onChange={valueBasedFilter}
+                                name="recipientState"
+                                count={item.count}
+                                value={item.name}
+                                />
                                 </button>
                               </li>
                             ))}
@@ -2374,42 +2576,16 @@ export default function HomePage() {
                                       : "filter-section-btn"
                                   }
                                 >
-                                  <div className="filter-section-btn-icon">
-                                    <label className="checkbox">
-                                      <input
-                                        className="checkbox-input"
-                                        type="checkbox"
-                                        checked={filter__shipDate.includes(
-                                          item.name
-                                        )}
-                                        name="CheckShipper"
-                                        onChange={(event) =>
-                                          valueBasedFilter(event, item.type)
-                                        }
-                                        value={item.name}
-                                      />
-                                      <span className="checkbox-indicator">
-                                        <svg
-                                          width="17"
-                                          height="13"
-                                          viewBox="0 0 17 13"
-                                          fill="none"
-                                          xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                          <path
-                                            d="M5.7 12.025L0 6.325L1.425 4.9L5.7 9.175L14.875 0L16.3 1.425L5.7 12.025Z"
-                                            fill="#0067B2"
-                                          />
-                                        </svg>
-                                      </span>
-                                    </label>
-                                  </div>
-                                  <div className="filter-section-btn-text">
-                                    {item.name}
-                                  </div>
-                                  <div className="filter-section-btn-count">
-                                    {item.count}
-                                  </div>
+                                  <Checkbox
+                                label={item.name}
+                                checked={filter__recipientCountry.includes(
+                                  item.name
+                                )}
+                                onChange={valueBasedFilter}
+                                name="recipientCountry"
+                                count={item.count}
+                                value={item.name}
+                                />
                                 </button>
                               </li>
                             ))}
@@ -2428,42 +2604,16 @@ export default function HomePage() {
                                       : "filter-section-btn"
                                   }
                                 >
-                                  <div className="filter-section-btn-icon">
-                                    <label className="checkbox">
-                                      <input
-                                        className="checkbox-input"
-                                        type="checkbox"
-                                        checked={filter__shipDate.includes(
-                                          item.name
-                                        )}
-                                        name="CheckShipper"
-                                        onChange={(event) =>
-                                          valueBasedFilter(event, item.type)
-                                        }
-                                        value={item.name}
-                                      />
-                                      <span className="checkbox-indicator">
-                                        <svg
-                                          width="17"
-                                          height="13"
-                                          viewBox="0 0 17 13"
-                                          fill="none"
-                                          xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                          <path
-                                            d="M5.7 12.025L0 6.325L1.425 4.9L5.7 9.175L14.875 0L16.3 1.425L5.7 12.025Z"
-                                            fill="#0067B2"
-                                          />
-                                        </svg>
-                                      </span>
-                                    </label>
-                                  </div>
-                                  <div className="filter-section-btn-text">
-                                    {item.name}
-                                  </div>
-                                  <div className="filter-section-btn-count">
-                                    {item.count}
-                                  </div>
+                                    <Checkbox
+                                label={item.name}
+                                checked={filter__recipientPostal.includes(
+                                  item.name
+                                )}
+                                onChange={valueBasedFilter}
+                                name="recipientPostal"
+                                count={item.count}
+                                value={item.name}
+                                />
                                 </button>
                               </li>
                             ))}
