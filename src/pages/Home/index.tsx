@@ -81,7 +81,7 @@ export default function HomePage() {
 
   const [userinfo, setUserInfo] = useState<any[]>([]);
   const [filter_model, set_filter_model] = useState<any[]>([]);
-
+const [firstlevelClick, set_firstlevelClick] =useState(true);
 
     //second layer filter
     const [filter__accountNo, set_filter__accountNo] = useState<any[]>([]);
@@ -390,12 +390,14 @@ export default function HomePage() {
     let filterArr = userinfo.filter((e) => e !== value);
     setUserInfo(filterArr);
     filterSection = filterArr;
+    //alert(filterSection)
 
     clearShipmentStatusByValue(value)
 
     applyFilter(1);
   };
-  useEffect(() => {}, [userinfo]);
+  useEffect(() => { }, [shipmentStatus]);
+   useEffect(() => {}, [userinfo]);
   useEffect(() => { 
   }, [filter__accountNo]);
   useEffect(() => {}, [filter__attemptDelivery]);
@@ -640,10 +642,16 @@ export default function HomePage() {
     }
   };
   const [selectedDiv, setSelectedDiv] = useState();
-
+  const [selectedDiv_level2, setSelectedDiv_level2] = useState();
   const clickedItem = (value: any) => {
+   
     setSelectedDiv(value);
+    setSelectedDiv_level2(value);
+    set_firstlevelClick(false);
+    
   };
+  useEffect(() => {}, [firstlevelClick]);
+
 
   //first layer filter selection
 
@@ -1051,11 +1059,14 @@ export default function HomePage() {
     // shipment status
     if (val == 1) {
       setInnerFilter(1);
+      set_firstlevelClick(true);
     } else if (val == 2) {
+      set_firstlevelClick(true);
       // shipment info
       setInnerFilterJson(ShipmentInformationArr);
       setInnerFilter(2);
     } else if (val == 4) {
+      set_firstlevelClick(true);
       //recipient
       setInnerFilterJson(RecipientInfomationArr);
       setInnerFilter(4);
@@ -1090,12 +1101,14 @@ export default function HomePage() {
 
     let tempArray = [];
     let filteredData_level1: shipment[] = [];
+ 
     if (filterSection.length > 0) {
       tempArray = filterSection;
     } else {
       tempArray = userinfo;
       filterSection = userinfo;
     }
+  
     
     if (filterSection.length > 0) {
       if (filterSection.includes("delayed")) {
@@ -1116,9 +1129,11 @@ export default function HomePage() {
       }
 
       if (filterSection.includes("exception")) {
+       
         const filteredData_exception = originalRows.filter((item) => {
-          return Object.keys(item).some(() => item.isException == true);
+          return Object.keys(item).some(() => item.isException == true && item.isDelivered == false);
         });
+        console.log("EXXXXXX"+JSON.stringify(filteredData_exception));
         filteredData_level1 = filteredData_level1.concat(
           filteredData_exception
         );
@@ -1540,8 +1555,11 @@ export default function HomePage() {
       return self.indexOf(value) === index;
     });
     setSelectedList(uniqueArray);
+    const uniqueArray_table = filteredData_level1.filter((value, index, self) => {
+      return self.indexOf(value) === index;
+    });
    
-    setRows(filteredData_level1);
+    setRows(uniqueArray_table);
   };
   useEffect(() => {
 
@@ -2200,7 +2218,7 @@ export default function HomePage() {
                           ))}
                         </ul>
                       </div>
-                      <div className="filter-section__body-level-3">
+                      <div className={firstlevelClick === true ? "filter-section__body-level-3 hideBlock1" : "filter-section__body-level-3" }>
                         {selectedOption === "accountNo" ? (
                           <ul className="filter-section-list">
                             {li_accountNumber.map((item) => (
@@ -2210,7 +2228,7 @@ export default function HomePage() {
                               >
                                 <button
                                   className={
-                                    selectedDiv == item.name
+                                    selectedDiv_level2 == item.name
                                       ? "filter-section-btn selected"
                                       : "filter-section-btn"
                                   }
@@ -2239,7 +2257,7 @@ export default function HomePage() {
                               >
                                 <button
                                   className={
-                                    selectedDiv == item.name
+                                    selectedDiv_level2 == item.name
                                       ? "filter-section-btn selected"
                                       : "filter-section-btn"
                                   }
@@ -2267,7 +2285,7 @@ export default function HomePage() {
                               >
                                 <button
                                   className={
-                                    selectedDiv == item.name
+                                    selectedDiv_level2 == item.name
                                       ? "filter-section-btn selected"
                                       : "filter-section-btn"
                                   }
@@ -2296,7 +2314,7 @@ export default function HomePage() {
                               >
                                 <button
                                   className={
-                                    selectedDiv == item.name
+                                    selectedDiv_level2 == item.name
                                       ? "filter-section-btn selected"
                                       : "filter-section-btn"
                                   }
@@ -2324,7 +2342,7 @@ export default function HomePage() {
                               >
                                 <button
                                   className={
-                                    selectedDiv == item.name
+                                    selectedDiv_level2 == item.name
                                       ? "filter-section-btn selected"
                                       : "filter-section-btn"
                                   }
@@ -2352,7 +2370,7 @@ export default function HomePage() {
                               >
                                 <button
                                   className={
-                                    selectedDiv == item.name
+                                    selectedDiv_level2 == item.name
                                       ? "filter-section-btn selected"
                                       : "filter-section-btn"
                                   }
@@ -2380,7 +2398,7 @@ export default function HomePage() {
                               >
                                 <button
                                   className={
-                                    selectedDiv == item.name
+                                    selectedDiv_level2 == item.name
                                       ? "filter-section-btn selected"
                                       : "filter-section-btn"
                                   }
@@ -2408,7 +2426,7 @@ export default function HomePage() {
                               >
                                 <button
                                   className={
-                                    selectedDiv == item.name
+                                    selectedDiv_level2 == item.name
                                       ? "filter-section-btn selected"
                                       : "filter-section-btn"
                                   }
@@ -2437,7 +2455,7 @@ export default function HomePage() {
                               >
                                 <button
                                   className={
-                                    selectedDiv == item.name
+                                    selectedDiv_level2 == item.name
                                       ? "filter-section-btn selected"
                                       : "filter-section-btn"
                                   }
@@ -2466,7 +2484,7 @@ export default function HomePage() {
                               >
                                 <button
                                   className={
-                                    selectedDiv == item.name
+                                    selectedDiv_level2 == item.name
                                       ? "filter-section-btn selected"
                                       : "filter-section-btn"
                                   }
@@ -2494,7 +2512,7 @@ export default function HomePage() {
                               >
                                 <button
                                   className={
-                                    selectedDiv == item.name
+                                    selectedDiv_level2 == item.name
                                       ? "filter-section-btn selected"
                                       : "filter-section-btn"
                                   }
@@ -2522,7 +2540,7 @@ export default function HomePage() {
                               >
                                 <button
                                   className={
-                                    selectedDiv == item.name
+                                    selectedDiv_level2 == item.name
                                       ? "filter-section-btn selected"
                                       : "filter-section-btn"
                                   }
@@ -2550,7 +2568,7 @@ export default function HomePage() {
                               >
                                 <button
                                   className={
-                                    selectedDiv == item.name
+                                    selectedDiv_level2 == item.name
                                       ? "filter-section-btn selected"
                                       : "filter-section-btn"
                                   }
@@ -2578,7 +2596,7 @@ export default function HomePage() {
                               >
                                 <button
                                   className={
-                                    selectedDiv == item.name
+                                    selectedDiv_level2 == item.name
                                       ? "filter-section-btn selected"
                                       : "filter-section-btn"
                                   }
@@ -2606,7 +2624,7 @@ export default function HomePage() {
                               >
                                 <button
                                   className={
-                                    selectedDiv == item.name
+                                    selectedDiv_level2 == item.name
                                       ? "filter-section-btn selected"
                                       : "filter-section-btn"
                                   }
@@ -2634,7 +2652,7 @@ export default function HomePage() {
                               >
                                 <button
                                   className={
-                                    selectedDiv == item.name
+                                    selectedDiv_level2 == item.name
                                       ? "filter-section-btn selected"
                                       : "filter-section-btn"
                                   }
