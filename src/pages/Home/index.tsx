@@ -182,7 +182,8 @@ export default function HomePage() {
       }));
     } 
   }
-  
+  useEffect(() => {
+  }, [setShipmentStatus]);
   const handleCheckboxChange = (event: {
     target: { name: any; checked: any; value:any;};
   }) => {
@@ -229,7 +230,29 @@ export default function HomePage() {
     resetFilters();
   };
 
+  const reUpdatingTheValues_to_filterArrays =() => {
+    filter_layer1_accountNo = filter__accountNo;
+    filter_layer1_deliveredDate = filter__deliveredDate;
+    filter_layer1_attemptDelivery = filter__attemptDelivery;
+    filter_layer1_packageKg = filter__packageKg;
+    filter_layer1_packageLbs  = filter__packageLbs;
+    filter_layer1_purchaseOrderNumber  = filter__purchaseOrderNo;
+    filter_layer1_reference = filter__reference;
+    filter_layer1_scheduledDeliveryDate = filter__scheduledDeliveryDate;
+    filter_layer1_shipDate = filter__shipDate;
+
+    filter_layer1_recipientContactName = filter__recipientContactName;
+    filter_layer1_recipientCompany = filter__recipientCompany;
+    filter_layer1_recipientAddress = filter__recipientAddress;
+    filter_layer1_recipientCity = filter__recipientCity;
+    filter_layer1_recipientState = filter__recipientState;
+    filter_layer1_recipientCountry = filter__recipientCountry;
+    filter_layer1_recipientPostal = filter__recipientPostal;
+  
+  }
+
   const clearFilter = (value: string) => {
+    reUpdatingTheValues_to_filterArrays();
   
     if (value.includes("Delivered date -")) {
       value = value.split("Delivered date -")[1];
@@ -237,6 +260,7 @@ export default function HomePage() {
       filter_layer1_deliveredDate = filter__deliveredDate.filter(
         (e) => e !== value
       );
+     
       set_filter__deliveredDate(filter_layer1_deliveredDate)
     
       
@@ -251,6 +275,7 @@ export default function HomePage() {
       filter_layer1_attemptDelivery = filter__attemptDelivery.filter(
         (e) => e !== value
       );
+     
       set_filter__attemptDelivery(filter_layer1_attemptDelivery);
     }
     if (value.includes("Package Weight (Kg) -")) {
@@ -363,12 +388,14 @@ export default function HomePage() {
 
     
     let filterArr = userinfo.filter((e) => e !== value);
+    setUserInfo(filterArr);
     filterSection = filterArr;
+
     clearShipmentStatusByValue(value)
 
     applyFilter(1);
   };
-
+  useEffect(() => {}, [userinfo]);
   useEffect(() => { 
   }, [filter__accountNo]);
   useEffect(() => {}, [filter__attemptDelivery]);
@@ -1047,7 +1074,7 @@ export default function HomePage() {
         setRows(originalRows);
       }
     } else {
-      
+      setStoreId("");
     setSearchValue("");
     originalRows = originalRows_backup;
     setRows(originalRows);
@@ -1055,7 +1082,7 @@ export default function HomePage() {
     }
 
 
-    setStoreId("");
+   
     setSelectedList([]);
     setCardSelected("");
 
@@ -1069,7 +1096,7 @@ export default function HomePage() {
       tempArray = userinfo;
       filterSection = userinfo;
     }
-
+    
     if (filterSection.length > 0) {
       if (filterSection.includes("delayed")) {
         const filteredData_delayed = originalRows.filter((item) => {
@@ -1118,7 +1145,7 @@ export default function HomePage() {
     }
 
     if (filter_model.includes("deliveredDate")) {
-   
+    
       if (filter_layer1_deliveredDate.length > 0 || type ==1) {
         
         filter_layer1_deliveredDate = filter_layer1_deliveredDate;
@@ -1130,6 +1157,7 @@ export default function HomePage() {
         (variable) => "Delivered date -" + variable
       );
       tempArray = tempArray.concat(newArray);
+     
       // if empty array of filters
       if(filter_layer1_deliveredDate.length == 0) {
         filteredData_level1 = filteredData_level1;
@@ -1168,16 +1196,19 @@ export default function HomePage() {
     }
 
     if (filter_model.includes("numberOfAttempt")) {
+     
       if (filter_layer1_attemptDelivery.length > 0  || type ==1) {
         filter_layer1_attemptDelivery = filter_layer1_attemptDelivery;
       } else {
         filter_layer1_attemptDelivery = filter__attemptDelivery;
       }
-
+     
       const newArray = filter_layer1_attemptDelivery.map(
         (variable) => "No of attempt -" + variable
       );
+     
       tempArray = tempArray.concat(newArray);
+    
       // if empty array of filters
       if(filter_layer1_attemptDelivery.length == 0) {
         filteredData_level1 = filteredData_level1;
@@ -1253,6 +1284,7 @@ export default function HomePage() {
         filter_layer1_purchaseOrderNumber.includes(item.purchaseOrderNumber)
       );
       }
+   
     }
 
     if (filter_model.includes("reference")) {
@@ -1273,7 +1305,7 @@ export default function HomePage() {
         filter_layer1_reference.includes(item.reference)
       );
       }
-    
+     
     }
 
     if (filter_model.includes("scheduledDeliveryDate")) {
@@ -1453,7 +1485,7 @@ export default function HomePage() {
         (nullConvertedArray.includes(item.recipientState))
       );
       }
-
+   
     } 
 
     if (filter_model.includes("recipientCountry")) {
@@ -1477,7 +1509,7 @@ export default function HomePage() {
         (nullConvertedArray.includes(item.recipientCountry))
       );
       }
-
+    
     } 
 
     if (filter_model.includes("recipientPostal")) {
@@ -1501,16 +1533,19 @@ export default function HomePage() {
         (nullConvertedArray.includes(item.recipientPostal))
       );
       }
-
+   
     } 
+   
     const uniqueArray = tempArray.filter((value, index, self) => {
       return self.indexOf(value) === index;
     });
     setSelectedList(uniqueArray);
-
+   
     setRows(filteredData_level1);
   };
+  useEffect(() => {
 
+  }, [selectedList]);
   // Rest of your code...
 
   return (
