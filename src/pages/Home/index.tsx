@@ -81,33 +81,46 @@ export default function HomePage() {
 
   const [userinfo, setUserInfo] = useState<any[]>([]);
   const [filter_model, set_filter_model] = useState<any[]>([]);
-const [firstlevelClick, set_firstlevelClick] =useState(true);
+  const [firstlevelClick, set_firstlevelClick] = useState(true);
 
-    //second layer filter
-    const [filter__accountNo, set_filter__accountNo] = useState<any[]>([]);
-    const [filter__deliveredDate, set_filter__deliveredDate] = useState<any[]>(
-      []
-    );
-    const [filter__attemptDelivery, set_filter__attemptDelivery] = useState<
-      any[]
-    >([]);
-    const [filter__packageKg, set_filter__packageKg] = useState<any[]>([]);
-    const [filter__packageLbs, set_filter__packageLbs] = useState<any[]>([]);
-    const [filter__purchaseOrderNo, set_filter__purchaseOrderNo] = useState<
-      any[]
-    >([]);
-    const [filter__reference, set_filter__reference] = useState<any[]>([]);
-    const [filter__scheduledDeliveryDate, set_filter__scheduledDeliveryDate] =
-      useState<any[]>([]);
-    const [filter__shipDate, set_filter__shipDate] = useState<any[]>([]);
+  //second layer filter
+  const [filter__accountNo, set_filter__accountNo] = useState<any[]>([]);
+  const [filter__deliveredDate, set_filter__deliveredDate] = useState<any[]>(
+    []
+  );
+  const [filter__attemptDelivery, set_filter__attemptDelivery] = useState<
+    any[]
+  >([]);
+  const [filter__packageKg, set_filter__packageKg] = useState<any[]>([]);
+  const [filter__packageLbs, set_filter__packageLbs] = useState<any[]>([]);
+  const [filter__purchaseOrderNo, set_filter__purchaseOrderNo] = useState<
+    any[]
+  >([]);
+  const [filter__reference, set_filter__reference] = useState<any[]>([]);
+  const [filter__scheduledDeliveryDate, set_filter__scheduledDeliveryDate] =
+    useState<any[]>([]);
+  const [filter__shipDate, set_filter__shipDate] = useState<any[]>([]);
 
-    const [filter__recipientContactName, set_filter__recipientContactName] = useState<any[]>([]);
-    const [filter__recipientCompany, set_filter__recipientCompany] = useState<any[]>([]);
-    const [filter__recipientAddress, set_filter__recipientAddress] = useState<any[]>([]);
-    const [filter__recipientCity, set_filter__recipientCity] = useState<any[]>([]);
-    const [filter__recipientState, set_filter__recipientState] = useState<any[]>([]);
-    const [filter__recipientCountry, set_filter__recipientCountry] = useState<any[]>([]);
-    const [filter__recipientPostal, set_filter__recipientPostal] = useState<any[]>([]);
+  const [filter__recipientContactName, set_filter__recipientContactName] =
+    useState<any[]>([]);
+  const [filter__recipientCompany, set_filter__recipientCompany] = useState<
+    any[]
+  >([]);
+  const [filter__recipientAddress, set_filter__recipientAddress] = useState<
+    any[]
+  >([]);
+  const [filter__recipientCity, set_filter__recipientCity] = useState<any[]>(
+    []
+  );
+  const [filter__recipientState, set_filter__recipientState] = useState<any[]>(
+    []
+  );
+  const [filter__recipientCountry, set_filter__recipientCountry] = useState<
+    any[]
+  >([]);
+  const [filter__recipientPostal, set_filter__recipientPostal] = useState<
+    any[]
+  >([]);
   const handleLogout = () => {
     navigate("/login"); // Use the navigate function to navigate to the login page
   };
@@ -150,61 +163,58 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
     });
   };
 
-  const clearShipmentStatusByValue =(value:any) =>{
-    if(value == "delayed") {
+  const clearShipmentStatusByValue = (value: any) => {
+    if (value == "delayed") {
       setShipmentStatus((prevState) => ({
         ...prevState,
         chk_delayed: false,
       }));
-    } 
-    if(value == "delivered") {
+    }
+    if (value == "delivered") {
       setShipmentStatus((prevState) => ({
         ...prevState,
         chk_delivered: false,
       }));
-    } 
-    if(value == "exception") {
+    }
+    if (value == "exception") {
       setShipmentStatus((prevState) => ({
         ...prevState,
         chk_exception: false,
       }));
-    } 
-    if(value == "inTransit") {
+    }
+    if (value == "inTransit") {
       setShipmentStatus((prevState) => ({
         ...prevState,
         chk_inTranist: false,
       }));
-    } 
-    if(value == "label") {
+    }
+    if (value == "label") {
       setShipmentStatus((prevState) => ({
         ...prevState,
         chk_labelCreated: false,
       }));
-    } 
-  }
-  useEffect(() => {
-  }, [setShipmentStatus]);
+    }
+  };
+  useEffect(() => {}, [setShipmentStatus]);
   const handleCheckboxChange = (event: {
-    target: { name: any; checked: any; value:any;};
+    target: { name: any; checked: any; value: any };
   }) => {
-    const { name, checked, value} = event.target;
-      setShipmentStatus({ ...shipmentStatus, [name]: checked });
-      let tempArr =[];
-     
-      if (checked) {
-        tempArr = [...userinfo, value] ; 
-      } else {
-        tempArr = userinfo.filter((e) => e !== value);
-      }
-      setUserInfo(tempArr);
+    const { name, checked, value } = event.target;
+    setShipmentStatus({ ...shipmentStatus, [name]: checked });
+    let tempArr = [];
+
+    if (checked) {
+      tempArr = [...userinfo, value];
+    } else {
+      tempArr = userinfo.filter((e) => e !== value);
+    }
+    setUserInfo(tempArr);
   };
   useEffect(() => {
-    console.log("TTTTTTTT"+JSON.stringify(shipmentStatus))
-
+    console.log("TTTTTTTT" + JSON.stringify(shipmentStatus));
   }, [shipmentStatus]);
   useEffect(() => {
-    console.log("TTTTTTTT"+JSON.stringify(userinfo))
-
+    console.log("TTTTTTTT" + JSON.stringify(userinfo));
   }, [userinfo]);
 
   const selectSearchType = () => {
@@ -230,13 +240,13 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
     resetFilters();
   };
 
-  const reUpdatingTheValues_to_filterArrays =() => {
+  const reUpdatingTheValues_to_filterArrays = () => {
     filter_layer1_accountNo = filter__accountNo;
     filter_layer1_deliveredDate = filter__deliveredDate;
     filter_layer1_attemptDelivery = filter__attemptDelivery;
     filter_layer1_packageKg = filter__packageKg;
-    filter_layer1_packageLbs  = filter__packageLbs;
-    filter_layer1_purchaseOrderNumber  = filter__purchaseOrderNo;
+    filter_layer1_packageLbs = filter__packageLbs;
+    filter_layer1_purchaseOrderNumber = filter__purchaseOrderNo;
     filter_layer1_reference = filter__reference;
     filter_layer1_scheduledDeliveryDate = filter__scheduledDeliveryDate;
     filter_layer1_shipDate = filter__shipDate;
@@ -248,22 +258,19 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
     filter_layer1_recipientState = filter__recipientState;
     filter_layer1_recipientCountry = filter__recipientCountry;
     filter_layer1_recipientPostal = filter__recipientPostal;
-  
-  }
+  };
 
   const clearFilter = (value: string) => {
     reUpdatingTheValues_to_filterArrays();
-  
+
     if (value.includes("Delivered date -")) {
       value = value.split("Delivered date -")[1];
-    
+
       filter_layer1_deliveredDate = filter__deliveredDate.filter(
         (e) => e !== value
       );
-     
-      set_filter__deliveredDate(filter_layer1_deliveredDate)
-    
-      
+
+      set_filter__deliveredDate(filter_layer1_deliveredDate);
     }
     if (value.includes("Account No -")) {
       value = value.split("Account No -")[1];
@@ -275,7 +282,7 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
       filter_layer1_attemptDelivery = filter__attemptDelivery.filter(
         (e) => e !== value
       );
-     
+
       set_filter__attemptDelivery(filter_layer1_attemptDelivery);
     }
     if (value.includes("Package Weight (Kg) -")) {
@@ -303,33 +310,27 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
 
     if (value.includes("Scheduled Delivery Date -")) {
       value = value.split("Scheduled Delivery Date -")[1];
-      filter_layer1_scheduledDeliveryDate = filter__scheduledDeliveryDate.filter(
-        (e) => e !== value
-      );
+      filter_layer1_scheduledDeliveryDate =
+        filter__scheduledDeliveryDate.filter((e) => e !== value);
       set_filter__scheduledDeliveryDate(filter_layer1_scheduledDeliveryDate);
     }
     if (value.includes("Ship Date -")) {
-      
       value = value.split("Ship Date -")[1];
-     
-      filter_layer1_shipDate = filter__shipDate.filter(
-        (e) => e !== value
-      );
+
+      filter_layer1_shipDate = filter__shipDate.filter((e) => e !== value);
       set_filter__shipDate(filter_layer1_shipDate);
     }
     if (value.includes("RecipientName -")) {
-      
       value = value.split("RecipientName -")[1];
-     
+
       filter_layer1_recipientContactName = filter__recipientContactName.filter(
         (e) => e !== value
       );
       set_filter__recipientContactName(filter_layer1_recipientContactName);
     }
     if (value.includes("RecipientCompany -")) {
-      
       value = value.split("RecipientCompany -")[1];
-     
+
       filter_layer1_recipientCompany = filter__recipientCompany.filter(
         (e) => e !== value
       );
@@ -337,9 +338,8 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
     }
 
     if (value.includes("RecipientAddress -")) {
-      
       value = value.split("RecipientAddress -")[1];
-     
+
       filter_layer1_recipientAddress = filter__recipientAddress.filter(
         (e) => e !== value
       );
@@ -347,9 +347,8 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
     }
 
     if (value.includes("RecipientCity -")) {
-      
       value = value.split("RecipientCity -")[1];
-     
+
       filter_layer1_recipientCity = filter__recipientCity.filter(
         (e) => e !== value
       );
@@ -357,9 +356,8 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
     }
 
     if (value.includes("RecipientState -")) {
-      
       value = value.split("RecipientState -")[1];
-     
+
       filter_layer1_recipientState = filter__recipientState.filter(
         (e) => e !== value
       );
@@ -367,9 +365,8 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
     }
 
     if (value.includes("RecipientCountry -")) {
-      
       value = value.split("RecipientCountry -")[1];
-     
+
       filter_layer1_recipientCountry = filter__recipientCountry.filter(
         (e) => e !== value
       );
@@ -377,29 +374,26 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
     }
 
     if (value.includes("RecipientPostal -")) {
-      
       value = value.split("RecipientPostal -")[1];
-     
+
       filter_layer1_recipientPostal = filter__recipientPostal.filter(
         (e) => e !== value
       );
       set_filter__recipientPostal(filter_layer1_recipientPostal);
     }
 
-    
     let filterArr = userinfo.filter((e) => e !== value);
     setUserInfo(filterArr);
     filterSection = filterArr;
     //alert(filterSection)
 
-    clearShipmentStatusByValue(value)
+    clearShipmentStatusByValue(value);
 
     applyFilter(1);
   };
-  useEffect(() => { }, [shipmentStatus]);
-   useEffect(() => {}, [userinfo]);
-  useEffect(() => { 
-  }, [filter__accountNo]);
+  useEffect(() => {}, [shipmentStatus]);
+  useEffect(() => {}, [userinfo]);
+  useEffect(() => {}, [filter__accountNo]);
   useEffect(() => {}, [filter__attemptDelivery]);
   useEffect(() => {}, [filter__deliveredDate]);
   useEffect(() => {}, [filter__packageKg]);
@@ -644,14 +638,11 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
   const [selectedDiv, setSelectedDiv] = useState();
   const [selectedDiv_level2, setSelectedDiv_level2] = useState();
   const clickedItem = (value: any) => {
-   
     setSelectedDiv(value);
     setSelectedDiv_level2(value);
     set_firstlevelClick(false);
-    
   };
   useEffect(() => {}, [firstlevelClick]);
-
 
   //first layer filter selection
 
@@ -681,7 +672,6 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
   const shipperInfoChange = (value: string) => {
     setSelectedOption(value);
     if (value == "accountNo") {
-   
       const accountNumberArr = _.chain(originalRows)
         .groupBy("accountNumber")
         .map((items, name) => ({
@@ -776,12 +766,9 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
 
       set_li_scheduledDeliveryDate(scheduledDeliveryDateArr);
     } else if (value == "shipDate") {
-
       const shipDateArr = _(originalRows)
         .groupBy((item) => {
-          const formattedDate = moment(item.shipDate).format(
-            "YYYY-MM-DD"
-          );
+          const formattedDate = moment(item.shipDate).format("YYYY-MM-DD");
           return moment(formattedDate).isValid() ? formattedDate : "0000-00-00";
         })
         .map((items, name) => ({
@@ -864,17 +851,14 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
     }
   };
 
-
- 
-
   const valueBasedFilter = (event: {
-    target: { name: any; checked: any; value:any;};
+    target: { name: any; checked: any; value: any };
   }) => {
-    const { name, checked, value} = event.target;
+    const { name, checked, value } = event.target;
     let selectedOptionTemp = [];
     selectedOptionTemp = filter_model.concat(name);
     set_filter_model(selectedOptionTemp);
-  
+
     let tempArr = [];
     if (name == "accountNo") {
       if (checked) {
@@ -1030,9 +1014,8 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
     }
   };
 
-  
-  useEffect(() => { 
-    console.log("TTTTT"+JSON.stringify(filter__accountNo))
+  useEffect(() => {
+    console.log("TTTTT" + JSON.stringify(filter__accountNo));
   }, [filter__accountNo]);
   useEffect(() => {}, [filter__attemptDelivery]);
   useEffect(() => {}, [filter__deliveredDate]);
@@ -1073,27 +1056,21 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
     }
   };
   // type 0- apply, 1- clear
-  const applyFilter = (type:number) => {
-
+  const applyFilter = (type: number) => {
     setAnyFilter(true);
     setShowFilter(false);
 
     if (searchValue != "") {
       if (searchType == "Store ID") {
-      
-
         setRows(originalRows);
       }
     } else {
       setStoreId("");
-    setSearchValue("");
-    originalRows = originalRows_backup;
-    setRows(originalRows);
-
+      setSearchValue("");
+      originalRows = originalRows_backup;
+      setRows(originalRows);
     }
 
-
-   
     setSelectedList([]);
     setCardSelected("");
 
@@ -1101,80 +1078,100 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
 
     let tempArray = [];
     let filteredData_level1: shipment[] = [];
- 
+
     if (filterSection.length > 0) {
       tempArray = filterSection;
     } else {
       tempArray = userinfo;
       filterSection = userinfo;
     }
-  
-    
-    if (filterSection.length > 0) {
-      if (filterSection.includes("delayed")) {
-        const filteredData_delayed = originalRows.filter((item) => {
-          return Object.keys(item).some(() => item.isDelayed == true);
-        });
 
-        filteredData_level1 = filteredData_level1.concat(filteredData_delayed);
-      }
+    // if (filterSection.length > 0) {
+    //   if (filterSection.includes("delayed")) {
+    //     const filteredData_delayed = originalRows.filter((item) => {
+    //       return Object.keys(item).some(() => item.isDelayed == true);
+    //     });
 
-      if (filterSection.includes("delivered")) {
-        const filteredData_delivered = originalRows.filter((item) => {
-          return Object.keys(item).some(() => item.isDelivered == true);
-        });
-        filteredData_level1 = filteredData_level1.concat(
-          filteredData_delivered
-        );
-      }
+    //     filteredData_level1 = filteredData_level1.concat(filteredData_delayed);
+    //   }
 
-      if (filterSection.includes("exception")) {
-       
-        const filteredData_exception = originalRows.filter((item) => {
-          return Object.keys(item).some(() => item.isException == true && item.isDelivered == false);
-        });
-        console.log("EXXXXXX"+JSON.stringify(filteredData_exception));
-        filteredData_level1 = filteredData_level1.concat(
-          filteredData_exception
-        );
-      }
+    //   if (filterSection.includes("delivered")) {
+    //     const filteredData_delivered = originalRows.filter((item) => {
+    //       return Object.keys(item).some(() => item.isDelivered == true);
+    //     });
+    //     filteredData_level1 = filteredData_level1.concat(
+    //       filteredData_delivered
+    //     );
+    //   }
 
-      if (filterSection.includes("inTransit")) {
-        const filteredData_intransit = originalRows.filter((item) => {
-          return Object.keys(item).some(() => item.status == "In transit");
-        });
-        filteredData_level1 = filteredData_level1.concat(
-          filteredData_intransit
-        );
-      }
+    //   if (filterSection.includes("exception")) {
 
-      if (filterSection.includes("label")) {
-        const filteredData_label = originalRows.filter((item) => {
-          return Object.keys(item).some(() => item.status == "Initiated");
-        });
-        filteredData_level1 = filteredData_level1.concat(filteredData_label);
-      }
-    } else {
-   
-      filteredData_level1 = originalRows;
+    //     const filteredData_exception = originalRows.filter((item) => {
+    //       return Object.keys(item).some(() => item.isException == true && item.isDelivered == false);
+    //     });
+    //     console.log("EXXXXXX"+JSON.stringify(filteredData_exception));
+    //     filteredData_level1 = filteredData_level1.concat(
+    //       filteredData_exception
+    //     );
+    //   }
+
+    //   if (filterSection.includes("inTransit")) {
+    //     const filteredData_intransit = originalRows.filter((item) => {
+    //       return Object.keys(item).some(() => item.status == "In transit");
+    //     });
+    //     filteredData_level1 = filteredData_level1.concat(
+    //       filteredData_intransit
+    //     );
+    //   }
+
+    //   if (filterSection.includes("label")) {
+    //     const filteredData_label = originalRows.filter((item) => {
+    //       return Object.keys(item).some(() => item.status == "Initiated");
+    //     });
+    //     filteredData_level1 = filteredData_level1.concat(filteredData_label);
+    //   }
+    // } else {
+
+    //   filteredData_level1 = originalRows;
+    // }
+
+    // move to seperate file
+    type SectionToKeyMap = {
+      [section: string]: { field: string; value: any };
+    };
+
+    const sectionToKeyMap: SectionToKeyMap = {
+      delayed: { field: "isDelayed", value: true },
+      delivered: { field: "isDelivered", value: true },
+      exception: { field: "isException", value: true },
+      inTransit: { field: "status", value: "In transit" },
+      label: { field: "status", value: "Initiated" },
+    };
+
+    if (filterSection.length == 0) filteredData_level1 = originalRows;
+    else {
+      filterSection.forEach((section) => {
+        const { field, value } = sectionToKeyMap[section];
+        if (field) {
+          const filteredData = filterStatusData(originalRows, field, value);
+          filteredData_level1 = filteredData_level1.concat(filteredData);
+        }
+      });
     }
 
     if (filter_model.includes("deliveredDate")) {
-    
-      if (filter_layer1_deliveredDate.length > 0 || type ==1) {
-        
+      if (filter_layer1_deliveredDate.length > 0 || type == 1) {
         filter_layer1_deliveredDate = filter_layer1_deliveredDate;
       } else {
-       
         filter_layer1_deliveredDate = filter__deliveredDate;
       }
       const newArray = filter_layer1_deliveredDate.map(
         (variable) => "Delivered date -" + variable
       );
       tempArray = tempArray.concat(newArray);
-     
+
       // if empty array of filters
-      if(filter_layer1_deliveredDate.length == 0) {
+      if (filter_layer1_deliveredDate.length == 0) {
         filteredData_level1 = filteredData_level1;
       } else {
         filteredData_level1 = filteredData_level1.filter((item) =>
@@ -1188,7 +1185,7 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
       set_filter__deliveredDate(filter_layer1_deliveredDate);
     }
     if (filter_model.includes("accountNo")) {
-      if (filter_layer1_accountNo.length > 0  || type ==1) {
+      if (filter_layer1_accountNo.length > 0 || type == 1) {
         filter_layer1_accountNo = filter_layer1_accountNo;
       } else {
         filter_layer1_accountNo = filter__accountNo;
@@ -1198,48 +1195,44 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
       );
       tempArray = tempArray.concat(newArray);
       // if empty array of filters
-      if(filter_layer1_accountNo.length == 0) {
+      if (filter_layer1_accountNo.length == 0) {
         filteredData_level1 = filteredData_level1;
       } else {
         filteredData_level1 = filteredData_level1.filter((item) =>
-        filter_layer1_accountNo.includes(item.accountNumber)
-      );
-
+          filter_layer1_accountNo.includes(item.accountNumber)
+        );
       }
-
-    
     }
 
     if (filter_model.includes("numberOfAttempt")) {
-     
-      if (filter_layer1_attemptDelivery.length > 0  || type ==1) {
+      if (filter_layer1_attemptDelivery.length > 0 || type == 1) {
         filter_layer1_attemptDelivery = filter_layer1_attemptDelivery;
       } else {
         filter_layer1_attemptDelivery = filter__attemptDelivery;
       }
-     
+
       const newArray = filter_layer1_attemptDelivery.map(
         (variable) => "No of attempt -" + variable
       );
-     
+
       tempArray = tempArray.concat(newArray);
-    
+
       // if empty array of filters
-      if(filter_layer1_attemptDelivery.length == 0) {
+      if (filter_layer1_attemptDelivery.length == 0) {
         filteredData_level1 = filteredData_level1;
       } else {
-        console.log("EEEEEEE"+JSON.stringify(filter_layer1_attemptDelivery))
-       
+        console.log("EEEEEEE" + JSON.stringify(filter_layer1_attemptDelivery));
 
         filteredData_level1 = filteredData_level1.filter((item) =>
-        filter_layer1_attemptDelivery.map((str) => parseInt(str, 10)).includes(item.numberOfAttemptedDeliveries)
-      );
+          filter_layer1_attemptDelivery
+            .map((str) => parseInt(str, 10))
+            .includes(item.numberOfAttemptedDeliveries)
+        );
       }
     }
 
     if (filter_model.includes("packageKg")) {
-    
-      if (filter_layer1_packageKg.length > 0  || type ==1) {
+      if (filter_layer1_packageKg.length > 0 || type == 1) {
         filter_layer1_packageKg = filter_layer1_packageKg;
       } else {
         filter_layer1_packageKg = filter__packageKg;
@@ -1249,18 +1242,17 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
       );
       tempArray = tempArray.concat(newArray);
       // if empty array of filters
-      if(filter_layer1_packageKg.length == 0) {
+      if (filter_layer1_packageKg.length == 0) {
         filteredData_level1 = filteredData_level1;
       } else {
-      
         filteredData_level1 = filteredData_level1.filter((item) =>
-        filter_layer1_packageKg.includes(item.packageWeightKg)
-      );
+          filter_layer1_packageKg.includes(item.packageWeightKg)
+        );
       }
     }
 
     if (filter_model.includes("packageLbs")) {
-      if (filter_layer1_packageLbs.length > 0  || type ==1) {
+      if (filter_layer1_packageLbs.length > 0 || type == 1) {
         filter_layer1_packageLbs = filter_layer1_packageLbs;
       } else {
         filter_layer1_packageLbs = filter__packageLbs;
@@ -1271,17 +1263,17 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
       );
       tempArray = tempArray.concat(newArray);
 
-      if(filter_layer1_packageLbs.length == 0) {
+      if (filter_layer1_packageLbs.length == 0) {
         filteredData_level1 = filteredData_level1;
       } else {
         filteredData_level1 = filteredData_level1.filter((item) =>
-        filter_layer1_packageLbs.includes(item.packageWeightLbs)
-      );
+          filter_layer1_packageLbs.includes(item.packageWeightLbs)
+        );
       }
     }
 
     if (filter_model.includes("purchaseOrderNumber")) {
-      if (filter_layer1_purchaseOrderNumber.length > 0 || type==1) {
+      if (filter_layer1_purchaseOrderNumber.length > 0 || type == 1) {
         filter_layer1_purchaseOrderNumber = filter_layer1_purchaseOrderNumber;
       } else {
         filter_layer1_purchaseOrderNumber = filter__purchaseOrderNo;
@@ -1292,18 +1284,17 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
       );
       tempArray = tempArray.concat(newArray);
 
-      if(filter_layer1_purchaseOrderNumber.length == 0) {
+      if (filter_layer1_purchaseOrderNumber.length == 0) {
         filteredData_level1 = filteredData_level1;
       } else {
         filteredData_level1 = filteredData_level1.filter((item) =>
-        filter_layer1_purchaseOrderNumber.includes(item.purchaseOrderNumber)
-      );
+          filter_layer1_purchaseOrderNumber.includes(item.purchaseOrderNumber)
+        );
       }
-   
     }
 
     if (filter_model.includes("reference")) {
-      if (filter_layer1_reference.length > 0 || type ==1) {
+      if (filter_layer1_reference.length > 0 || type == 1) {
         filter_layer1_reference = filter_layer1_reference;
       } else {
         filter_layer1_reference = filter__reference;
@@ -1313,18 +1304,17 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
         (variable) => "Reference -" + variable
       );
       tempArray = tempArray.concat(newArray);
-      if(filter_layer1_reference.length == 0) {
+      if (filter_layer1_reference.length == 0) {
         filteredData_level1 = filteredData_level1;
       } else {
         filteredData_level1 = filteredData_level1.filter((item) =>
-        filter_layer1_reference.includes(item.reference)
-      );
+          filter_layer1_reference.includes(item.reference)
+        );
       }
-     
     }
 
     if (filter_model.includes("scheduledDeliveryDate")) {
-      if (filter_layer1_scheduledDeliveryDate.length > 0 || type ==1) {
+      if (filter_layer1_scheduledDeliveryDate.length > 0 || type == 1) {
         filter_layer1_scheduledDeliveryDate =
           filter_layer1_scheduledDeliveryDate;
       } else {
@@ -1336,23 +1326,22 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
       );
       tempArray = tempArray.concat(newArray);
 
-      if(filter_layer1_scheduledDeliveryDate.length == 0) {
+      if (filter_layer1_scheduledDeliveryDate.length == 0) {
         filteredData_level1 = filteredData_level1;
       } else {
         filteredData_level1 = filteredData_level1.filter((item) =>
-        filter_layer1_scheduledDeliveryDate.includes(
-          moment(
-            moment(item.scheduledDeliveryDate).format("YYYY-MM-DD")
-          ).isValid()
-            ? moment(item.scheduledDeliveryDate).format("YYYY-MM-DD")
-            : "0000-00-00"
-        )
-      );
+          filter_layer1_scheduledDeliveryDate.includes(
+            moment(
+              moment(item.scheduledDeliveryDate).format("YYYY-MM-DD")
+            ).isValid()
+              ? moment(item.scheduledDeliveryDate).format("YYYY-MM-DD")
+              : "0000-00-00"
+          )
+        );
       }
-      
     }
     if (filter_model.includes("shipDate")) {
-      if (filter_layer1_shipDate.length > 0 || type ==1 ) {
+      if (filter_layer1_shipDate.length > 0 || type == 1) {
         filter_layer1_shipDate = filter_layer1_shipDate;
       } else {
         filter_layer1_shipDate = filter__shipDate;
@@ -1363,28 +1352,21 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
       );
       tempArray = tempArray.concat(newArray);
 
-      if(filter_layer1_shipDate.length == 0) {
+      if (filter_layer1_shipDate.length == 0) {
         filteredData_level1 = filteredData_level1;
       } else {
-       
-
         filteredData_level1 = filteredData_level1.filter((item) =>
-        filter_layer1_shipDate.includes(
-          moment(
-            moment(item.shipDate).format("YYYY-MM-DD")
-          ).isValid()
-            ? moment(item.shipDate).format("YYYY-MM-DD")
-            : "0000-00-00"
-        )
-      );
-        
+          filter_layer1_shipDate.includes(
+            moment(moment(item.shipDate).format("YYYY-MM-DD")).isValid()
+              ? moment(item.shipDate).format("YYYY-MM-DD")
+              : "0000-00-00"
+          )
+        );
       }
-
     }
 
-
     if (filter_model.includes("recipientContactName")) {
-      if (filter_layer1_recipientContactName.length > 0 || type ==1 ) {
+      if (filter_layer1_recipientContactName.length > 0 || type == 1) {
         filter_layer1_recipientContactName = filter_layer1_recipientContactName;
       } else {
         filter_layer1_recipientContactName = filter__recipientContactName;
@@ -1395,20 +1377,21 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
       );
       tempArray = tempArray.concat(newArray);
 
-      if(filter_layer1_recipientContactName.length == 0) {
+      if (filter_layer1_recipientContactName.length == 0) {
         filteredData_level1 = filteredData_level1;
       } else {
-        const nullConvertedArray = filter_layer1_recipientContactName.map((str) => str === 'null' ? null : str);
+        const nullConvertedArray = filter_layer1_recipientContactName.map(
+          (str) => (str === "null" ? null : str)
+        );
 
         filteredData_level1 = filteredData_level1.filter((item) =>
-        (nullConvertedArray.includes(item.recipientContactName))
-      );
+          nullConvertedArray.includes(item.recipientContactName)
+        );
       }
-
-    }    
+    }
 
     if (filter_model.includes("recipientCompany")) {
-      if (filter_layer1_recipientCompany.length > 0 || type ==1 ) {
+      if (filter_layer1_recipientCompany.length > 0 || type == 1) {
         filter_layer1_recipientCompany = filter_layer1_recipientCompany;
       } else {
         filter_layer1_recipientCompany = filter__recipientCompany;
@@ -1419,20 +1402,21 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
       );
       tempArray = tempArray.concat(newArray);
 
-      if(filter_layer1_recipientCompany.length == 0) {
+      if (filter_layer1_recipientCompany.length == 0) {
         filteredData_level1 = filteredData_level1;
       } else {
-        const nullConvertedArray = filter_layer1_recipientCompany.map((str) => str === 'null' ? null : str);
+        const nullConvertedArray = filter_layer1_recipientCompany.map((str) =>
+          str === "null" ? null : str
+        );
 
         filteredData_level1 = filteredData_level1.filter((item) =>
-        (nullConvertedArray.includes(item.recipientCompany))
-      );
+          nullConvertedArray.includes(item.recipientCompany)
+        );
       }
-
-    }    
+    }
 
     if (filter_model.includes("recipientAddress")) {
-      if (filter_layer1_recipientAddress.length > 0 || type ==1 ) {
+      if (filter_layer1_recipientAddress.length > 0 || type == 1) {
         filter_layer1_recipientAddress = filter_layer1_recipientAddress;
       } else {
         filter_layer1_recipientAddress = filter__recipientAddress;
@@ -1443,20 +1427,21 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
       );
       tempArray = tempArray.concat(newArray);
 
-      if(filter_layer1_recipientAddress.length == 0) {
+      if (filter_layer1_recipientAddress.length == 0) {
         filteredData_level1 = filteredData_level1;
       } else {
-        const nullConvertedArray = filter_layer1_recipientAddress.map((str) => str === 'null' ? null : str);
+        const nullConvertedArray = filter_layer1_recipientAddress.map((str) =>
+          str === "null" ? null : str
+        );
 
         filteredData_level1 = filteredData_level1.filter((item) =>
-        (nullConvertedArray.includes(item.recipientAddress))
-      );
+          nullConvertedArray.includes(item.recipientAddress)
+        );
       }
-
-    }   
+    }
 
     if (filter_model.includes("recipientCity")) {
-      if (filter_layer1_recipientCity.length > 0 || type ==1 ) {
+      if (filter_layer1_recipientCity.length > 0 || type == 1) {
         filter_layer1_recipientCity = filter_layer1_recipientCity;
       } else {
         filter_layer1_recipientCity = filter__recipientCity;
@@ -1467,20 +1452,21 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
       );
       tempArray = tempArray.concat(newArray);
 
-      if(filter_layer1_recipientCity.length == 0) {
+      if (filter_layer1_recipientCity.length == 0) {
         filteredData_level1 = filteredData_level1;
       } else {
-        const nullConvertedArray = filter_layer1_recipientCity.map((str) => str === 'null' ? null : str);
+        const nullConvertedArray = filter_layer1_recipientCity.map((str) =>
+          str === "null" ? null : str
+        );
 
         filteredData_level1 = filteredData_level1.filter((item) =>
-        (nullConvertedArray.includes(item.recipientCity))
-      );
+          nullConvertedArray.includes(item.recipientCity)
+        );
       }
-
-    } 
+    }
 
     if (filter_model.includes("recipientState")) {
-      if (filter_layer1_recipientState.length > 0 || type ==1 ) {
+      if (filter_layer1_recipientState.length > 0 || type == 1) {
         filter_layer1_recipientState = filter_layer1_recipientState;
       } else {
         filter_layer1_recipientState = filter__recipientState;
@@ -1491,20 +1477,21 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
       );
       tempArray = tempArray.concat(newArray);
 
-      if(filter_layer1_recipientState.length == 0) {
+      if (filter_layer1_recipientState.length == 0) {
         filteredData_level1 = filteredData_level1;
       } else {
-        const nullConvertedArray = filter_layer1_recipientState.map((str) => str === 'null' ? null : str);
+        const nullConvertedArray = filter_layer1_recipientState.map((str) =>
+          str === "null" ? null : str
+        );
 
         filteredData_level1 = filteredData_level1.filter((item) =>
-        (nullConvertedArray.includes(item.recipientState))
-      );
+          nullConvertedArray.includes(item.recipientState)
+        );
       }
-   
-    } 
+    }
 
     if (filter_model.includes("recipientCountry")) {
-      if (filter_layer1_recipientCountry.length > 0 || type ==1 ) {
+      if (filter_layer1_recipientCountry.length > 0 || type == 1) {
         filter_layer1_recipientCountry = filter_layer1_recipientCountry;
       } else {
         filter_layer1_recipientCountry = filter__recipientCountry;
@@ -1515,20 +1502,21 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
       );
       tempArray = tempArray.concat(newArray);
 
-      if(filter_layer1_recipientCountry.length == 0) {
+      if (filter_layer1_recipientCountry.length == 0) {
         filteredData_level1 = filteredData_level1;
       } else {
-        const nullConvertedArray = filter_layer1_recipientCountry.map((str) => str === 'null' ? null : str);
+        const nullConvertedArray = filter_layer1_recipientCountry.map((str) =>
+          str === "null" ? null : str
+        );
 
         filteredData_level1 = filteredData_level1.filter((item) =>
-        (nullConvertedArray.includes(item.recipientCountry))
-      );
+          nullConvertedArray.includes(item.recipientCountry)
+        );
       }
-    
-    } 
+    }
 
     if (filter_model.includes("recipientPostal")) {
-      if (filter_layer1_recipientPostal.length > 0 || type ==1 ) {
+      if (filter_layer1_recipientPostal.length > 0 || type == 1) {
         filter_layer1_recipientPostal = filter_layer1_recipientPostal;
       } else {
         filter_layer1_recipientPostal = filter__recipientPostal;
@@ -1539,31 +1527,46 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
       );
       tempArray = tempArray.concat(newArray);
 
-      if(filter_layer1_recipientPostal.length == 0) {
+      if (filter_layer1_recipientPostal.length == 0) {
         filteredData_level1 = filteredData_level1;
       } else {
-        const nullConvertedArray = filter_layer1_recipientPostal.map((str) => str === 'null' ? null : str);
+        const nullConvertedArray = filter_layer1_recipientPostal.map((str) =>
+          str === "null" ? null : str
+        );
 
         filteredData_level1 = filteredData_level1.filter((item) =>
-        (nullConvertedArray.includes(item.recipientPostal))
-      );
+          nullConvertedArray.includes(item.recipientPostal)
+        );
       }
-   
-    } 
-   
+    }
+
     const uniqueArray = tempArray.filter((value, index, self) => {
       return self.indexOf(value) === index;
     });
     setSelectedList(uniqueArray);
-    const uniqueArray_table = filteredData_level1.filter((value, index, self) => {
-      return self.indexOf(value) === index;
-    });
-   
+    const uniqueArray_table = filteredData_level1.filter(
+      (value, index, self) => {
+        return self.indexOf(value) === index;
+      }
+    );
+
     setRows(uniqueArray_table);
   };
-  useEffect(() => {
+  useEffect(() => {}, [selectedList]);
 
-  }, [selectedList]);
+  function filterStatusData(
+    originalRows: shipment[],
+    filterProperty: string,
+    filterValue: any
+  ) {
+    console.log(originalRows);
+    debugger;
+    return originalRows.filter((item: any) => {
+      return Object.keys(item).some((key) => {
+        return item[key] === filterValue && key === filterProperty;
+      });
+    });
+  }
   // Rest of your code...
 
   return (
@@ -2030,7 +2033,7 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
                           </div>
                         </button>
                       </li>
-                     
+
                       <li
                         className={
                           innerFilter == 4
@@ -2218,7 +2221,13 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
                           ))}
                         </ul>
                       </div>
-                      <div className={firstlevelClick === true ? "filter-section__body-level-3 hideBlock1" : "filter-section__body-level-3" }>
+                      <div
+                        className={
+                          firstlevelClick === true
+                            ? "filter-section__body-level-3 hideBlock1"
+                            : "filter-section__body-level-3"
+                        }
+                      >
                         {selectedOption === "accountNo" ? (
                           <ul className="filter-section-list">
                             {li_accountNumber.map((item) => (
@@ -2233,17 +2242,16 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
                                       : "filter-section-btn"
                                   }
                                 >
-                                <Checkbox
-                                label={item.name}
-                                checked={filter__accountNo.includes(
-                                  item.name
-                                )}
-                                onChange={valueBasedFilter}
-                                name="accountNo"
-                                count={item.count}
-                                value={item.name}
-                              />
-                                 
+                                  <Checkbox
+                                    label={item.name}
+                                    checked={filter__accountNo.includes(
+                                      item.name
+                                    )}
+                                    onChange={valueBasedFilter}
+                                    name="accountNo"
+                                    count={item.count}
+                                    value={item.name}
+                                  />
                                 </button>
                               </li>
                             ))}
@@ -2262,15 +2270,15 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
                                       : "filter-section-btn"
                                   }
                                 >
-                                    <Checkbox
-                                label={item.name}
-                                checked={filter__deliveredDate.includes(
-                                  item.name
-                                )}
-                                onChange={valueBasedFilter}
-                                name="deliveredDate"
-                                count={item.count}
-                                value={item.name}
+                                  <Checkbox
+                                    label={item.name}
+                                    checked={filter__deliveredDate.includes(
+                                      item.name
+                                    )}
+                                    onChange={valueBasedFilter}
+                                    name="deliveredDate"
+                                    count={item.count}
+                                    value={item.name}
                                   />
                                 </button>
                               </li>
@@ -2290,17 +2298,16 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
                                       : "filter-section-btn"
                                   }
                                 >
-                                     <Checkbox
-                                label={item.name}
-                                checked={filter__attemptDelivery.includes(
-                                  item.name
-                                )}
-                                onChange={valueBasedFilter}
-                                name="numberOfAttempt"
-                                count={item.count}
-                                value={item.name}
+                                  <Checkbox
+                                    label={item.name}
+                                    checked={filter__attemptDelivery.includes(
+                                      item.name
+                                    )}
+                                    onChange={valueBasedFilter}
+                                    name="numberOfAttempt"
+                                    count={item.count}
+                                    value={item.name}
                                   />
-                                
                                 </button>
                               </li>
                             ))}
@@ -2319,16 +2326,16 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
                                       : "filter-section-btn"
                                   }
                                 >
-                            <Checkbox
-                                label={item.name}
-                                checked={filter__packageKg.includes(
-                                  item.name
-                                )}
-                                onChange={valueBasedFilter}
-                                name="packageKg"
-                                count={item.count}
-                                value={item.name}
-                              />
+                                  <Checkbox
+                                    label={item.name}
+                                    checked={filter__packageKg.includes(
+                                      item.name
+                                    )}
+                                    onChange={valueBasedFilter}
+                                    name="packageKg"
+                                    count={item.count}
+                                    value={item.name}
+                                  />
                                 </button>
                               </li>
                             ))}
@@ -2347,16 +2354,16 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
                                       : "filter-section-btn"
                                   }
                                 >
-                                <Checkbox
-                                label={item.name}
-                                checked={filter__packageLbs.includes(
-                                  item.name
-                                )}
-                                onChange={valueBasedFilter}
-                                name="packageLbs"
-                                count={item.count}
-                                value={item.name}
-                                />
+                                  <Checkbox
+                                    label={item.name}
+                                    checked={filter__packageLbs.includes(
+                                      item.name
+                                    )}
+                                    onChange={valueBasedFilter}
+                                    name="packageLbs"
+                                    count={item.count}
+                                    value={item.name}
+                                  />
                                 </button>
                               </li>
                             ))}
@@ -2375,16 +2382,16 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
                                       : "filter-section-btn"
                                   }
                                 >
-                                 <Checkbox
-                                label={item.name}
-                                checked={filter__purchaseOrderNo.includes(
-                                  item.name
-                                )}
-                                onChange={valueBasedFilter}
-                                name="purchaseOrderNumber"
-                                count={item.count}
-                                value={item.name}
-                                />
+                                  <Checkbox
+                                    label={item.name}
+                                    checked={filter__purchaseOrderNo.includes(
+                                      item.name
+                                    )}
+                                    onChange={valueBasedFilter}
+                                    name="purchaseOrderNumber"
+                                    count={item.count}
+                                    value={item.name}
+                                  />
                                 </button>
                               </li>
                             ))}
@@ -2404,15 +2411,15 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
                                   }
                                 >
                                   <Checkbox
-                                label={item.name}
-                                checked={filter__reference.includes(
-                                  item.name
-                                )}
-                                onChange={valueBasedFilter}
-                                name="reference"
-                                count={item.count}
-                                value={item.name}
-                                />
+                                    label={item.name}
+                                    checked={filter__reference.includes(
+                                      item.name
+                                    )}
+                                    onChange={valueBasedFilter}
+                                    name="reference"
+                                    count={item.count}
+                                    value={item.name}
+                                  />
                                 </button>
                               </li>
                             ))}
@@ -2431,17 +2438,16 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
                                       : "filter-section-btn"
                                   }
                                 >
-                                    <Checkbox
-                                label={item.name}
-                                checked={filter__scheduledDeliveryDate.includes(
-                                  item.name
-                                )}
-                                onChange={valueBasedFilter}
-                                name="scheduledDeliveryDate"
-                                count={item.count}
-                                value={item.name}
-                                />
-                               
+                                  <Checkbox
+                                    label={item.name}
+                                    checked={filter__scheduledDeliveryDate.includes(
+                                      item.name
+                                    )}
+                                    onChange={valueBasedFilter}
+                                    name="scheduledDeliveryDate"
+                                    count={item.count}
+                                    value={item.name}
+                                  />
                                 </button>
                               </li>
                             ))}
@@ -2460,17 +2466,16 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
                                       : "filter-section-btn"
                                   }
                                 >
-                                     <Checkbox
-                                label={item.name}
-                                checked={filter__shipDate.includes(
-                                  item.name
-                                )}
-                                onChange={valueBasedFilter}
-                                name="shipDate"
-                                count={item.count}
-                                value={item.name}
-                                />
-                               
+                                  <Checkbox
+                                    label={item.name}
+                                    checked={filter__shipDate.includes(
+                                      item.name
+                                    )}
+                                    onChange={valueBasedFilter}
+                                    name="shipDate"
+                                    count={item.count}
+                                    value={item.name}
+                                  />
                                 </button>
                               </li>
                             ))}
@@ -2489,16 +2494,16 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
                                       : "filter-section-btn"
                                   }
                                 >
-                                   <Checkbox
-                                label={item.name}
-                                checked={filter__recipientContactName.includes(
-                                  item.name
-                                )}
-                                onChange={valueBasedFilter}
-                                name="recipientContactName"
-                                count={item.count}
-                                value={item.name}
-                                />
+                                  <Checkbox
+                                    label={item.name}
+                                    checked={filter__recipientContactName.includes(
+                                      item.name
+                                    )}
+                                    onChange={valueBasedFilter}
+                                    name="recipientContactName"
+                                    count={item.count}
+                                    value={item.name}
+                                  />
                                 </button>
                               </li>
                             ))}
@@ -2517,16 +2522,16 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
                                       : "filter-section-btn"
                                   }
                                 >
-                                   <Checkbox
-                                label={item.name}
-                                checked={filter__recipientCompany.includes(
-                                  item.name
-                                )}
-                                onChange={valueBasedFilter}
-                                name="recipientCompany"
-                                count={item.count}
-                                value={item.name}
-                                />
+                                  <Checkbox
+                                    label={item.name}
+                                    checked={filter__recipientCompany.includes(
+                                      item.name
+                                    )}
+                                    onChange={valueBasedFilter}
+                                    name="recipientCompany"
+                                    count={item.count}
+                                    value={item.name}
+                                  />
                                 </button>
                               </li>
                             ))}
@@ -2545,16 +2550,16 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
                                       : "filter-section-btn"
                                   }
                                 >
-                                   <Checkbox
-                                label={item.name}
-                                checked={filter__recipientAddress.includes(
-                                  item.name
-                                )}
-                                onChange={valueBasedFilter}
-                                name="recipientAddress"
-                                count={item.count}
-                                value={item.name}
-                                />
+                                  <Checkbox
+                                    label={item.name}
+                                    checked={filter__recipientAddress.includes(
+                                      item.name
+                                    )}
+                                    onChange={valueBasedFilter}
+                                    name="recipientAddress"
+                                    count={item.count}
+                                    value={item.name}
+                                  />
                                 </button>
                               </li>
                             ))}
@@ -2574,15 +2579,15 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
                                   }
                                 >
                                   <Checkbox
-                                label={item.name}
-                                checked={filter__recipientCity.includes(
-                                  item.name
-                                )}
-                                onChange={valueBasedFilter}
-                                name="recipientCity"
-                                count={item.count}
-                                value={item.name}
-                                />
+                                    label={item.name}
+                                    checked={filter__recipientCity.includes(
+                                      item.name
+                                    )}
+                                    onChange={valueBasedFilter}
+                                    name="recipientCity"
+                                    count={item.count}
+                                    value={item.name}
+                                  />
                                 </button>
                               </li>
                             ))}
@@ -2601,16 +2606,16 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
                                       : "filter-section-btn"
                                   }
                                 >
-                                <Checkbox
-                                label={item.name}
-                                checked={filter__recipientState.includes(
-                                  item.name
-                                )}
-                                onChange={valueBasedFilter}
-                                name="recipientState"
-                                count={item.count}
-                                value={item.name}
-                                />
+                                  <Checkbox
+                                    label={item.name}
+                                    checked={filter__recipientState.includes(
+                                      item.name
+                                    )}
+                                    onChange={valueBasedFilter}
+                                    name="recipientState"
+                                    count={item.count}
+                                    value={item.name}
+                                  />
                                 </button>
                               </li>
                             ))}
@@ -2630,15 +2635,15 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
                                   }
                                 >
                                   <Checkbox
-                                label={item.name}
-                                checked={filter__recipientCountry.includes(
-                                  item.name
-                                )}
-                                onChange={valueBasedFilter}
-                                name="recipientCountry"
-                                count={item.count}
-                                value={item.name}
-                                />
+                                    label={item.name}
+                                    checked={filter__recipientCountry.includes(
+                                      item.name
+                                    )}
+                                    onChange={valueBasedFilter}
+                                    name="recipientCountry"
+                                    count={item.count}
+                                    value={item.name}
+                                  />
                                 </button>
                               </li>
                             ))}
@@ -2657,16 +2662,16 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
                                       : "filter-section-btn"
                                   }
                                 >
-                                    <Checkbox
-                                label={item.name}
-                                checked={filter__recipientPostal.includes(
-                                  item.name
-                                )}
-                                onChange={valueBasedFilter}
-                                name="recipientPostal"
-                                count={item.count}
-                                value={item.name}
-                                />
+                                  <Checkbox
+                                    label={item.name}
+                                    checked={filter__recipientPostal.includes(
+                                      item.name
+                                    )}
+                                    onChange={valueBasedFilter}
+                                    name="recipientPostal"
+                                    count={item.count}
+                                    value={item.name}
+                                  />
                                 </button>
                               </li>
                             ))}
@@ -2676,7 +2681,9 @@ const [firstlevelClick, set_firstlevelClick] =useState(true);
                         )}
                       </div>
                     </>
-                  ): ""}
+                  ) : (
+                    ""
+                  )}
                 </div>
                 <div className="filter-section__footer">
                   <div className="filter-section-action">
