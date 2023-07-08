@@ -28,6 +28,9 @@ height: 100vh;
   background-size: 33%;
   height: 100%;
 } 
+.row-login {
+  width: 50%;
+}
 section {
   background-color: #fafafa;
 }
@@ -48,9 +51,9 @@ small {
   color: rgba(31, 29, 29, 0.822);
 }
 
-.wrapper {
-  //position:relative;
-}
+// .wrapper {
+//   //position:relative;
+// }
 
 .wrapper i {
   position: absolute;
@@ -95,6 +98,7 @@ input[type=text], input[type=password] {
   color: white;
   height: 37px;
   border-radius: 25px;
+  padding: 1%;
 }
 
 .btn.btn1:hover {
@@ -112,8 +116,9 @@ input[type=text], input[type=password] {
   bottom: 0;
   //position: fixed;
   height: 66px;
-
+  font-family: Lato;
 }
+
 
 .form-container{
   height: 100%;
@@ -161,8 +166,9 @@ input[type=text], input[type=password] {
 
 }
 
-.container-fluid{
-  background-color: grey;
+.container-fluid-login{
+  // background-color: grey;
+  width:50%
 }
 
 #form-outline-password{
@@ -183,7 +189,7 @@ input[type=text], input[type=password] {
 }
 
 .form-wrapper{
-  width:  38% !important;
+  width: 100% !important;
   height: 100%;
   align-items: center;
   margin-left: 2%;
@@ -244,7 +250,39 @@ input[type=text], input[type=password] {
 .error-border {
   border: 1px solid red !important;
 }
-
-.wrapper-elm{
-  height: 100vh !important;
+.Login__error {
+  color: red;
+  font-size: 12px;
+  margin-top: 2px;
+  text-align: left;
 }
+.Login__success {
+  display:none;
+}
+.wrapper-elm{
+  height:  100vh; 
+  width:  100vw;
+  margin:  0 0; 
+  display:  flex; 
+  align-items:  flex-start; 
+  justify-content:  flex-start; 
+  background:  #fafafc; 
+}
+
+.left {
+  width:  50%; 
+  height:  auto; 
+   min-height:  100%; 
+  position:  relative; 
+  // background-image: url("https://images.pexels.com/photos/114979/pexels-photo-114979.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
+  background-image: url("../../assets/images/login-background.png");
+  background-size:  cover;
+  border-top-left-radius:  4px; 
+  border-bottom-left-radius:  4px; 
+  svg {
+    height:  40px; 
+    width:  auto; 
+    margin:  20px; 
+  }
+}
+
