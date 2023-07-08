@@ -35,6 +35,7 @@ import {
   dashboardIconPack,
   formatDate,
   getFilterValueforUI,
+  showFilterNameInUI
 } from "../../components/commonFunctions";
 import Checkbox from "../../components/checkbox";
 
@@ -161,6 +162,20 @@ export default function HomePage() {
       chk_inTranist: false,
       chk_labelCreated: false,
     });
+  };
+
+  interface FilterLayer1Arrays {
+    [key: string]: any[];
+   }
+   // shipment info array 
+   const [filterConditions, setFilterConditions] = useState<any[]>({
+    filter_layer1_attemptDelivery:[],
+    filter_layer1_packageKg: [],
+    filter_layer1_packageLbs: [],
+  });
+
+  const getIntersection = (arr1, arr2) => {
+    return arr1.filter((item) => arr2.some((otherItem) => item.trackingNumber === otherItem.trackingNumber));
   };
 
   const clearShipmentStatusByValue = (value: any) => {
@@ -854,12 +869,14 @@ export default function HomePage() {
   const valueBasedFilter = (event: {
     target: { name: any; checked: any; value: any };
   }) => {
+    
     const { name, checked, value } = event.target;
     let selectedOptionTemp = [];
     selectedOptionTemp = filter_model.concat(name);
     set_filter_model(selectedOptionTemp);
 
     let tempArr = [];
+
     if (name == "accountNo") {
       if (checked) {
         tempArr = [...filter__accountNo, value];
@@ -878,24 +895,34 @@ export default function HomePage() {
 
       set_filter__deliveredDate(tempArr);
     }
-    if (name == "numberOfAttempt") {
+    if (name === "numberOfAttempt") {
+      
       if (checked) {
-        tempArr = [...filter__attemptDelivery, value];
+        setFilterConditions(prevState => ({
+          ...prevState,
+          filter_layer1_attemptDelivery: [...prevState.filter_layer1_attemptDelivery, value],
+        }));
       } else {
-        tempArr = filter__attemptDelivery.filter((e) => e !== value);
+        setFilterConditions(prevState => ({
+          ...prevState,
+          filter_layer1_attemptDelivery: prevState.filter_layer1_attemptDelivery.filter((element) => element !== value),
+        }));
       }
-
-      set_filter__attemptDelivery(tempArr);
+     
     }
 
     if (name == "packageKg") {
       if (checked) {
-        tempArr = [...filter__packageKg, value];
+        setFilterConditions(prevState => ({
+          ...prevState,
+          filter_layer1_packageKg: [...prevState.filter_layer1_packageKg, value],
+        }));
       } else {
-        tempArr = filter__packageKg.filter((e) => e !== value);
+        setFilterConditions(prevState => ({
+          ...prevState,
+          filter_layer1_packageKg: prevState.filter_layer1_packageKg.filter((element) => element !== value),
+        }));
       }
-
-      set_filter__packageKg(tempArr);
     }
     if (name == "packageLbs") {
       if (checked) {
@@ -1013,7 +1040,9 @@ export default function HomePage() {
       set_filter__recipientPostal(tempArr);
     }
   };
-
+  useEffect(() => {
+    console.log("FILLL"+JSON.stringify(filterConditions))
+  }, [filterConditions]);
   useEffect(() => {
     console.log("TTTTT" + JSON.stringify(filter__accountNo));
   }, [filter__accountNo]);
@@ -1055,6 +1084,23 @@ export default function HomePage() {
       setInnerFilter(4);
     }
   };
+
+ 
+
+
+
+   function filterData(originalData: any[], filterConditions: any): any[] {
+
+    var tempData = originalData.filter((item: any) => {
+     return Object.entries(filterConditions).every(([property, values]) => {
+      return (values as any[]).includes(item[property]);
+     });
+    });
+    return tempData;
+   }
+
+   // For showing the selected List 
+   let selectedListArray: any[]  =[];
   // type 0- apply, 1- clear
   const applyFilter = (type: number) => {
     setAnyFilter(true);
@@ -1078,7 +1124,8 @@ export default function HomePage() {
 
     let tempArray = [];
     let filteredData_level1: shipment[] = [];
-
+    let filteredData_level2: shipment[] = [];
+   
     if (filterSection.length > 0) {
       tempArray = filterSection;
     } else {
@@ -1086,66 +1133,28 @@ export default function HomePage() {
       filterSection = userinfo;
     }
 
-    // if (filterSection.length > 0) {
-    //   if (filterSection.includes("delayed")) {
-    //     const filteredData_delayed = originalRows.filter((item) => {
-    //       return Object.keys(item).some(() => item.isDelayed == true);
-    //     });
-
-    //     filteredData_level1 = filteredData_level1.concat(filteredData_delayed);
-    //   }
-
-    //   if (filterSection.includes("delivered")) {
-    //     const filteredData_delivered = originalRows.filter((item) => {
-    //       return Object.keys(item).some(() => item.isDelivered == true);
-    //     });
-    //     filteredData_level1 = filteredData_level1.concat(
-    //       filteredData_delivered
-    //     );
-    //   }
-
-    //   if (filterSection.includes("exception")) {
-
-    //     const filteredData_exception = originalRows.filter((item) => {
-    //       return Object.keys(item).some(() => item.isException == true && item.isDelivered == false);
-    //     });
-    //     console.log("EXXXXXX"+JSON.stringify(filteredData_exception));
-    //     filteredData_level1 = filteredData_level1.concat(
-    //       filteredData_exception
-    //     );
-    //   }
-
-    //   if (filterSection.includes("inTransit")) {
-    //     const filteredData_intransit = originalRows.filter((item) => {
-    //       return Object.keys(item).some(() => item.status == "In transit");
-    //     });
-    //     filteredData_level1 = filteredData_level1.concat(
-    //       filteredData_intransit
-    //     );
-    //   }
-
-    //   if (filterSection.includes("label")) {
-    //     const filteredData_label = originalRows.filter((item) => {
-    //       return Object.keys(item).some(() => item.status == "Initiated");
-    //     });
-    //     filteredData_level1 = filteredData_level1.concat(filteredData_label);
-    //   }
-    // } else {
-
-    //   filteredData_level1 = originalRows;
-    // }
+  
 
     // move to seperate file
     type SectionToKeyMap = {
-      [section: string]: { field: string; value: any };
+      [section: string]: { field: any; value: any };
     };
+   type SectionToKeyMap_shipperInfo = {
+    [section: string]: { field: any; value: any , type :string};
+  };
 
     const sectionToKeyMap: SectionToKeyMap = {
       delayed: { field: "isDelayed", value: true },
       delivered: { field: "isDelivered", value: true },
       exception: { field: "isException", value: true },
       inTransit: { field: "status", value: "In transit" },
-      label: { field: "status", value: "Initiated" },
+      label: { field: "status", value: "Initiated" }
+    };
+
+    const sectionShipperInfo: SectionToKeyMap_shipperInfo= {
+      numberOfAttempt: { field: "numberOfAttemptedDeliveries", value: filterConditions.filter_layer1_attemptDelivery , type: "number"},
+      packageKg: { field: "packageWeightKg", value: filterConditions.filter_layer1_packageKg , type :"string"},
+     
     };
 
     if (filterSection.length == 0) filteredData_level1 = originalRows;
@@ -1158,6 +1167,37 @@ export default function HomePage() {
         }
       });
     }
+
+    // if (filter_model.includes("numberOfAttempt")) {
+      
+
+    //   const newArray = filter_layer1_attemptDelivery.map(
+    //     (variable) => "No of attempt -" + variable
+    //   );
+
+    //   tempArray = tempArray.concat(newArray);
+    if(filter_model.length == 0 ) filteredData_level2 = originalRows;
+    else {
+      filter_model.forEach((section) => {
+        const { field, value , type} = sectionShipperInfo[section];
+        if (field) {
+          if(filteredData_level2.length == 0) {
+            filteredData_level2 = filterShipperInfoData(originalRows, field, value, type);
+          }
+          else { 
+            filteredData_level2 = filterShipperInfoData(filteredData_level2, field, value, type);
+          }
+         
+        }
+      });
+    
+
+    }
+   
+  
+    const intersectionArray = getIntersection(filteredData_level1, filteredData_level2);
+    //}
+
 
     if (filter_model.includes("deliveredDate")) {
       if (filter_layer1_deliveredDate.length > 0 || type == 1) {
@@ -1204,33 +1244,7 @@ export default function HomePage() {
       }
     }
 
-    if (filter_model.includes("numberOfAttempt")) {
-      if (filter_layer1_attemptDelivery.length > 0 || type == 1) {
-        filter_layer1_attemptDelivery = filter_layer1_attemptDelivery;
-      } else {
-        filter_layer1_attemptDelivery = filter__attemptDelivery;
-      }
-
-      const newArray = filter_layer1_attemptDelivery.map(
-        (variable) => "No of attempt -" + variable
-      );
-
-      tempArray = tempArray.concat(newArray);
-
-      // if empty array of filters
-      if (filter_layer1_attemptDelivery.length == 0) {
-        filteredData_level1 = filteredData_level1;
-      } else {
-        console.log("EEEEEEE" + JSON.stringify(filter_layer1_attemptDelivery));
-
-        filteredData_level1 = filteredData_level1.filter((item) =>
-          filter_layer1_attemptDelivery
-            .map((str) => parseInt(str, 10))
-            .includes(item.numberOfAttemptedDeliveries)
-        );
-      }
-    }
-
+   
     if (filter_model.includes("packageKg")) {
       if (filter_layer1_packageKg.length > 0 || type == 1) {
         filter_layer1_packageKg = filter_layer1_packageKg;
@@ -1540,7 +1554,7 @@ export default function HomePage() {
       }
     }
 
-    const uniqueArray = tempArray.filter((value, index, self) => {
+    const uniqueArray = selectedListArray.filter((value, index, self) => {
       return self.indexOf(value) === index;
     });
     setSelectedList(uniqueArray);
@@ -1550,9 +1564,9 @@ export default function HomePage() {
       }
     );
 
-    setRows(uniqueArray_table);
+    setRows(intersectionArray);
   };
-  useEffect(() => {}, [selectedList]);
+ 
 
   function filterStatusData(
     originalRows: shipment[],
@@ -1560,13 +1574,37 @@ export default function HomePage() {
     filterValue: any
   ) {
     console.log(originalRows);
-    debugger;
     return originalRows.filter((item: any) => {
       return Object.keys(item).some((key) => {
         return item[key] === filterValue && key === filterProperty;
       });
     });
   }
+
+
+  function filterShipperInfoData(
+    originalRows: shipment[],
+    filterProperty: keyof shipment,
+    filterValue: any[],
+    type:string
+  ) {
+    const newArray = filterValue.map(
+      (variable) => showFilterNameInUI(filterProperty)+" -" + variable
+    );
+    selectedListArray = selectedListArray.concat(newArray);
+    let filterArray :any[]= []
+    if(type == "number") {
+      filterArray = filterValue.map((str) => Number(str));
+    } else {
+      filterArray = filterValue
+    }
+    
+   
+    return originalRows.filter((item) => filterArray.includes(item[filterProperty]));
+  }
+ 
+  useEffect(() => {}, [selectedList]);
+ 
   // Rest of your code...
 
   return (
@@ -2300,7 +2338,7 @@ export default function HomePage() {
                                 >
                                   <Checkbox
                                     label={item.name}
-                                    checked={filter__attemptDelivery.includes(
+                                    checked={filterConditions.filter_layer1_attemptDelivery.includes(
                                       item.name
                                     )}
                                     onChange={valueBasedFilter}
@@ -2328,7 +2366,7 @@ export default function HomePage() {
                                 >
                                   <Checkbox
                                     label={item.name}
-                                    checked={filter__packageKg.includes(
+                                    checked={filterConditions.filter_layer1_packageKg.includes(
                                       item.name
                                     )}
                                     onChange={valueBasedFilter}

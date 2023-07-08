@@ -102,3 +102,21 @@ export function formatDate(dateTime: any, format: Intl.DateTimeFormatOptions): s
       return newItem;
     });
   };
+
+ 
+
+
+  export function showFilterNameInUI(value: string) {
+    const ShipmentInformationArr = [
+      { jsonKey: "numberOfAttemptedDeliveries", showValueForUI: "No Of Attempt" },
+    ];
+  
+    const foundItem = ShipmentInformationArr.find((item) => item.jsonKey === value);
+  
+    if (foundItem) {
+      return foundItem.showValueForUI;
+    } else {
+      // Handle the case when no matching jsonKey is found
+      return "";
+    }
+  }
