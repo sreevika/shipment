@@ -106,17 +106,16 @@ export function formatDate(dateTime: any, format: Intl.DateTimeFormatOptions): s
  
 
 
-  export function showFilterNameInUI(value: string) {
-    const ShipmentInformationArr = [
-      { jsonKey: "numberOfAttemptedDeliveries", showValueForUI: "No Of Attempt" },
-    ];
-  
-    const foundItem = ShipmentInformationArr.find((item) => item.jsonKey === value);
-  
-    if (foundItem) {
-      return foundItem.showValueForUI;
-    } else {
-      // Handle the case when no matching jsonKey is found
-      return "";
+  export function showFilterNameInUI(filterArray :any[], value: string) {
+console.log("----"+value)
+    for (const statusKey in filterArray) {
+      if (filterArray.hasOwnProperty(statusKey)) {
+        const status = filterArray[statusKey];
+        if (status.field === value) {
+          return status.display;
+        }
+      }
     }
+    return null; 
+
   }

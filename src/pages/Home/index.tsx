@@ -82,6 +82,7 @@ export default function HomePage() {
   // Add other properties as needed
   const [filterConditions, setFilterConditions] = useState<FilterConditions>({
     filter_layer1_accountNo: [],
+    filter_layer1_deliveredDate: [],
     filter_layer1_attemptDelivery: [],
     filter_layer1_packageKg: [],
     filter_layer1_packageLbs: [],
@@ -100,11 +101,11 @@ export default function HomePage() {
   //ag change
 
   const StatusFilterInfo: StatusFilterInfo = {
-    delayed: { field: "isDelayed", value: true },
-    delivered: { field: "isDelivered", value: true },
-    exception: { field: "isException", value: true },
-    inTransit: { field: "status", value: "In transit" },
-    label: { field: "status", value: "Initiated" },
+    delayed: { field: "isDelayed", value: true , display:"Delayed"},
+    delivered: { field: "isDelivered", value: true , display:"Delivered"},
+    exception: { field: "isException", value: true , display:"Exception"},
+    inTransit: { field: "status", value: "In transit" , display:"In transit"},
+    label: { field: "status", value: "Initiated" , display:"Label"},
   };
   //ag changes
   sectionShipperInfo = {
@@ -113,90 +114,113 @@ export default function HomePage() {
       sectionValue: filterConditions.filter_layer1_accountNo,
       type: "string",
       filterVariable: "filter_layer1_accountNo",
+      display:"AccountNo"
+    },
+    deliveredDate: {
+      field: "deliveredTime",
+      sectionValue: filterConditions.filter_layer1_deliveredDate,
+      type: "date",
+      filterVariable: "filter_layer1_deliveredDate",
+      display:"Delivered Date"
     },
     numberOfAttempt: {
       field: "numberOfAttemptedDeliveries",
       sectionValue: filterConditions.filter_layer1_attemptDelivery,
       type: "number",
       filterVariable: "filter_layer1_attemptDelivery",
+      display:"No of Attempt"
     },
     packageKg: {
       field: "packageWeightKg",
       sectionValue: filterConditions.filter_layer1_packageKg,
       type: "string",
       filterVariable: "filter_layer1_packageKg",
+      display:"Package KG"
+
     },
     packageLbs: {
       field: "packageWeightLbs",
       sectionValue: filterConditions.filter_layer1_packageLbs,
       type: "string",
       filterVariable: "filter_layer1_packageLbs",
+      display:"Package Lbs"
     },
     purchaseOrderNumber: {
       field: "purchaseOrderNumber",
       sectionValue: filterConditions.filter_layer1_purchaseOrder,
       type: "string",
       filterVariable: "filter_layer1_purchaseOrder",
+      display:"Order No"
     },
     reference: {
       field: "reference",
       sectionValue: filterConditions.filter_layer1_reference,
       type: "string",
       filterVariable: "filter_layer1_reference",
+      display:"Reference"
     },
     scheduledDeliveryDate: {
       field: "scheduledDeliveryDate",
       sectionValue: filterConditions.filter_layer1_scheduledDeliveryDate,
       type: "date",
       filterVariable: "filter_layer1_scheduledDeliveryDate",
+      display:"Sch. Delivery Date"
     },
     shipDate: {
       field: "shipDate",
       sectionValue: filterConditions.filter_layer1_shipDate,
       type: "date",
       filterVariable: "filter_layer1_shipDate",
+      display:"Ship Date"
     },
     recipientContactName: {
       field: "recipientContactName",
       sectionValue: filterConditions.filter_layer1_recipientContactName,
       type: "string",
       filterVariable: "filter_layer1_recipientContactName",
+      display:"Recipient Name"
     },
     recipientCompany: {
       field: "recipientCompany",
       sectionValue: filterConditions.filter_layer1_recipientCompany,
       type: "string",
       filterVariable: "filter_layer1_recipientCompany",
+      display:"Recipient Company"
     },
     recipientAddress: {
       field: "recipientAddress",
       sectionValue: filterConditions.filter_layer1_recipientAddress,
       type: "string",
       filterVariable: "filter_layer1_recipientAddress",
+      display:"Recipient Address"
     },
     recipientCity: {
       field: "recipientCity",
       sectionValue: filterConditions.filter_layer1_recipientCity,
       type: "string",
       filterVariable: "filter_layer1_recipientCity",
+      display:"Recipient City"
     },
     recipientState: {
       field: "recipientState",
       sectionValue: filterConditions.filter_layer1_recipientState,
       type: "string",
       filterVariable: "filter_layer1_recipientState",
+      display:"Recipient State"
     },
     recipientCountry: {
       field: "recipientCountry",
       sectionValue: filterConditions.filter_layer1_recipientCountry,
       type: "string",
       filterVariable: "filter_layer1_recipientCountry",
+      display:"Recipient Country"
     },
     recipientPostal: {
       field: "recipientPostal",
       sectionValue: filterConditions.filter_layer1_recipientPostal,
       type: "string",
       filterVariable: "filter_layer1_recipientPostal",
+      display:"Recipient Postal"
     },
   };
 
@@ -827,8 +851,8 @@ export default function HomePage() {
       // .value();
       const deliveredDateArr = _(originalRows)
         .groupBy((item) => {
-          const formattedDate = moment(item.deliveredTime).format("YYYY-MM-DD");
-          return moment(formattedDate).isValid() ? formattedDate : "0000-00-00";
+          const formattedDate = moment(item.deliveredTime).format("MM/DD/YYYY");
+          return moment(formattedDate).isValid() ? formattedDate : "00/00/0000";
         })
         .map((items, name) => ({
           name,
@@ -891,9 +915,9 @@ export default function HomePage() {
       const scheduledDeliveryDateArr = _(originalRows)
         .groupBy((item) => {
           const formattedDate = moment(item.scheduledDeliveryDate).format(
-            "YYYY-MM-DD"
+            "MM/DD/YYYY"
           );
-          return moment(formattedDate).isValid() ? formattedDate : "0000-00-00";
+          return moment(formattedDate).isValid() ? formattedDate : "00/00/0000";
         })
         .map((items, name) => ({
           name,
@@ -906,8 +930,8 @@ export default function HomePage() {
     } else if (value == "shipDate") {
       const shipDateArr = _(originalRows)
         .groupBy((item) => {
-          const formattedDate = moment(item.shipDate).format("YYYY-MM-DD");
-          return moment(formattedDate).isValid() ? formattedDate : "0000-00-00";
+          const formattedDate = moment(item.shipDate).format("MM/DD/YYYY");
+          return moment(formattedDate).isValid() ? formattedDate : "00/00/0000";
         })
         .map((items, name) => ({
           name,
@@ -1012,6 +1036,7 @@ export default function HomePage() {
         ),
       }));
     }
+ 
     // setFilterConditions((prevState) => ({
     //   ...prevState,
     //   [filterVariable]: checked
@@ -1214,9 +1239,7 @@ export default function HomePage() {
   useEffect(() => {
     console.log("FILLL" + JSON.stringify(filterConditions));
   }, [filterConditions]);
-  useEffect(() => {
-    console.log("TTTTT" + JSON.stringify(filter__accountNo));
-  }, [filter__accountNo]);
+
   useEffect(() => {}, [filter__attemptDelivery]);
   useEffect(() => {}, [filter__deliveredDate]);
   useEffect(() => {}, [filter__packageKg]);
@@ -1363,6 +1386,8 @@ export default function HomePage() {
     filterProperty: string,
     filterValue: any
   ) {
+   
+    selectedListArray = selectedListArray.concat(showFilterNameInUI(StatusFilterInfo,filterProperty));
     return originalRows.filter((item: any) => {
       return Object.keys(item).some((key) => {
         return item[key] === filterValue && key === filterProperty;
@@ -1378,22 +1403,38 @@ export default function HomePage() {
     type: string
   ) {
     const newArray = filterValue.map(
-      (variable) => showFilterNameInUI(filterProperty) + " -" + variable
+      (variable) => showFilterNameInUI(sectionShipperInfo, filterProperty) + " -" + variable
     );
     selectedListArray = selectedListArray.concat(newArray);
     let filterArray: any[] = [];
     if (type == "number") {
       filterArray = filterValue.map((str) => Number(str));
     } else {
-      filterArray = filterValue;
+    
+      filterArray = filterValue.map(
+        (str) => (str === "null" ? null : str)
+      );
     }
-
-    var filteredData = originalRows.filter(
-      (item) => filterArray.includes(item[filterProperty])
-      // filterArray.includes(item[filterProperty]) ||
-      // (filterArray.includes(null) && item[filterProperty] === null)
+    if(type == "date") {
+      var filteredData = originalRows.filter((item) =>
+      filterArray.includes(
+        moment(moment(item[filterProperty]).format("MM/DD/YYYY")).isValid()
+          ? moment(item[filterProperty]).format("MM/DD/YYYY")
+          : "00/00/0000"
+      )
     );
-    debugger;
+
+    } else {
+      var filteredData = originalRows.filter(
+        (item) => filterArray.includes(item[filterProperty])
+        // filterArray.includes(item[filterProperty]) ||
+        // (filterArray.includes(null) && item[filterProperty] === null)
+      );
+      
+
+    }
+   
+   
     return filteredData;
   }
 
@@ -2104,7 +2145,7 @@ export default function HomePage() {
                                 >
                                   <Checkbox
                                     label={item.name}
-                                    checked={filter__deliveredDate.includes(
+                                    checked={filterConditions.filter_layer1_deliveredDate.includes(
                                       item.name
                                     )}
                                     onChange={valueBasedFilter}

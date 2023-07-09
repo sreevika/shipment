@@ -4,6 +4,7 @@ interface NormalFilterInfo {
     sectionValue: any;
     type: string;
     filterVariable: string;
+    display:string;
   };
 }
 

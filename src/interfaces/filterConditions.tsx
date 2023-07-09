@@ -1,5 +1,6 @@
 interface FilterConditions {
   filter_layer1_accountNo: any[];
+  filter_layer1_deliveredDate:any[];
   filter_layer1_attemptDelivery: any[];
   filter_layer1_packageKg: any[];
   filter_layer1_packageLbs: any[];
