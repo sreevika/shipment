@@ -153,12 +153,12 @@ export default function LoginPage() {
                           ? "error-border form-control form-control-lg"
                           : "form-control form-control-lg"
                       }
-                      maxLength={10}
+                      maxLength={15}
                       value={uname}
                       onChange={unameChangeHandler}
                     />
                     <small className="bottom-text">Please enter your ID</small>
-                    <small className="bottom-count">{uname.length}/10</small>
+                    <small className="bottom-count">{uname.length}/15</small>
                   </div>
 
                   <div
