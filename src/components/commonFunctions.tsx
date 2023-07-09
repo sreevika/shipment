@@ -107,7 +107,6 @@ export function formatDate(dateTime: any, format: Intl.DateTimeFormatOptions): s
 
 
   export function showFilterNameInUI(filterArray :any[], value: string) {
-console.log("----"+value)
     for (const statusKey in filterArray) {
       if (filterArray.hasOwnProperty(statusKey)) {
         const status = filterArray[statusKey];
