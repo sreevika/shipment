@@ -15,7 +15,7 @@ import transit from "../../assets/images/transit.png";
 import labelImg from "../../assets/images/label.png";
 import redAlertImg from "../../assets/images/red-alert.png";
 import yellowAlertImg from "../../assets/images/yellow-alert.png";
-import { json, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Paper,
   Table,
@@ -48,6 +48,7 @@ const EDUCONNECT_URL = `https://shipmenttrackingapi-qa.signsharecloud.com/api`;
   // For showing the selected List
   let selectedListArray: any[] = [];
   let selectedListKeyStatus: any[] = [];
+  let selectedListKeyShipper: any[] = [];
 let sectionShipperInfo: NormalFilterInfo = {};
 export default function HomePage() {
   const [rows, setRows] = useState<Shipment[]>([]);
@@ -82,7 +83,7 @@ export default function HomePage() {
   //ag change
 
   // Add other properties as needed
-  const [filterConditions, setFilterConditions] = useState<FilterConditions>({
+  let [filterConditions, setFilterConditions] = useState<FilterConditions>({
     filter_layer1_accountNo: [],
     filter_layer1_deliveredDate: [],
     filter_layer1_attemptDelivery: [],
@@ -116,7 +117,7 @@ export default function HomePage() {
       sectionValue: filterConditions.filter_layer1_accountNo,
       type: "string",
       filterVariable: "filter_layer1_accountNo",
-      display:"AccountNo"
+      display:"Account No"
     },
     deliveredDate: {
       field: "deliveredTime",
@@ -137,7 +138,7 @@ export default function HomePage() {
       sectionValue: filterConditions.filter_layer1_packageKg,
       type: "string",
       filterVariable: "filter_layer1_packageKg",
-      display:"Package KG"
+      display:"PKG(KG)"
 
     },
     packageLbs: {
@@ -145,14 +146,14 @@ export default function HomePage() {
       sectionValue: filterConditions.filter_layer1_packageLbs,
       type: "string",
       filterVariable: "filter_layer1_packageLbs",
-      display:"Package Lbs"
+      display:"PKG(Lbs)"
     },
     purchaseOrderNumber: {
       field: "purchaseOrderNumber",
       sectionValue: filterConditions.filter_layer1_purchaseOrder,
       type: "string",
       filterVariable: "filter_layer1_purchaseOrder",
-      display:"Order No"
+      display:"PO No"
     },
     reference: {
       field: "reference",
@@ -309,6 +310,8 @@ export default function HomePage() {
     setUserInfo(filterArr);
 
   };
+
+ 
   useEffect(() => {}, [setShipmentStatus]);
   useEffect(() => {console.log("FILTER LOG 3"+userinfo)}, [userinfo]);
   //status field changes
@@ -321,19 +324,17 @@ export default function HomePage() {
 
     if (checked) {
       tempArr = [...userinfo, value];
+     // selectedListKeyStatus = selectedListKeyStatus.concat(value);
     } else {
       tempArr = userinfo.filter((e) => e !== value);
+     // selectedListKeyStatus = selectedListKeyStatus.concat(value);
     }
-    selectedListKeyStatus = selectedListKeyStatus.concat(tempArr);
+    selectedListKeyStatus = tempArr;
     console.log("AAAA"+JSON.stringify(selectedListKeyStatus))
     setUserInfo(tempArr);
   };
-  useEffect(() => {
-    console.log("TTTTTTTT" + JSON.stringify(shipmentStatus));
-  }, [shipmentStatus]);
-  useEffect(() => {
-    console.log("TTTTTTTT" + JSON.stringify(userinfo));
-  }, [userinfo]);
+  //useEffect(() => {}, [shipmentStatus]);
+
 
   const selectSearchType = () => {
     setDropDown(!dropDown);
@@ -358,6 +359,9 @@ export default function HomePage() {
     resetFilters();
   };
 
+
+// -----------------------------------------------------//
+  // Common functions need to move as components
   const getInputKeyByValueForStatusFilter = (input: string): string | undefined => {
   for (const key in StatusFilterInfo) {
     if (StatusFilterInfo.hasOwnProperty(key)) {
@@ -369,10 +373,59 @@ export default function HomePage() {
   return undefined;
 };
 
+const getSectionKeyByDisplay = (displayValue: string): string | undefined => {
+  const foundSectionKey = Object.keys(sectionShipperInfo).find((sectionKey) =>
+    displayValue.toLowerCase().includes(sectionShipperInfo[sectionKey].display.toLowerCase())
+  );
+  return foundSectionKey;
+};
+
+// -----------------------------------------------------//
+const resetAllFilters =() =>{
+  setStoreId("");
+  setSearchValue("");
+  setCardSelected("");
+
+  filterSection = [];
+  setUserInfo([]);
+  resetShipmentStatus();
+
+  resetShipmentStatus();
+  selectedListArray =[]
+  selectedListKeyShipper=[]
+  selectedListKeyStatus =[]
+  setSelectedList([]);
+
+  setFilterConditions((prevState) => ({
+    ...prevState,
+    filter_layer1_accountNo: [],
+    filter_layer1_deliveredDate: [],
+    filter_layer1_attemptDelivery: [],
+    filter_layer1_packageKg: [],
+    filter_layer1_packageLbs: [],
+    filter_layer1_purchaseOrder: [],
+    filter_layer1_reference: [],
+    filter_layer1_scheduledDeliveryDate: [],
+    filter_layer1_shipDate: [],
+    filter_layer1_recipientContactName: [],
+    filter_layer1_recipientCompany: [],
+    filter_layer1_recipientAddress: [],
+    filter_layer1_recipientCity: [],
+    filter_layer1_recipientState: [],
+    filter_layer1_recipientCountry: [],
+    filter_layer1_recipientPostal: [],
+  }));
+
+  originalRows = originalRows_backup;
+  setRows(originalRows);
+}
+
+// Clear filter as each item on the selected List
   const clearFilter = (value: string) => {
 
-    // let filterArr
-    if(Object.values(StatusFilterInfo).some(
+    
+     // let filterArr
+     if(Object.values(StatusFilterInfo).some(
       (status) => status.display === value
     )) {
     
@@ -384,12 +437,21 @@ export default function HomePage() {
     
       filterSection = filterArr;
     }
+    let displayName = value.split(":")[0];
+   
+    if(selectedListArray.includes(value)) {
+      selectedListArray = selectedListArray.filter((e) => e !== value);
+   
+      if(!selectedListArray.some((item) =>item.includes(displayName.trim()))) 
+      {
+    
+        selectedListKeyShipper = selectedListKeyShipper.filter((e) => e !== getSectionKeyByDisplay(displayName));
 
-    // let filterArr = userinfo.filter((e) => e !== value);
-    // setUserInfo(filterArr);
-    // filterSection = filterArr;
-    //alert(filterSection)
-   // alert(value);
+      }
+    }
+  
+    clearShipmentInfoAndRecipientDataByValue(value);
+  
     if(selectedListKeyStatus.includes(value)) {
       selectedListKeyStatus = selectedListKeyStatus.filter((e) => e !== value);
       selectedListArray = selectedListArray.filter((e) => e !== value);
@@ -817,6 +879,8 @@ export default function HomePage() {
     selectedOptionTemp = filter_model.concat(name);
     set_filter_model(selectedOptionTemp);
 
+    selectedListKeyShipper = selectedListKeyShipper.concat(name);
+    console.log("ABBBB---"+JSON.stringify(selectedListKeyShipper))
     const { filterVariable } = sectionShipperInfo[name];
 
     if (checked) {
@@ -835,10 +899,28 @@ export default function HomePage() {
  
     
   };
-  useEffect(() => {
-    console.log("FILLL" + JSON.stringify(filterConditions));
-  }, [filterConditions]);
+ 
+  const clearShipmentInfoAndRecipientDataByValue = (value: string) => {
+    let nameKey = getSectionKeyByDisplay(value.split(":")[0]);
+    let keyValue: string = value.split(":")[1].trim();
 
+    
+    if (nameKey && sectionShipperInfo[nameKey]) {
+    const { filterVariable } = sectionShipperInfo[nameKey];
+
+    setFilterConditions((prevState: FilterConditions) => ({
+      ...prevState,
+      [filterVariable]: prevState[filterVariable as keyof FilterConditions].filter(
+        (element: string) => element !== keyValue
+      ),
+    }));
+   }
+   
+  };
+  
+  useEffect(() => {
+    console.log("XXXX" + JSON.stringify(filterConditions));
+  }, [filterConditions]);
 
   const toggleFilter = () => {
     setShowFilter(!showFilter);
@@ -902,6 +984,10 @@ export default function HomePage() {
     }
     //need to check
     console.log("AAAAA"+selectedListKeyStatus);
+    
+    selectedListKeyStatus = selectedListKeyStatus.filter((value, index, self) => {
+      return self.indexOf(value) === index;
+    });
 
     if (selectedListKeyStatus.length == 0) filteredData_level1 = originalRows;
     else {
@@ -916,11 +1002,17 @@ export default function HomePage() {
 
     //ag changes
     //check filter_model
-    if (filter_model.length == 0) filteredData_level2 = originalRows;
+    selectedListKeyShipper = selectedListKeyShipper.filter((value, index, self) => {
+      return self.indexOf(value) === index;
+    });
+    if (selectedListKeyShipper.length == 0) filteredData_level2 = originalRows;
     else {
-      const distinctValues = [...new Set(filter_model)];
+    
+      const distinctValues = [...new Set(selectedListKeyShipper)];
+ 
       distinctValues.forEach((section) => {
         const { field, sectionValue, type } = sectionShipperInfo[section];
+      
         if (field && sectionValue.length > 0) {
           if (filteredData_level2.length == 0) {
             filteredData_level2 = filterShipperInfoData(
@@ -986,10 +1078,14 @@ export default function HomePage() {
     filterValue: any[],
     type: string
   ) {
+
+    
     const newArray = filterValue.map(
-      (variable) => showFilterNameInUI(sectionShipperInfo, filterProperty) + " -" + variable
+      (variable) => showFilterNameInUI(sectionShipperInfo  , filterProperty) + " : " + variable
     );
+
     selectedListArray = selectedListArray.concat(newArray);
+  
     let filterArray: any[] = [];
     if (type == "number") {
       filterArray = filterValue.map((str) => Number(str));
@@ -1022,7 +1118,10 @@ export default function HomePage() {
     return filteredData;
   }
 
+
   useEffect(() => {}, [selectedList]);
+
+  // ------------------------------------------- Sorting --------------------------------------------//
 
   // Rest of your code...
 
@@ -2192,7 +2291,7 @@ export default function HomePage() {
                 <li className="filter-section__applied-list">
                   <button
                     className="btn btn-close-reset"
-                    onClick={clearSearchValue}
+                    onClick={resetAllFilters}
                   >
                     Reset
                   </button>
