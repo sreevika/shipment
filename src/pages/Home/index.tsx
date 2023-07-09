@@ -996,14 +996,9 @@ export default function HomePage() {
     let selectedOptionTemp = [];
     selectedOptionTemp = filter_model.concat(name);
     set_filter_model(selectedOptionTemp);
-    //ag changes
-    //make a generic function
+
     const { filterVariable } = sectionShipperInfo[name];
-    // console.log(field);
-    debugger;
-    console.log("sectionShipperInfo");
-    console.log(sectionShipperInfo);
-    debugger;
+
     if (checked) {
       setFilterConditions((prevState: any) => ({
         ...prevState,
@@ -1017,8 +1012,6 @@ export default function HomePage() {
         ),
       }));
     }
-    console.log("filterConditions11");
-    console.log(filterConditions);
     // setFilterConditions((prevState) => ({
     //   ...prevState,
     //   [filterVariable]: checked
@@ -1276,6 +1269,7 @@ export default function HomePage() {
   let selectedListArray: any[] = [];
   // type 0- apply, 1- clear
   const applyFilter = (type: number) => {
+    console.log(type);
     setAnyFilter(true);
     setShowFilter(false);
 
@@ -1305,8 +1299,8 @@ export default function HomePage() {
       tempArray = userinfo;
       filterSection = userinfo;
     }
-
-    // move to seperate file
+    //need to check
+    console.log(tempArray);
 
     if (filterSection.length == 0) filteredData_level1 = originalRows;
     else {
@@ -1319,19 +1313,10 @@ export default function HomePage() {
       });
     }
 
-    // if (filter_model.includes("numberOfAttempt")) {
-
-    //   const newArray = filter_layer1_attemptDelivery.map(
-    //     (variable) => "No of attempt -" + variable
-    //   );
-
-    //   tempArray = tempArray.concat(newArray);
     //ag changes
     //check filter_model
     if (filter_model.length == 0) filteredData_level2 = originalRows;
     else {
-      console.log("sectionShipperInfo333");
-      console.log(sectionShipperInfo);
       const distinctValues = [...new Set(filter_model)];
       distinctValues.forEach((section) => {
         const { field, sectionValue, type } = sectionShipperInfo[section];
@@ -1355,385 +1340,29 @@ export default function HomePage() {
       });
     }
 
+    //get combined records
     const intersectionArray = getIntersection(
       filteredData_level1,
       filteredData_level2
     );
-    //}
-
-    // if (filter_model.includes("deliveredDate")) {
-    //   if (filter_layer1_deliveredDate.length > 0 || type == 1) {
-    //     filter_layer1_deliveredDate = filter_layer1_deliveredDate;
-    //   } else {
-    //     filter_layer1_deliveredDate = filter__deliveredDate;
-    //   }
-    //   const newArray = filter_layer1_deliveredDate.map(
-    //     (variable) => "Delivered date -" + variable
-    //   );
-    //   tempArray = tempArray.concat(newArray);
-
-    //   // if empty array of filters
-    //   if (filter_layer1_deliveredDate.length == 0) {
-    //     filteredData_level1 = filteredData_level1;
-    //   } else {
-    //     filteredData_level1 = filteredData_level1.filter((item) =>
-    //       filter_layer1_deliveredDate.includes(
-    //         moment(moment(item.deliveredTime).format("YYYY-MM-DD")).isValid()
-    //           ? moment(item.deliveredTime).format("YYYY-MM-DD")
-    //           : "0000-00-00"
-    //       )
-    //     );
-    //   }
-    //   set_filter__deliveredDate(filter_layer1_deliveredDate);
-    // }
-    // if (filter_model.includes("accountNo")) {
-    //   if (filter_layer1_accountNo.length > 0 || type == 1) {
-    //     filter_layer1_accountNo = filter_layer1_accountNo;
-    //   } else {
-    //     filter_layer1_accountNo = filter__accountNo;
-    //   }
-    //   const newArray = filter_layer1_accountNo.map(
-    //     (variable) => "Account No -" + variable
-    //   );
-    //   tempArray = tempArray.concat(newArray);
-    //   // if empty array of filters
-    //   if (filter_layer1_accountNo.length == 0) {
-    //     filteredData_level1 = filteredData_level1;
-    //   } else {
-    //     filteredData_level1 = filteredData_level1.filter((item) =>
-    //       filter_layer1_accountNo.includes(item.accountNumber)
-    //     );
-    //   }
-    // }
-
-    // if (filter_model.includes("packageKg")) {
-    //   if (filter_layer1_packageKg.length > 0 || type == 1) {
-    //     filter_layer1_packageKg = filter_layer1_packageKg;
-    //   } else {
-    //     filter_layer1_packageKg = filter__packageKg;
-    //   }
-    //   const newArray = filter_layer1_packageKg.map(
-    //     (variable) => "Package Weight (Kg) -" + variable
-    //   );
-    //   tempArray = tempArray.concat(newArray);
-    //   // if empty array of filters
-    //   if (filter_layer1_packageKg.length == 0) {
-    //     filteredData_level1 = filteredData_level1;
-    //   } else {
-    //     filteredData_level1 = filteredData_level1.filter((item) =>
-    //       filter_layer1_packageKg.includes(item.packageWeightKg)
-    //     );
-    //   }
-    // }
-
-    // if (filter_model.includes("packageLbs")) {
-    //   if (filter_layer1_packageLbs.length > 0 || type == 1) {
-    //     filter_layer1_packageLbs = filter_layer1_packageLbs;
-    //   } else {
-    //     filter_layer1_packageLbs = filter__packageLbs;
-    //   }
-
-    //   const newArray = filter_layer1_packageLbs.map(
-    //     (variable) => "Package Weight (Lbs) -" + variable
-    //   );
-    //   tempArray = tempArray.concat(newArray);
-
-    //   if (filter_layer1_packageLbs.length == 0) {
-    //     filteredData_level1 = filteredData_level1;
-    //   } else {
-    //     filteredData_level1 = filteredData_level1.filter((item) =>
-    //       filter_layer1_packageLbs.includes(item.packageWeightLbs)
-    //     );
-    //   }
-    // }
-
-    // if (filter_model.includes("purchaseOrderNumber")) {
-    //   if (filter_layer1_purchaseOrderNumber.length > 0 || type == 1) {
-    //     filter_layer1_purchaseOrderNumber = filter_layer1_purchaseOrderNumber;
-    //   } else {
-    //     filter_layer1_purchaseOrderNumber = filter__purchaseOrderNo;
-    //   }
-
-    //   const newArray = filter_layer1_purchaseOrderNumber.map(
-    //     (variable) => "Puchase Order No -" + variable
-    //   );
-    //   tempArray = tempArray.concat(newArray);
-
-    //   if (filter_layer1_purchaseOrderNumber.length == 0) {
-    //     filteredData_level1 = filteredData_level1;
-    //   } else {
-    //     filteredData_level1 = filteredData_level1.filter((item) =>
-    //       filter_layer1_purchaseOrderNumber.includes(item.purchaseOrderNumber)
-    //     );
-    //   }
-    // }
-
-    // if (filter_model.includes("reference")) {
-    //   if (filter_layer1_reference.length > 0 || type == 1) {
-    //     filter_layer1_reference = filter_layer1_reference;
-    //   } else {
-    //     filter_layer1_reference = filter__reference;
-    //   }
-
-    //   const newArray = filter_layer1_reference.map(
-    //     (variable) => "Reference -" + variable
-    //   );
-    //   tempArray = tempArray.concat(newArray);
-    //   if (filter_layer1_reference.length == 0) {
-    //     filteredData_level1 = filteredData_level1;
-    //   } else {
-    //     filteredData_level1 = filteredData_level1.filter((item) =>
-    //       filter_layer1_reference.includes(item.reference)
-    //     );
-    //   }
-    // }
-
-    // if (filter_model.includes("scheduledDeliveryDate")) {
-    //   if (filter_layer1_scheduledDeliveryDate.length > 0 || type == 1) {
-    //     filter_layer1_scheduledDeliveryDate =
-    //       filter_layer1_scheduledDeliveryDate;
-    //   } else {
-    //     filter_layer1_scheduledDeliveryDate = filter__scheduledDeliveryDate;
-    //   }
-
-    //   const newArray = filter_layer1_scheduledDeliveryDate.map(
-    //     (variable) => "Scheduled Delivery Date -" + variable
-    //   );
-    //   tempArray = tempArray.concat(newArray);
-
-    //   if (filter_layer1_scheduledDeliveryDate.length == 0) {
-    //     filteredData_level1 = filteredData_level1;
-    //   } else {
-    //     filteredData_level1 = filteredData_level1.filter((item) =>
-    //       filter_layer1_scheduledDeliveryDate.includes(
-    //         moment(
-    //           moment(item.scheduledDeliveryDate).format("YYYY-MM-DD")
-    //         ).isValid()
-    //           ? moment(item.scheduledDeliveryDate).format("YYYY-MM-DD")
-    //           : "0000-00-00"
-    //       )
-    //     );
-    //   }
-    // }
-    // if (filter_model.includes("shipDate")) {
-    //   if (filter_layer1_shipDate.length > 0 || type == 1) {
-    //     filter_layer1_shipDate = filter_layer1_shipDate;
-    //   } else {
-    //     filter_layer1_shipDate = filter__shipDate;
-    //   }
-
-    //   const newArray = filter_layer1_shipDate.map(
-    //     (variable) => "Ship Date -" + variable
-    //   );
-    //   tempArray = tempArray.concat(newArray);
-
-    //   if (filter_layer1_shipDate.length == 0) {
-    //     filteredData_level1 = filteredData_level1;
-    //   } else {
-    //     filteredData_level1 = filteredData_level1.filter((item) =>
-    //       filter_layer1_shipDate.includes(
-    //         moment(moment(item.shipDate).format("YYYY-MM-DD")).isValid()
-    //           ? moment(item.shipDate).format("YYYY-MM-DD")
-    //           : "0000-00-00"
-    //       )
-    //     );
-    //   }
-    // }
-
-    // if (filter_model.includes("recipientContactName")) {
-    //   if (filter_layer1_recipientContactName.length > 0 || type == 1) {
-    //     filter_layer1_recipientContactName = filter_layer1_recipientContactName;
-    //   } else {
-    //     filter_layer1_recipientContactName = filter__recipientContactName;
-    //   }
-
-    //   const newArray = filter_layer1_recipientContactName.map(
-    //     (variable) => "RecipientName -" + variable
-    //   );
-    //   tempArray = tempArray.concat(newArray);
-
-    //   if (filter_layer1_recipientContactName.length == 0) {
-    //     filteredData_level1 = filteredData_level1;
-    //   } else {
-    //     const nullConvertedArray = filter_layer1_recipientContactName.map(
-    //       (str) => (str === "null" ? null : str)
-    //     );
-
-    //     filteredData_level1 = filteredData_level1.filter((item) =>
-    //       nullConvertedArray.includes(item.recipientContactName)
-    //     );
-    //   }
-    // }
-
-    // if (filter_model.includes("recipientCompany")) {
-    //   if (filter_layer1_recipientCompany.length > 0 || type == 1) {
-    //     filter_layer1_recipientCompany = filter_layer1_recipientCompany;
-    //   } else {
-    //     filter_layer1_recipientCompany = filter__recipientCompany;
-    //   }
-
-    //   const newArray = filter_layer1_recipientCompany.map(
-    //     (variable) => "RecipientCompany -" + variable
-    //   );
-    //   tempArray = tempArray.concat(newArray);
-
-    //   if (filter_layer1_recipientCompany.length == 0) {
-    //     filteredData_level1 = filteredData_level1;
-    //   } else {
-    //     const nullConvertedArray = filter_layer1_recipientCompany.map((str) =>
-    //       str === "null" ? null : str
-    //     );
-
-    //     filteredData_level1 = filteredData_level1.filter((item) =>
-    //       nullConvertedArray.includes(item.recipientCompany)
-    //     );
-    //   }
-    // }
-
-    // if (filter_model.includes("recipientAddress")) {
-    //   if (filter_layer1_recipientAddress.length > 0 || type == 1) {
-    //     filter_layer1_recipientAddress = filter_layer1_recipientAddress;
-    //   } else {
-    //     filter_layer1_recipientAddress = filter__recipientAddress;
-    //   }
-
-    //   const newArray = filter_layer1_recipientAddress.map(
-    //     (variable) => "RecipientAddress -" + variable
-    //   );
-    //   tempArray = tempArray.concat(newArray);
-
-    //   if (filter_layer1_recipientAddress.length == 0) {
-    //     filteredData_level1 = filteredData_level1;
-    //   } else {
-    //     const nullConvertedArray = filter_layer1_recipientAddress.map((str) =>
-    //       str === "null" ? null : str
-    //     );
-
-    //     filteredData_level1 = filteredData_level1.filter((item) =>
-    //       nullConvertedArray.includes(item.recipientAddress)
-    //     );
-    //   }
-    // }
-
-    // if (filter_model.includes("recipientCity")) {
-    //   if (filter_layer1_recipientCity.length > 0 || type == 1) {
-    //     filter_layer1_recipientCity = filter_layer1_recipientCity;
-    //   } else {
-    //     filter_layer1_recipientCity = filter__recipientCity;
-    //   }
-
-    //   const newArray = filter_layer1_recipientCity.map(
-    //     (variable) => "RecipientCity -" + variable
-    //   );
-    //   tempArray = tempArray.concat(newArray);
-
-    //   if (filter_layer1_recipientCity.length == 0) {
-    //     filteredData_level1 = filteredData_level1;
-    //   } else {
-    //     const nullConvertedArray = filter_layer1_recipientCity.map((str) =>
-    //       str === "null" ? null : str
-    //     );
-
-    //     filteredData_level1 = filteredData_level1.filter((item) =>
-    //       nullConvertedArray.includes(item.recipientCity)
-    //     );
-    //   }
-    // }
-
-    // if (filter_model.includes("recipientState")) {
-    //   if (filter_layer1_recipientState.length > 0 || type == 1) {
-    //     filter_layer1_recipientState = filter_layer1_recipientState;
-    //   } else {
-    //     filter_layer1_recipientState = filter__recipientState;
-    //   }
-
-    //   const newArray = filter_layer1_recipientState.map(
-    //     (variable) => "RecipientState -" + variable
-    //   );
-    //   tempArray = tempArray.concat(newArray);
-
-    //   if (filter_layer1_recipientState.length == 0) {
-    //     filteredData_level1 = filteredData_level1;
-    //   } else {
-    //     const nullConvertedArray = filter_layer1_recipientState.map((str) =>
-    //       str === "null" ? null : str
-    //     );
-
-    //     filteredData_level1 = filteredData_level1.filter((item) =>
-    //       nullConvertedArray.includes(item.recipientState)
-    //     );
-    //   }
-    // }
-
-    // if (filter_model.includes("recipientCountry")) {
-    //   if (filter_layer1_recipientCountry.length > 0 || type == 1) {
-    //     filter_layer1_recipientCountry = filter_layer1_recipientCountry;
-    //   } else {
-    //     filter_layer1_recipientCountry = filter__recipientCountry;
-    //   }
-
-    //   const newArray = filter_layer1_recipientCountry.map(
-    //     (variable) => "RecipientCountry -" + variable
-    //   );
-    //   tempArray = tempArray.concat(newArray);
-
-    //   if (filter_layer1_recipientCountry.length == 0) {
-    //     filteredData_level1 = filteredData_level1;
-    //   } else {
-    //     const nullConvertedArray = filter_layer1_recipientCountry.map((str) =>
-    //       str === "null" ? null : str
-    //     );
-
-    //     filteredData_level1 = filteredData_level1.filter((item) =>
-    //       nullConvertedArray.includes(item.recipientCountry)
-    //     );
-    //   }
-    // }
-
-    // if (filter_model.includes("recipientPostal")) {
-    //   if (filter_layer1_recipientPostal.length > 0 || type == 1) {
-    //     filter_layer1_recipientPostal = filter_layer1_recipientPostal;
-    //   } else {
-    //     filter_layer1_recipientPostal = filter__recipientPostal;
-    //   }
-
-    //   const newArray = filter_layer1_recipientPostal.map(
-    //     (variable) => "RecipientPostal -" + variable
-    //   );
-    //   tempArray = tempArray.concat(newArray);
-
-    //   if (filter_layer1_recipientPostal.length == 0) {
-    //     filteredData_level1 = filteredData_level1;
-    //   } else {
-    //     const nullConvertedArray = filter_layer1_recipientPostal.map((str) =>
-    //       str === "null" ? null : str
-    //     );
-
-    //     filteredData_level1 = filteredData_level1.filter((item) =>
-    //       nullConvertedArray.includes(item.recipientPostal)
-    //     );
-    //   }
-    // }
 
     const uniqueArray = selectedListArray.filter((value, index, self) => {
       return self.indexOf(value) === index;
     });
-    setSelectedList(uniqueArray);
-    // const uniqueArray_table = filteredData_level1.filter(
-    //   (value, index, self) => {
-    //     return self.indexOf(value) === index;
-    //   }
-    // );
 
+    //to show selected filters
+    setSelectedList(uniqueArray);
+
+    //show records in table
     setRows(intersectionArray);
   };
 
+  //generic function to handle status filters
   function filterStatusData(
     originalRows: Shipment[],
     filterProperty: string,
     filterValue: any
   ) {
-    console.log(originalRows);
     return originalRows.filter((item: any) => {
       return Object.keys(item).some((key) => {
         return item[key] === filterValue && key === filterProperty;
@@ -1741,6 +1370,7 @@ export default function HomePage() {
     });
   }
 
+  //generic function to handle normal filters
   function filterShipperInfoData(
     originalRows: Shipment[],
     filterProperty: keyof Shipment,
