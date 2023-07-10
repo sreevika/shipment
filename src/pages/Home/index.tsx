@@ -39,18 +39,21 @@ import {
 } from "../../components/commonFunctions";
 import Checkbox from "../../components/checkbox";
 import FilterConditions from "../../interfaces/filterConditions";
-import StatusFilterInfo from "../../interfaces/statusFilterInfo";
-import NormalFilterInfo from "../../interfaces/normalFilterInfo";
+// import StatusFilterInfo from "../../interfaces/statusFilterInfo";
 import SelectedFilterListInfo from "../../interfaces/selectedFilterListInfo";
+import NormalFilterInfo from "../../interfaces/normalFilterInfo";
+import initialStatusFilterInfo from "../../constants/statusFIlterData";
+import initialNormalFilterInfo from "../../constants/normalFilterData";
 
 let originalRows: Shipment[] = [];
 let originalRows_backup: Shipment[] = [];
 const EDUCONNECT_URL = `https://shipmenttrackingapi-qa.signsharecloud.com/api`;
+
 // For showing the selected List
 let selectedListArray: any[] = [];
 let selectedListKeyStatus: any[] = [];
 let selectedListKeyShipper: any[] = [];
-let sectionShipperInfo: NormalFilterInfo = {};
+// let normalFilterInfo: NormalFilterInfo = {};
 
 // for selected  filter List
 let selectedFilterListForUI: SelectedFilterListInfo[] = [];
@@ -61,6 +64,13 @@ export default function HomePage() {
   const config = {
     headers: { Authorization: `Bearer ${token}` },
   };
+  //new
+  const [statusFilterInfo, setStatusFilterInfo] = useState(
+    initialStatusFilterInfo
+  );
+  const [shipAndRecpFilterInfo, setShipAndRecpFilterInfo] = useState(
+    initialNormalFilterInfo
+  );
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -82,7 +92,6 @@ export default function HomePage() {
     fetchData();
   }, []); // Empty dependency array ensures the effect runs only once
 
-  console.log(JSON.stringify(originalRows_backup));
   const navigate = useNavigate(); // Use the useNavigate hook here
 
   //ag change
@@ -109,15 +118,15 @@ export default function HomePage() {
 
   //ag change
 
-  const StatusFilterInfo: StatusFilterInfo = {
-    delayed: { field: "isDelayed", value: true, display: "Delayed" },
-    delivered: { field: "isDelivered", value: true, display: "Delivered" },
-    exception: { field: "isException", value: true, display: "Exception" },
-    inTransit: { field: "status", value: "In transit", display: "In transit" },
-    label: { field: "status", value: "Initiated", display: "Label" },
-  };
+  // const StatusFilterInfo: StatusFilterInfo = {
+  //   delayed: { field: "isDelayed", value: true, display: "Delayed" },
+  //   delivered: { field: "isDelivered", value: true, display: "Delivered" },
+  //   exception: { field: "isException", value: true, display: "Exception" },
+  //   inTransit: { field: "status", value: "In transit", display: "In transit" },
+  //   label: { field: "status", value: "Initiated", display: "Label" },
+  // };
   //ag changes
-  sectionShipperInfo = {
+  const normalFilterInfo: NormalFilterInfo = {
     accountNo: {
       field: "accountNumber",
       sectionValue: filterConditions.filter_layer1_accountNo,
@@ -253,6 +262,7 @@ export default function HomePage() {
   let filterSection: any[] = [];
 
   //checkbox changes
+  // statusFilterInfo['delayed'].sectionValue=true;
   const [shipmentStatus, setShipmentStatus] = useState({
     chk_delayed: false,
     chk_delivered: false,
@@ -282,78 +292,116 @@ export default function HomePage() {
     );
   };
 
-  const clearShipmentStatusByValue = (value: any) => {
-    if (value == "delayed") {
-      setShipmentStatus((prevState) => ({
-        ...prevState,
-        chk_delayed: false,
-      }));
-    }
-    if (value == "delivered") {
-      setShipmentStatus((prevState) => ({
-        ...prevState,
-        chk_delivered: false,
-      }));
-    }
-    if (value == "exception") {
-      setShipmentStatus((prevState) => ({
-        ...prevState,
-        chk_exception: false,
-      }));
-    }
-    if (value == "inTransit") {
-      setShipmentStatus((prevState) => ({
-        ...prevState,
-        chk_inTranist: false,
-      }));
-    }
-    if (value == "label") {
-      setShipmentStatus((prevState) => ({
-        ...prevState,
-        chk_labelCreated: false,
-      }));
-    }
-    let filterArr = userinfo.filter((e) => e !== value);
+  //needed
+  // const UnselectStatusFilterFromUI = (value: SelectedFilterListInfo) => {
+  //   //sreevika : check value.display is correct
+  //   switch (value.display) {
+  //     case "delayed":
+  //       setShipmentStatus((prevState) => ({
+  //         ...prevState,
+  //         chk_delayed: false,
+  //       }));
+  //       break;
+  //     case "delivered":
+  //       setShipmentStatus((prevState) => ({
+  //         ...prevState,
+  //         chk_delivered: false,
+  //       }));
+  //       break;
+  //     case "exception":
+  //       setShipmentStatus((prevState) => ({
+  //         ...prevState,
+  //         chk_exception: false,
+  //       }));
+  //       break;
+  //     case "inTransit":
+  //       setShipmentStatus((prevState) => ({
+  //         ...prevState,
+  //         chk_inTransit: false,
+  //       }));
+  //       break;
+  //     case "label":
+  //       setShipmentStatus((prevState) => ({
+  //         ...prevState,
+  //         chk_labelCreated: false,
+  //       }));
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  //   //sreevika
+  //   // let filterArr = userinfo.filter((e) => e !== value.display);
+  //   // setUserInfo(filterArr);
+  // };
 
-    setUserInfo(filterArr);
-  };
+  // useEffect(() => {}, [setShipmentStatus]);
+  // useEffect(() => {
+  //   console.log("FILTER LOG 3" + userinfo);
+  // }, [userinfo]);
+  //new changes
 
-  useEffect(() => {}, [setShipmentStatus]);
-  useEffect(() => {
-    console.log("FILTER LOG 3" + userinfo);
-  }, [userinfo]);
+  //new
+  //calculate count for status field
+  Object.keys(initialStatusFilterInfo).forEach((key) => {
+    const filterField = initialStatusFilterInfo[key].field;
+    const filterValue = initialStatusFilterInfo[key].sectionValue;
+
+    const filteredRows = originalRows.filter(
+      (item: any) => item[filterField] === filterValue
+    );
+    const count = Object.keys(filteredRows).length;
+
+    statusFilterInfo[key].count = count;
+  });
 
   //status field changes
-  const handleCheckboxChange = (event: {
+  const statusFilterCheckboxChange = (event: any) => {
+    const isChecked = event.target.checked;
+    const checkboxValue = event.target.value;
+
+    setStatusFilterInfo((prevState) => ({
+      ...prevState,
+      [checkboxValue]: {
+        ...prevState[checkboxValue],
+        checkedStatus: isChecked,
+      },
+    }));
+    console.log("StatusFilterInfo");
+    console.log(statusFilterInfo);
+
+    // Perform other actions based on the checkbox value and isChecked
+    // ...
+  };
+
+  //////////////////////////////////////////////////
+  const statusFilterCheckboxChange1 = (event: {
     target: { name: any; checked: any; value: any };
   }) => {
     const { name, checked, value } = event.target;
-    setShipmentStatus({ ...shipmentStatus, [name]: checked });
-    let tempArr = [];
+    // setShipmentStatus({ ...shipmentStatus, [name]: checked });
+    statusFilterInfo[name].checkedStatus = checked;
+    console.log(value);
+    // const filterInfo1: SelectedFilterListInfo = {
+    //   field: value,
+    //   filterType: 1,
+    //   sectionValue: `shipmentStatus.${name}`,
+    //   type: "",
+    //   filterVariable: "filter_layer1_" + value,
+    //   display: value,
+    // };
 
-    const filterInfo1: SelectedFilterListInfo = {
-      field: value,
-      filterType: 1,
-      sectionValue: `shipmentStatus.${name}`,
-      type: "",
-      filterVariable: "filter_layer1_" + value,
-      display: value,
-    };
-
-    if (checked) {
-      tempArr = [...userinfo, value];
-      selectedFilterListFor_selected.push(filterInfo1);
-
-      // selectedListKeyStatus = selectedListKeyStatus.concat(value);
-    } else {
-      tempArr = userinfo.filter((e) => e !== value);
-      selectedFilterListFor_selected = selectedFilterListFor_selected.filter(
-        (filterInfo) => !(filterInfo.field === filterInfo1.field)
-      );
-    }
-    selectedListKeyStatus = tempArr;
-    console.log("AAAA" + JSON.stringify(selectedFilterListFor_selected));
-    setUserInfo(tempArr);
+    // if (checked) {
+    //   tempArr = [...userinfo, value];
+    //   selectedFilterListFor_selected.push(filterInfo1);
+    // } else {
+    //   tempArr = userinfo.filter((e) => e !== value);
+    //   selectedFilterListFor_selected = selectedFilterListFor_selected.filter(
+    //     (filterInfo) => !(filterInfo.field === filterInfo1.field)
+    //   );
+    // }
+    // selectedListKeyStatus = tempArr;
+    // console.log("AAAA" + JSON.stringify(selectedFilterListFor_selected));
+    // setUserInfo(tempArr);
   };
 
   //useEffect(() => {}, [shipmentStatus]);
@@ -371,7 +419,6 @@ export default function HomePage() {
   };
   const clearSearchValue = () => {
     setSearchValue("");
-    console.log(JSON.stringify(originalRows_backup));
     originalRows = originalRows_backup;
     setRows(originalRows);
 
@@ -386,9 +433,9 @@ export default function HomePage() {
   const getInputKeyByValueForStatusFilter = (
     input: string
   ): string | undefined => {
-    for (const key in StatusFilterInfo) {
-      if (StatusFilterInfo.hasOwnProperty(key)) {
-        if (StatusFilterInfo[key].display === input) {
+    for (const key in statusFilterInfo) {
+      if (statusFilterInfo.hasOwnProperty(key)) {
+        if (statusFilterInfo[key].display === input) {
           return key;
         }
       }
@@ -397,16 +444,17 @@ export default function HomePage() {
   };
 
   const getSectionKeyByDisplay = (displayValue: string): string | undefined => {
-    const foundSectionKey = Object.keys(sectionShipperInfo).find((sectionKey) =>
+    const foundSectionKey = Object.keys(normalFilterInfo).find((sectionKey) =>
       displayValue
         .toLowerCase()
-        .includes(sectionShipperInfo[sectionKey].display.toLowerCase())
+        .includes(normalFilterInfo[sectionKey].display.toLowerCase())
     );
     return foundSectionKey;
   };
 
   // -----------------------------------------------------//
   const resetAllFilters = () => {
+    debugger;
     setStoreId("");
     setSearchValue("");
     setCardSelected("");
@@ -415,7 +463,6 @@ export default function HomePage() {
     setUserInfo([]);
     resetShipmentStatus();
 
-    resetShipmentStatus();
     selectedListArray = [];
     selectedListKeyShipper = [];
     selectedListKeyStatus = [];
@@ -446,8 +493,13 @@ export default function HomePage() {
   };
 
   // Clear filter as each item on the selected List
-  const clearFilter = (value: string) => {
+  const clearFilter = (value: SelectedFilterListInfo) => {
     // let filterArr
+    console.log(value);
+    selectedFilterListForUI = selectedFilterListForUI.filter(
+      (e) => e.display != value.display
+    );
+    statusFilterInfo[value.key].checkedStatus = false;
     // if (
     //   Object.values(StatusFilterInfo).some((status) => status.display === value)
     // ) {
@@ -460,37 +512,38 @@ export default function HomePage() {
 
     //   filterSection = filterArr;
     // }
-    debugger;
 
-    //remove from selected array
-    let displayName = value.split(":")[0];
-    console.log("selectedListArray");
-    console.log(selectedListArray);
-    if (selectedListArray.includes(value)) {
-      selectedListArray = selectedListArray.filter((e) => e !== value);
+    // //remove from selected array
+    // console.log("selectedListArray");
+    // console.log(selectedListArray);
+    // if (selectedListArray.includes(value.display)) {
+    //   selectedListArray = selectedListArray.filter((e) => e !== value);
 
-      if (
-        !selectedListArray.some((item) => item.includes(displayName.trim()))
-      ) {
-        selectedListKeyShipper = selectedListKeyShipper.filter(
-          (e) => e !== getSectionKeyByDisplay(displayName)
-        );
-      }
-    }
+    //   if (
+    //     !selectedListArray.some((item) => item.includes(value.display.trim()))
+    //   ) {
+    //     selectedListKeyShipper = selectedListKeyShipper.filter(
+    //       (e) => e !== getSectionKeyByDisplay(value.display)
+    //     );
+    //   }
+    // }
+    // if (value.filterType == 2) {
+    //   UnselectNormalFilterFromUI(value);
+    // } else if (value.filterType == 1) {
+    //   UnselectStatusFilterFromUI(value);
+    // }
 
-    clearShipmentInfoAndRecipientDataByValue(value);
+    //sreevika
+    // if (selectedListKeyStatus.includes(value)) {
+    //   selectedListKeyStatus = selectedListKeyStatus.filter((e) => e !== value);
+    //   selectedListArray = selectedListArray.filter((e) => e !== value);
+    // }
 
-    if (selectedListKeyStatus.includes(value)) {
-      selectedListKeyStatus = selectedListKeyStatus.filter((e) => e !== value);
-      selectedListArray = selectedListArray.filter((e) => e !== value);
-    }
-    clearShipmentStatusByValue(value.toLowerCase());
-
-    applyFilter();
+    applyFilters();
   };
-  useEffect(() => {}, [shipmentStatus]);
-  useEffect(() => {}, [userinfo]);
-  useEffect(() => {}, [selectedList]);
+  // useEffect(() => {}, [shipmentStatus]);
+  // useEffect(() => {}, [userinfo]);
+  // useEffect(() => {}, [selectedList]);
 
   const searchData = (event: { key: string }) => {
     setAnyFilter(true);
@@ -591,13 +644,6 @@ export default function HomePage() {
     { name: "Recipient Postal", value: "recipientPostal" },
   ];
 
-  //FOR VALIDATION
-  originalRows.forEach((item) => {
-    const deliveredTime = formatDate(item.deliveredTime, dateFormatToDisplay);
-    const currentDate = formatDate(new Date(), dateFormatToDisplay);
-    console.log(deliveredTime + " " + currentDate);
-  });
-
   //Find date interval
   const toDate = new Date();
   const fromDate = new Date(toDate.getTime() - 14 * 24 * 60 * 60 * 1000);
@@ -682,7 +728,6 @@ export default function HomePage() {
         //setRows(filteredData);
         filterBlockData = filteredData;
         setRows(filterBlockData);
-        console.log("FILLL" + JSON.stringify(filterBlockData));
       }
     }
   };
@@ -693,7 +738,7 @@ export default function HomePage() {
     setSelectedDiv_level2(value);
     set_firstlevelClick(false);
   };
-  useEffect(() => {}, [firstlevelClick]);
+  // useEffect(() => {}, [firstlevelClick]);
 
   //first layer filter selection
 
@@ -899,7 +944,7 @@ export default function HomePage() {
   };
 
   //check normal filter
-  const valueBasedFilter = (event: {
+  const normalFilterCheckboxChange = (event: {
     target: { name: any; checked: any; value: any };
   }) => {
     const { name, checked, value } = event.target;
@@ -909,7 +954,7 @@ export default function HomePage() {
     set_filter_model(selectedOptionTemp);
 
     selectedListKeyShipper = selectedListKeyShipper.concat(name);
-    const { filterVariable } = sectionShipperInfo[name];
+    const { filterVariable } = normalFilterInfo[name];
 
     const filterInfo1: SelectedFilterListInfo = {
       field: name,
@@ -917,7 +962,7 @@ export default function HomePage() {
       sectionValue: value,
       type: "array",
       filterVariable: `filterConditions.${filterVariable}`,
-      display: showFilterNameInUI(sectionShipperInfo, name) + " : " + value,
+      display: showFilterNameInUI(normalFilterInfo, name) + " : " + value,
     };
 
     if (checked) {
@@ -937,30 +982,28 @@ export default function HomePage() {
         (filterInfo) => !(filterInfo.field === filterInfo1.field)
       );
     }
-    console.log("AAAAAA" + JSON.stringify(selectedFilterListFor_selected));
   };
 
-  const clearShipmentInfoAndRecipientDataByValue = (value: string) => {
-    if (value.includes(":")) {
-      let nameKey = getSectionKeyByDisplay(value.split(":")[0]);
-      let keyValue: string = value.split(":")[1].trim();
+  const UnselectNormalFilterFromUI = (value: SelectedFilterListInfo) => {
+    // let nameKey = getSectionKeyByDisplay(value.split(":")[0]);
+    // let keyValue: string = value.split(":")[1].trim();
 
-      if (nameKey && sectionShipperInfo[nameKey]) {
-        const { filterVariable } = sectionShipperInfo[nameKey];
+    if (value.field && normalFilterInfo[value.field]) {
+      //sreevika (if field and array key if diff)
+      const { filterVariable } = normalFilterInfo[value.field];
 
-        setFilterConditions((prevState: FilterConditions) => ({
-          ...prevState,
-          [filterVariable]: prevState[
-            filterVariable as keyof FilterConditions
-          ].filter((element: string) => element !== keyValue),
-        }));
-      }
+      setFilterConditions((prevState: FilterConditions) => ({
+        ...prevState,
+        [filterVariable]: prevState[
+          filterVariable as keyof FilterConditions
+        ].filter((element: string) => element !== value.sectionValue),
+      }));
     }
   };
 
-  useEffect(() => {
-    console.log("XXXX" + JSON.stringify(filterConditions));
-  }, [filterConditions]);
+  // useEffect(() => {
+  //   console.log("XXXX" + JSON.stringify(filterConditions));
+  // }, [filterConditions]);
 
   const toggleFilter = () => {
     setShowFilter(!showFilter);
@@ -986,11 +1029,72 @@ export default function HomePage() {
       setInnerFilter(4);
     }
   };
+  ////////////////////////////////////////////////////////
+  //new
+  const applyFilters = () => {
+    console.log(statusFilterInfo);
+    setShowFilter(false);
+    const shipmentDataFilteredByStatus: Shipment[] = applyFilterByStatus();
+    const shipmentDataFilteredByShipAndRecp: Shipment[] =
+      applyFilterByShipAndRecp();
 
+    console.log(shipmentDataFilteredByShipAndRecp);
+    setRows(shipmentDataFilteredByStatus);
+  };
+
+  //apply Shipment Status Filters
+  const applyFilterByStatus = () => {
+    let filteredData: Shipment[] = [];
+    Object.keys(statusFilterInfo).forEach((key) => {
+      const item = statusFilterInfo[key];
+      if (item.checkedStatus === true) {
+        // Perform desired actions with the checked item
+        console.log(key, item);
+        const tempData = filterStatusData(
+          originalRows,
+          item.field,
+          item.sectionValue,
+          item.display
+        );
+        filteredData = filteredData.concat(tempData);
+        //add items to show in selected list
+        const newItem: SelectedFilterListInfo = {
+          display: item.display,
+          field: item.field,
+          filterType: 0,
+          sectionValue: undefined,
+          type: "",
+          filterVariable: "",
+          key: key,
+        };
+        const existingItem = selectedFilterListForUI.find(
+          (item) => item.key === key
+        );
+        if (!existingItem) {
+          selectedFilterListForUI.push(newItem);
+        }
+      }
+    });
+
+    // const tempArray = Object.entries(statusFilterInfo)
+    //   .filter(([key, value]) => value.checkedStatus)
+    //   .map(([key, value]) => value.display);
+    // selectedFilterListForUI = tempArray;
+
+    filteredData = filteredData.filter((value, index, self) => {
+      return self.indexOf(value) === index;
+    });
+    return filteredData;
+  };
+
+  //apply Shipment Status Filters
+  const applyFilterByShipAndRecp = () => {
+    return originalRows;
+  };
+  /////////////////////////////////////////////////////////////
   // type 0- apply, 1- clear
   const applyFilter = () => {
     //if any selected filter availableshow reset buttom
-    //need to check
     setAnyFilter(true);
 
     //close filter box
@@ -1008,18 +1112,17 @@ export default function HomePage() {
     setSelectedList([]);
     setCardSelected("");
 
-    let tempArray = [];
     let filteredShipmentData_level: Shipment[] = [];
     let filteredNormalData_level: Shipment[] = [];
 
     //logic for status filter
-    console.log("selectedListKeyStatus");
-    console.log(selectedListKeyStatus);
     selectedListKeyStatus = selectedListKeyStatus.filter(
       (value, index, self) => {
         return self.indexOf(value) === index;
       }
     );
+    console.log("selectedFilterListFor_selected");
+    console.log(selectedFilterListFor_selected);
     selectedFilterListForUI = selectedFilterListFor_selected;
 
     if (selectedFilterListForUI.length == 0)
@@ -1050,25 +1153,23 @@ export default function HomePage() {
 
       const groupedFiltersArray = Object.values(groupedFilters);
 
-      console.log("AAAAAAABB" + JSON.stringify(groupedFiltersArray));
-
       // need type checking
 
       groupedFiltersArray.forEach((item) => {
         if (item.filterType === 1) {
-          const { field, value } = StatusFilterInfo[item.field];
+          const { field, sectionValue } = statusFilterInfo[item.field];
           if (field) {
             const filteredData = filterStatusData(
               originalRows,
               field,
-              value,
+              sectionValue,
               item.field
             );
             filteredShipmentData_level =
               filteredShipmentData_level.concat(filteredData);
           }
         } else {
-          const { field, sectionValue, type } = sectionShipperInfo[item.field];
+          const { field, sectionValue, type } = normalFilterInfo[item.field];
 
           if (field && sectionValue.length > 0) {
             if (filteredNormalData_level.length == 0) {
@@ -1116,7 +1217,7 @@ export default function HomePage() {
     //   const distinctValues = [...new Set(selectedListKeyShipper)];
 
     //   distinctValues.forEach((section) => {
-    //     const { field, sectionValue, type } = sectionShipperInfo[section];
+    //     const { field, sectionValue, type } = normalFilterInfo[section];
 
     //     if (field && sectionValue.length > 0) {
     //       if (filteredNormalData_level.length == 0) {
@@ -1152,20 +1253,19 @@ export default function HomePage() {
 
     //to show selected filters
     setSelectedList(uniqueArray);
-
     //need to check
     //getting duplicate values
     const uniqueArray_table = intersectionArray.filter((value, index, self) => {
       return self.indexOf(value) === index;
     });
 
-    if (uniqueArray_table.length == 0) {
-      //show records in table
-      setRows(originalRows);
-    } else {
-      //show records in table
-      setRows(uniqueArray_table);
-    }
+    // if (uniqueArray_table.length == 0) {
+    //   //show records in table
+    //   setRows(originalRows);
+    // } else {
+    //show records in table
+    setRows(uniqueArray_table);
+    // }
   };
 
   //generic function to handle status filters
@@ -1193,9 +1293,7 @@ export default function HomePage() {
   ) {
     const newArray = filterValue.map(
       (variable) =>
-        showFilterNameInUI(sectionShipperInfo, filterProperty) +
-        " : " +
-        variable
+        showFilterNameInUI(normalFilterInfo, filterProperty) + " : " + variable
     );
 
     selectedListArray = selectedListArray.concat(newArray);
@@ -1225,7 +1323,7 @@ export default function HomePage() {
     return filteredData;
   }
 
-  useEffect(() => {}, [selectedList]);
+  // useEffect(() => {}, [selectedList]);
 
   // ------------------------------------------- Sorting --------------------------------------------//
 
@@ -1744,112 +1842,30 @@ export default function HomePage() {
                     <div className="filter-section__body-level-2 shipper___info__tab">
                       {innerFilter == 1 ? (
                         <ul className="filter-section-list">
-                          <li
-                            className="filter-section-item"
-                            onClick={() => clickedItem("delayed")}
-                          >
-                            {/* add selected class if its selected */}
-                            <button
-                              className={
-                                selectedDiv == "delayed"
-                                  ? "filter-section-btn selected"
-                                  : "filter-section-btn"
-                              }
+                          {Object.keys(statusFilterInfo).map((key) => (
+                            <li
+                              className="filter-section-item"
+                              onClick={() => clickedItem(key)}
+                              key={key}
                             >
-                              <Checkbox
-                                label="Delayed"
-                                checked={shipmentStatus.chk_delayed}
-                                onChange={handleCheckboxChange}
-                                name="chk_delayed"
-                                count={delayedCount}
-                                value="delayed"
-                              />
-                            </button>
-                          </li>
-                          <li
-                            className="filter-section-item"
-                            onClick={() => clickedItem("delivered")}
-                          >
-                            <button
-                              className={
-                                selectedDiv == "delivered"
-                                  ? "filter-section-btn selected"
-                                  : "filter-section-btn"
-                              }
-                            >
-                              <Checkbox
-                                label="Delivered"
-                                checked={shipmentStatus.chk_delivered}
-                                onChange={handleCheckboxChange}
-                                name="chk_delivered"
-                                count={deliveredCount}
-                                value="delivered"
-                              />
-                            </button>
-                          </li>
-                          <li
-                            className="filter-section-item"
-                            onClick={() => clickedItem("exception")}
-                          >
-                            <button
-                              className={
-                                selectedDiv == "exception"
-                                  ? "filter-section-btn selected"
-                                  : "filter-section-btn"
-                              }
-                            >
-                              <Checkbox
-                                label="Exception"
-                                checked={shipmentStatus.chk_exception}
-                                onChange={handleCheckboxChange}
-                                name="chk_exception"
-                                count={exceptionCount}
-                                value="exception"
-                              />
-                            </button>
-                          </li>
-                          <li
-                            className="filter-section-item"
-                            onClick={() => clickedItem("inTransit")}
-                          >
-                            <button
-                              className={
-                                selectedDiv == "inTransit"
-                                  ? "filter-section-btn selected"
-                                  : "filter-section-btn"
-                              }
-                            >
-                              <Checkbox
-                                label="In Transit"
-                                checked={shipmentStatus.chk_inTranist}
-                                onChange={handleCheckboxChange}
-                                name="chk_inTranist"
-                                count={inTransitCount}
-                                value="inTransit"
-                              />
-                            </button>
-                          </li>
-                          <li
-                            className="filter-section-item"
-                            onClick={() => clickedItem("label")}
-                          >
-                            <button
-                              className={
-                                selectedDiv == "label"
-                                  ? "filter-section-btn selected"
-                                  : "filter-section-btn"
-                              }
-                            >
-                              <Checkbox
-                                label="Label Created"
-                                checked={shipmentStatus.chk_labelCreated}
-                                onChange={handleCheckboxChange}
-                                name="chk_labelCreated"
-                                count={labelCreatedCount}
-                                value="label"
-                              />
-                            </button>
-                          </li>
+                              <button
+                                className={
+                                  selectedDiv === key
+                                    ? "filter-section-btn selected"
+                                    : "filter-section-btn"
+                                }
+                              >
+                                <Checkbox
+                                  label={statusFilterInfo[key].display}
+                                  checked={statusFilterInfo[key].checkedStatus}
+                                  onChange={statusFilterCheckboxChange}
+                                  name={key}
+                                  count={statusFilterInfo[key].count}
+                                  value={key}
+                                />
+                              </button>
+                            </li>
+                          ))}
                         </ul>
                       ) : (
                         ""
@@ -1909,7 +1925,7 @@ export default function HomePage() {
                                     checked={filterConditions.filter_layer1_accountNo.includes(
                                       item.name
                                     )}
-                                    onChange={valueBasedFilter}
+                                    onChange={normalFilterCheckboxChange}
                                     name="accountNo"
                                     count={item.count}
                                     value={item.name}
@@ -1937,7 +1953,7 @@ export default function HomePage() {
                                     checked={filterConditions.filter_layer1_deliveredDate.includes(
                                       item.name
                                     )}
-                                    onChange={valueBasedFilter}
+                                    onChange={normalFilterCheckboxChange}
                                     name="deliveredDate"
                                     count={item.count}
                                     value={item.name}
@@ -1965,7 +1981,7 @@ export default function HomePage() {
                                     checked={filterConditions.filter_layer1_attemptDelivery.includes(
                                       item.name
                                     )}
-                                    onChange={valueBasedFilter}
+                                    onChange={normalFilterCheckboxChange}
                                     name="numberOfAttempt"
                                     count={item.count}
                                     value={item.name}
@@ -1993,7 +2009,7 @@ export default function HomePage() {
                                     checked={filterConditions.filter_layer1_packageKg.includes(
                                       item.name
                                     )}
-                                    onChange={valueBasedFilter}
+                                    onChange={normalFilterCheckboxChange}
                                     name="packageKg"
                                     count={item.count}
                                     value={item.name}
@@ -2021,7 +2037,7 @@ export default function HomePage() {
                                     checked={filterConditions.filter_layer1_packageLbs.includes(
                                       item.name
                                     )}
-                                    onChange={valueBasedFilter}
+                                    onChange={normalFilterCheckboxChange}
                                     name="packageLbs"
                                     count={item.count}
                                     value={item.name}
@@ -2049,7 +2065,7 @@ export default function HomePage() {
                                     checked={filterConditions.filter_layer1_purchaseOrder.includes(
                                       item.name
                                     )}
-                                    onChange={valueBasedFilter}
+                                    onChange={normalFilterCheckboxChange}
                                     name="purchaseOrderNumber"
                                     count={item.count}
                                     value={item.name}
@@ -2077,7 +2093,7 @@ export default function HomePage() {
                                     checked={filterConditions.filter_layer1_reference.includes(
                                       item.name
                                     )}
-                                    onChange={valueBasedFilter}
+                                    onChange={normalFilterCheckboxChange}
                                     name="reference"
                                     count={item.count}
                                     value={item.name}
@@ -2105,7 +2121,7 @@ export default function HomePage() {
                                     checked={filterConditions.filter_layer1_scheduledDeliveryDate.includes(
                                       item.name
                                     )}
-                                    onChange={valueBasedFilter}
+                                    onChange={normalFilterCheckboxChange}
                                     name="scheduledDeliveryDate"
                                     count={item.count}
                                     value={item.name}
@@ -2133,7 +2149,7 @@ export default function HomePage() {
                                     checked={filterConditions.filter_layer1_shipDate.includes(
                                       item.name
                                     )}
-                                    onChange={valueBasedFilter}
+                                    onChange={normalFilterCheckboxChange}
                                     name="shipDate"
                                     count={item.count}
                                     value={item.name}
@@ -2161,7 +2177,7 @@ export default function HomePage() {
                                     checked={filterConditions.filter_layer1_recipientContactName.includes(
                                       item.name
                                     )}
-                                    onChange={valueBasedFilter}
+                                    onChange={normalFilterCheckboxChange}
                                     name="recipientContactName"
                                     count={item.count}
                                     value={item.name}
@@ -2189,7 +2205,7 @@ export default function HomePage() {
                                     checked={filterConditions.filter_layer1_recipientCompany.includes(
                                       item.name
                                     )}
-                                    onChange={valueBasedFilter}
+                                    onChange={normalFilterCheckboxChange}
                                     name="recipientCompany"
                                     count={item.count}
                                     value={item.name}
@@ -2217,7 +2233,7 @@ export default function HomePage() {
                                     checked={filterConditions.filter_layer1_recipientAddress.includes(
                                       item.name
                                     )}
-                                    onChange={valueBasedFilter}
+                                    onChange={normalFilterCheckboxChange}
                                     name="recipientAddress"
                                     count={item.count}
                                     value={item.name}
@@ -2245,7 +2261,7 @@ export default function HomePage() {
                                     checked={filterConditions.filter_layer1_recipientCity.includes(
                                       item.name
                                     )}
-                                    onChange={valueBasedFilter}
+                                    onChange={normalFilterCheckboxChange}
                                     name="recipientCity"
                                     count={item.count}
                                     value={item.name}
@@ -2273,7 +2289,7 @@ export default function HomePage() {
                                     checked={filterConditions.filter_layer1_recipientState.includes(
                                       item.name
                                     )}
-                                    onChange={valueBasedFilter}
+                                    onChange={normalFilterCheckboxChange}
                                     name="recipientState"
                                     count={item.count}
                                     value={item.name}
@@ -2301,7 +2317,7 @@ export default function HomePage() {
                                     checked={filterConditions.filter_layer1_recipientCountry.includes(
                                       item.name
                                     )}
-                                    onChange={valueBasedFilter}
+                                    onChange={normalFilterCheckboxChange}
                                     name="recipientCountry"
                                     count={item.count}
                                     value={item.name}
@@ -2329,7 +2345,7 @@ export default function HomePage() {
                                     checked={filterConditions.filter_layer1_recipientPostal.includes(
                                       item.name
                                     )}
-                                    onChange={valueBasedFilter}
+                                    onChange={normalFilterCheckboxChange}
                                     name="recipientPostal"
                                     count={item.count}
                                     value={item.name}
@@ -2357,7 +2373,7 @@ export default function HomePage() {
                     </button>
                     <button
                       className="btn btn-ship--primary"
-                      onClick={() => applyFilter()}
+                      onClick={() => applyFilters()}
                     >
                       APPLY
                     </button>

@@ -4,7 +4,10 @@ interface NormalFilterInfo {
     sectionValue: any;
     type: string;
     filterVariable: string;
-    display:string;
+    display: string;
+    filterType: string;
+    checkedStatus: boolean;
+    count: number;
   };
 }
 
