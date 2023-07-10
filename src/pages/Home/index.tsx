@@ -45,10 +45,10 @@ import NormalFilterInfo from "../../interfaces/normalFilterInfo";
 let originalRows: Shipment[] = [];
 let originalRows_backup: Shipment[] = [];
 const EDUCONNECT_URL = `https://shipmenttrackingapi-qa.signsharecloud.com/api`;
-  // For showing the selected List
-  let selectedListArray: any[] = [];
-  let selectedListKeyStatus: any[] = [];
-  let selectedListKeyShipper: any[] = [];
+// For showing the selected List
+let selectedListArray: any[] = [];
+let selectedListKeyStatus: any[] = [];
+let selectedListKeyShipper: any[] = [];
 let sectionShipperInfo: NormalFilterInfo = {};
 export default function HomePage() {
   const [rows, setRows] = useState<Shipment[]>([]);
@@ -104,11 +104,11 @@ export default function HomePage() {
   //ag change
 
   const StatusFilterInfo: StatusFilterInfo = {
-    delayed: { field: "isDelayed", value: true , display:"Delayed"},
-    delivered: { field: "isDelivered", value: true , display:"Delivered"},
-    exception: { field: "isException", value: true , display:"Exception"},
-    inTransit: { field: "status", value: "In transit" , display:"In transit"},
-    label: { field: "status", value: "Initiated" , display:"Label"},
+    delayed: { field: "isDelayed", value: true, display: "Delayed" },
+    delivered: { field: "isDelivered", value: true, display: "Delivered" },
+    exception: { field: "isException", value: true, display: "Exception" },
+    inTransit: { field: "status", value: "In transit", display: "In transit" },
+    label: { field: "status", value: "Initiated", display: "Label" },
   };
   //ag changes
   sectionShipperInfo = {
@@ -117,113 +117,112 @@ export default function HomePage() {
       sectionValue: filterConditions.filter_layer1_accountNo,
       type: "string",
       filterVariable: "filter_layer1_accountNo",
-      display:"Account No"
+      display: "Account No",
     },
     deliveredDate: {
       field: "deliveredTime",
       sectionValue: filterConditions.filter_layer1_deliveredDate,
       type: "date",
       filterVariable: "filter_layer1_deliveredDate",
-      display:"Delivered Date"
+      display: "Delivered Date",
     },
     numberOfAttempt: {
       field: "numberOfAttemptedDeliveries",
       sectionValue: filterConditions.filter_layer1_attemptDelivery,
       type: "number",
       filterVariable: "filter_layer1_attemptDelivery",
-      display:"No of Attempt"
+      display: "No of Attempt",
     },
     packageKg: {
       field: "packageWeightKg",
       sectionValue: filterConditions.filter_layer1_packageKg,
       type: "string",
       filterVariable: "filter_layer1_packageKg",
-      display:"PKG(KG)"
-
+      display: "PKG(KG)",
     },
     packageLbs: {
       field: "packageWeightLbs",
       sectionValue: filterConditions.filter_layer1_packageLbs,
       type: "string",
       filterVariable: "filter_layer1_packageLbs",
-      display:"PKG(Lbs)"
+      display: "PKG(Lbs)",
     },
     purchaseOrderNumber: {
       field: "purchaseOrderNumber",
       sectionValue: filterConditions.filter_layer1_purchaseOrder,
       type: "string",
       filterVariable: "filter_layer1_purchaseOrder",
-      display:"PO No"
+      display: "PO No",
     },
     reference: {
       field: "reference",
       sectionValue: filterConditions.filter_layer1_reference,
       type: "string",
       filterVariable: "filter_layer1_reference",
-      display:"Reference"
+      display: "Reference",
     },
     scheduledDeliveryDate: {
       field: "scheduledDeliveryDate",
       sectionValue: filterConditions.filter_layer1_scheduledDeliveryDate,
       type: "date",
       filterVariable: "filter_layer1_scheduledDeliveryDate",
-      display:"Sch. Delivery Date"
+      display: "Sch. Delivery Date",
     },
     shipDate: {
       field: "shipDate",
       sectionValue: filterConditions.filter_layer1_shipDate,
       type: "date",
       filterVariable: "filter_layer1_shipDate",
-      display:"Ship Date"
+      display: "Ship Date",
     },
     recipientContactName: {
       field: "recipientContactName",
       sectionValue: filterConditions.filter_layer1_recipientContactName,
       type: "string",
       filterVariable: "filter_layer1_recipientContactName",
-      display:"Recipient Name"
+      display: "Recipient Name",
     },
     recipientCompany: {
       field: "recipientCompany",
       sectionValue: filterConditions.filter_layer1_recipientCompany,
       type: "string",
       filterVariable: "filter_layer1_recipientCompany",
-      display:"Recipient Company"
+      display: "Recipient Company",
     },
     recipientAddress: {
       field: "recipientAddress",
       sectionValue: filterConditions.filter_layer1_recipientAddress,
       type: "string",
       filterVariable: "filter_layer1_recipientAddress",
-      display:"Recipient Address"
+      display: "Recipient Address",
     },
     recipientCity: {
       field: "recipientCity",
       sectionValue: filterConditions.filter_layer1_recipientCity,
       type: "string",
       filterVariable: "filter_layer1_recipientCity",
-      display:"Recipient City"
+      display: "Recipient City",
     },
     recipientState: {
       field: "recipientState",
       sectionValue: filterConditions.filter_layer1_recipientState,
       type: "string",
       filterVariable: "filter_layer1_recipientState",
-      display:"Recipient State"
+      display: "Recipient State",
     },
     recipientCountry: {
       field: "recipientCountry",
       sectionValue: filterConditions.filter_layer1_recipientCountry,
       type: "string",
       filterVariable: "filter_layer1_recipientCountry",
-      display:"Recipient Country"
+      display: "Recipient Country",
     },
     recipientPostal: {
       field: "recipientPostal",
       sectionValue: filterConditions.filter_layer1_recipientPostal,
       type: "string",
       filterVariable: "filter_layer1_recipientPostal",
-      display:"Recipient Postal"
+      display: "Recipient Postal",
     },
   };
 
@@ -238,7 +237,6 @@ export default function HomePage() {
   const [userinfo, setUserInfo] = useState<any[]>([]);
   const [filter_model, set_filter_model] = useState<any[]>([]);
   const [firstlevelClick, set_firstlevelClick] = useState(true);
-
 
   const handleLogout = () => {
     navigate("/login"); // Use the navigate function to navigate to the login page
@@ -270,7 +268,10 @@ export default function HomePage() {
   //ag change;
   const getIntersection = (arr1: any[], arr2: any[]) => {
     return arr1.filter((item) =>
-      arr2.some((otherItem) => item.trackingNumber === otherItem.trackingNumber)
+      arr2.some(
+        (otherItem) =>
+          item.trackingNumberUniqueId === otherItem.trackingNumberUniqueId
+      )
     );
   };
 
@@ -306,14 +307,15 @@ export default function HomePage() {
       }));
     }
     let filterArr = userinfo.filter((e) => e !== value);
-  
-    setUserInfo(filterArr);
 
+    setUserInfo(filterArr);
   };
 
- 
   useEffect(() => {}, [setShipmentStatus]);
-  useEffect(() => {console.log("FILTER LOG 3"+userinfo)}, [userinfo]);
+  useEffect(() => {
+    console.log("FILTER LOG 3" + userinfo);
+  }, [userinfo]);
+
   //status field changes
   const handleCheckboxChange = (event: {
     target: { name: any; checked: any; value: any };
@@ -324,17 +326,17 @@ export default function HomePage() {
 
     if (checked) {
       tempArr = [...userinfo, value];
-     // selectedListKeyStatus = selectedListKeyStatus.concat(value);
+      // selectedListKeyStatus = selectedListKeyStatus.concat(value);
     } else {
       tempArr = userinfo.filter((e) => e !== value);
-     // selectedListKeyStatus = selectedListKeyStatus.concat(value);
+      // selectedListKeyStatus = selectedListKeyStatus.concat(value);
     }
     selectedListKeyStatus = tempArr;
-    console.log("AAAA"+JSON.stringify(selectedListKeyStatus))
+    console.log("AAAA" + JSON.stringify(selectedListKeyStatus));
     setUserInfo(tempArr);
   };
-  //useEffect(() => {}, [shipmentStatus]);
 
+  //useEffect(() => {}, [shipmentStatus]);
 
   const selectSearchType = () => {
     setDropDown(!dropDown);
@@ -359,106 +361,112 @@ export default function HomePage() {
     resetFilters();
   };
 
-
-// -----------------------------------------------------//
+  // -----------------------------------------------------//
   // Common functions need to move as components
-  const getInputKeyByValueForStatusFilter = (input: string): string | undefined => {
-  for (const key in StatusFilterInfo) {
-    if (StatusFilterInfo.hasOwnProperty(key)) {
-      if (StatusFilterInfo[key].display === input) {
-        return key;
+  const getInputKeyByValueForStatusFilter = (
+    input: string
+  ): string | undefined => {
+    for (const key in StatusFilterInfo) {
+      if (StatusFilterInfo.hasOwnProperty(key)) {
+        if (StatusFilterInfo[key].display === input) {
+          return key;
+        }
       }
     }
-  }
-  return undefined;
-};
+    return undefined;
+  };
 
-const getSectionKeyByDisplay = (displayValue: string): string | undefined => {
-  const foundSectionKey = Object.keys(sectionShipperInfo).find((sectionKey) =>
-    displayValue.toLowerCase().includes(sectionShipperInfo[sectionKey].display.toLowerCase())
-  );
-  return foundSectionKey;
-};
+  const getSectionKeyByDisplay = (displayValue: string): string | undefined => {
+    const foundSectionKey = Object.keys(sectionShipperInfo).find((sectionKey) =>
+      displayValue
+        .toLowerCase()
+        .includes(sectionShipperInfo[sectionKey].display.toLowerCase())
+    );
+    return foundSectionKey;
+  };
 
-// -----------------------------------------------------//
-const resetAllFilters =() =>{
-  setStoreId("");
-  setSearchValue("");
-  setCardSelected("");
+  // -----------------------------------------------------//
+  const resetAllFilters = () => {
+    setStoreId("");
+    setSearchValue("");
+    setCardSelected("");
 
-  filterSection = [];
-  setUserInfo([]);
-  resetShipmentStatus();
+    filterSection = [];
+    setUserInfo([]);
+    resetShipmentStatus();
 
-  resetShipmentStatus();
-  selectedListArray =[]
-  selectedListKeyShipper=[]
-  selectedListKeyStatus =[]
-  setSelectedList([]);
+    resetShipmentStatus();
+    selectedListArray = [];
+    selectedListKeyShipper = [];
+    selectedListKeyStatus = [];
+    setSelectedList([]);
 
-  setFilterConditions((prevState) => ({
-    ...prevState,
-    filter_layer1_accountNo: [],
-    filter_layer1_deliveredDate: [],
-    filter_layer1_attemptDelivery: [],
-    filter_layer1_packageKg: [],
-    filter_layer1_packageLbs: [],
-    filter_layer1_purchaseOrder: [],
-    filter_layer1_reference: [],
-    filter_layer1_scheduledDeliveryDate: [],
-    filter_layer1_shipDate: [],
-    filter_layer1_recipientContactName: [],
-    filter_layer1_recipientCompany: [],
-    filter_layer1_recipientAddress: [],
-    filter_layer1_recipientCity: [],
-    filter_layer1_recipientState: [],
-    filter_layer1_recipientCountry: [],
-    filter_layer1_recipientPostal: [],
-  }));
+    setFilterConditions((prevState) => ({
+      ...prevState,
+      filter_layer1_accountNo: [],
+      filter_layer1_deliveredDate: [],
+      filter_layer1_attemptDelivery: [],
+      filter_layer1_packageKg: [],
+      filter_layer1_packageLbs: [],
+      filter_layer1_purchaseOrder: [],
+      filter_layer1_reference: [],
+      filter_layer1_scheduledDeliveryDate: [],
+      filter_layer1_shipDate: [],
+      filter_layer1_recipientContactName: [],
+      filter_layer1_recipientCompany: [],
+      filter_layer1_recipientAddress: [],
+      filter_layer1_recipientCity: [],
+      filter_layer1_recipientState: [],
+      filter_layer1_recipientCountry: [],
+      filter_layer1_recipientPostal: [],
+    }));
 
-  originalRows = originalRows_backup;
-  setRows(originalRows);
-}
+    originalRows = originalRows_backup;
+    setRows(originalRows);
+  };
 
-// Clear filter as each item on the selected List
+  // Clear filter as each item on the selected List
   const clearFilter = (value: string) => {
+    // let filterArr
+    // if (
+    //   Object.values(StatusFilterInfo).some((status) => status.display === value)
+    // ) {
+    //   let filterArr = selectedList.filter((e) => e !== value);
+    //   let filterArr1 = userinfo.filter(
+    //     (e) => e !== getInputKeyByValueForStatusFilter(value)
+    //   );
 
-    
-     // let filterArr
-     if(Object.values(StatusFilterInfo).some(
-      (status) => status.display === value
-    )) {
-    
-    
-      let filterArr = selectedList.filter((e) => e !== value);
-      let filterArr1 = userinfo.filter((e) => e !== getInputKeyByValueForStatusFilter(value));
- 
-      setUserInfo(filterArr1);
-    
-      filterSection = filterArr;
-    }
+    //   setUserInfo(filterArr1);
+
+    //   filterSection = filterArr;
+    // }
+    debugger;
+
+    //remove from selected array
     let displayName = value.split(":")[0];
-   
-    if(selectedListArray.includes(value)) {
+    console.log("selectedListArray");
+    console.log(selectedListArray);
+    if (selectedListArray.includes(value)) {
       selectedListArray = selectedListArray.filter((e) => e !== value);
-   
-      if(!selectedListArray.some((item) =>item.includes(displayName.trim()))) 
-      {
-    
-        selectedListKeyShipper = selectedListKeyShipper.filter((e) => e !== getSectionKeyByDisplay(displayName));
 
+      if (
+        !selectedListArray.some((item) => item.includes(displayName.trim()))
+      ) {
+        selectedListKeyShipper = selectedListKeyShipper.filter(
+          (e) => e !== getSectionKeyByDisplay(displayName)
+        );
       }
     }
-  
+
     clearShipmentInfoAndRecipientDataByValue(value);
-  
-    if(selectedListKeyStatus.includes(value)) {
+
+    if (selectedListKeyStatus.includes(value)) {
       selectedListKeyStatus = selectedListKeyStatus.filter((e) => e !== value);
       selectedListArray = selectedListArray.filter((e) => e !== value);
     }
     clearShipmentStatusByValue(value.toLowerCase());
 
-    applyFilter(1);
+    applyFilter();
   };
   useEffect(() => {}, [shipmentStatus]);
   useEffect(() => {}, [userinfo]);
@@ -706,7 +714,6 @@ const resetAllFilters =() =>{
 
       set_li_accountNumber(accountNumberArr);
     } else if (value == "deliveredDate") {
-  
       const deliveredDateArr = _(originalRows)
         .groupBy((item) => {
           const formattedDate = moment(item.deliveredTime).format("MM/DD/YYYY");
@@ -871,6 +878,7 @@ const resetAllFilters =() =>{
     }
   };
 
+  //check normal filter
   const valueBasedFilter = (event: {
     target: { name: any; checked: any; value: any };
   }) => {
@@ -880,7 +888,7 @@ const resetAllFilters =() =>{
     set_filter_model(selectedOptionTemp);
 
     selectedListKeyShipper = selectedListKeyShipper.concat(name);
-    console.log("ABBBB---"+JSON.stringify(selectedListKeyShipper))
+    console.log("ABBBB---" + JSON.stringify(selectedListKeyShipper));
     const { filterVariable } = sectionShipperInfo[name];
 
     if (checked) {
@@ -896,28 +904,26 @@ const resetAllFilters =() =>{
         ),
       }));
     }
- 
-    
   };
- 
+
   const clearShipmentInfoAndRecipientDataByValue = (value: string) => {
-    let nameKey = getSectionKeyByDisplay(value.split(":")[0]);
-    let keyValue: string = value.split(":")[1].trim();
+    if (value.includes(":")) {
+      let nameKey = getSectionKeyByDisplay(value.split(":")[0]);
+      let keyValue: string = value.split(":")[1].trim();
 
-    
-    if (nameKey && sectionShipperInfo[nameKey]) {
-    const { filterVariable } = sectionShipperInfo[nameKey];
+      if (nameKey && sectionShipperInfo[nameKey]) {
+        const { filterVariable } = sectionShipperInfo[nameKey];
 
-    setFilterConditions((prevState: FilterConditions) => ({
-      ...prevState,
-      [filterVariable]: prevState[filterVariable as keyof FilterConditions].filter(
-        (element: string) => element !== keyValue
-      ),
-    }));
-   }
-   
+        setFilterConditions((prevState: FilterConditions) => ({
+          ...prevState,
+          [filterVariable]: prevState[
+            filterVariable as keyof FilterConditions
+          ].filter((element: string) => element !== keyValue),
+        }));
+      }
+    }
   };
-  
+
   useEffect(() => {
     console.log("XXXX" + JSON.stringify(filterConditions));
   }, [filterConditions]);
@@ -947,83 +953,95 @@ const resetAllFilters =() =>{
     }
   };
 
-
-
   // type 0- apply, 1- clear
-  const applyFilter = (type: number) => {
-    console.log(type);
+  const applyFilter = () => {
+    //if any selected filter availableshow reset buttom
+    //need to check
     setAnyFilter(true);
+
+    //close filter box
     setShowFilter(false);
 
-    if (searchValue != "") {
-      if (searchType == "Store ID") {
-        setRows(originalRows);
-      }
-    } else {
+    //check the store id availablity
+    if (searchValue == "" || searchType != "Store ID") {
       setStoreId("");
       setSearchValue("");
       originalRows = originalRows_backup;
-      setRows(originalRows);
+      // setRows(originalRows);
     }
 
+    //need to check
     setSelectedList([]);
     setCardSelected("");
 
-    //clearSearchValue();
-
     let tempArray = [];
-    let filteredData_level1: Shipment[] = [];
-    let filteredData_level2: Shipment[] = [];
-    console.log("FILTER LOGG 1"+filterSection)
-    console.log("FILTER LOGG 2"+userinfo)
-    if (filterSection.length > 0) {
-      tempArray = filterSection;
-    } else {
-      tempArray = userinfo;
-      filterSection = userinfo;
-    }
-    //need to check
-    console.log("AAAAA"+selectedListKeyStatus);
-    
-    selectedListKeyStatus = selectedListKeyStatus.filter((value, index, self) => {
-      return self.indexOf(value) === index;
-    });
+    let filteredShipmentData_level: Shipment[] = [];
+    let filteredNormalData_level: Shipment[] = [];
 
-    if (selectedListKeyStatus.length == 0) filteredData_level1 = originalRows;
+    // console.log("FILTER LOGG 1" + filterSection);
+    // console.log("FILTER LOGG 2" + userinfo);
+    // if (filterSection.length > 0) {
+    //   tempArray = filterSection;
+    // } else {
+    //   tempArray = userinfo;
+    //   filterSection = userinfo;
+    // }
+    //need to check
+    // console.log("AAAAA" + selectedListKeyStatus);
+
+    //logic for status filter
+    console.log("selectedListKeyStatus");
+    console.log(selectedListKeyStatus);
+    selectedListKeyStatus = selectedListKeyStatus.filter(
+      (value, index, self) => {
+        return self.indexOf(value) === index;
+      }
+    );
+
+    if (selectedListKeyStatus.length == 0)
+      filteredShipmentData_level = originalRows;
     else {
       selectedListKeyStatus.forEach((section) => {
         const { field, value } = StatusFilterInfo[section];
         if (field) {
-          const filteredData = filterStatusData(originalRows, field, value, section);
-          filteredData_level1 = filteredData_level1.concat(filteredData);
+          const filteredData = filterStatusData(
+            originalRows,
+            field,
+            value,
+            section
+          );
+          filteredShipmentData_level =
+            filteredShipmentData_level.concat(filteredData);
         }
       });
     }
 
     //ag changes
-    //check filter_model
-    selectedListKeyShipper = selectedListKeyShipper.filter((value, index, self) => {
-      return self.indexOf(value) === index;
-    });
-    if (selectedListKeyShipper.length == 0) filteredData_level2 = originalRows;
+    //logic for Normal filter
+    selectedListKeyShipper = selectedListKeyShipper.filter(
+      (value, index, self) => {
+        return self.indexOf(value) === index;
+      }
+    );
+    if (selectedListKeyShipper.length == 0)
+      filteredNormalData_level = originalRows;
     else {
-    
       const distinctValues = [...new Set(selectedListKeyShipper)];
- 
+
       distinctValues.forEach((section) => {
         const { field, sectionValue, type } = sectionShipperInfo[section];
-      
+
         if (field && sectionValue.length > 0) {
-          if (filteredData_level2.length == 0) {
-            filteredData_level2 = filterShipperInfoData(
+          if (filteredNormalData_level.length == 0) {
+            filteredNormalData_level = filterShipperInfoData(
               originalRows,
               field,
               sectionValue,
               type
             );
           } else {
-            filteredData_level2 = filterShipperInfoData(
-              filteredData_level2,
+            filteredNormalData_level = filterShipperInfoData(
+              filteredNormalData_level,
               field,
               sectionValue,
               type
@@ -1035,10 +1053,12 @@ const resetAllFilters =() =>{
 
     //get combined records
     const intersectionArray = getIntersection(
-      filteredData_level1,
-      filteredData_level2
+      filteredShipmentData_level,
+      filteredNormalData_level
     );
 
+    //logic for selected filters
+    //check duplicate
     const uniqueArray = selectedListArray.filter((value, index, self) => {
       return self.indexOf(value) === index;
     });
@@ -1046,12 +1066,19 @@ const resetAllFilters =() =>{
     //to show selected filters
     setSelectedList(uniqueArray);
 
+    //need to check
+    //getting duplicate values
     const uniqueArray_table = intersectionArray.filter((value, index, self) => {
       return self.indexOf(value) === index;
     });
 
-    //show records in table
-    setRows(uniqueArray_table);
+    if (uniqueArray_table.length == 0) {
+      //show records in table
+      setRows(originalRows);
+    } else {
+      //show records in table
+      setRows(uniqueArray_table);
+    }
   };
 
   //generic function to handle status filters
@@ -1059,10 +1086,9 @@ const resetAllFilters =() =>{
     originalRows: Shipment[],
     filterProperty: string,
     filterValue: any,
-    filterSection :string
+    filterSection: string
   ) {
-  
-   // selectedListKeyStatus = selectedListKeyStatus.concat(filterProperty)
+    // selectedListKeyStatus = selectedListKeyStatus.concat(filterProperty)
     selectedListArray = selectedListArray.concat(filterSection);
     return originalRows.filter((item: any) => {
       return Object.keys(item).some((key) => {
@@ -1078,46 +1104,39 @@ const resetAllFilters =() =>{
     filterValue: any[],
     type: string
   ) {
-
-    
     const newArray = filterValue.map(
-      (variable) => showFilterNameInUI(sectionShipperInfo  , filterProperty) + " : " + variable
+      (variable) =>
+        showFilterNameInUI(sectionShipperInfo, filterProperty) +
+        " : " +
+        variable
     );
 
     selectedListArray = selectedListArray.concat(newArray);
-  
+
     let filterArray: any[] = [];
     if (type == "number") {
       filterArray = filterValue.map((str) => Number(str));
     } else {
-    
-      filterArray = filterValue.map(
-        (str) => (str === "null" ? null : str)
-      );
+      filterArray = filterValue.map((str) => (str === "null" ? null : str));
     }
-    if(type == "date") {
+    if (type == "date") {
       var filteredData = originalRows.filter((item) =>
-      filterArray.includes(
-        moment(moment(item[filterProperty]).format("MM/DD/YYYY")).isValid()
-          ? moment(item[filterProperty]).format("MM/DD/YYYY")
-          : "00/00/0000"
-      )
-    );
-
+        filterArray.includes(
+          moment(moment(item[filterProperty]).format("MM/DD/YYYY")).isValid()
+            ? moment(item[filterProperty]).format("MM/DD/YYYY")
+            : "00/00/0000"
+        )
+      );
     } else {
       var filteredData = originalRows.filter(
         (item) => filterArray.includes(item[filterProperty])
         // filterArray.includes(item[filterProperty]) ||
         // (filterArray.includes(null) && item[filterProperty] === null)
       );
-      
-
     }
-   
-   
+
     return filteredData;
   }
-
 
   useEffect(() => {}, [selectedList]);
 
@@ -2251,7 +2270,7 @@ const resetAllFilters =() =>{
                     </button>
                     <button
                       className="btn btn-ship--primary"
-                      onClick={() => applyFilter(0)}
+                      onClick={() => applyFilter()}
                     >
                       APPLY
                     </button>
