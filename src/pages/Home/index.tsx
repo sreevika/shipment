@@ -275,6 +275,7 @@ export default function HomePage() {
     any[]
   >([]);
   const handleLogout = () => {
+    localStorage.setItem('Authorization','');
     navigate("/login"); // Use the navigate function to navigate to the login page
   };
   let originalRows1 = originalRows;
