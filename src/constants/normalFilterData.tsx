@@ -11,6 +11,7 @@ const initialNormalFilterInfo: NormalFilterInfo = {
     filterType: "shipInfo",
     checkedStatus: false,
     count: 0,
+    displayFilterTab : "Account Number"
   },
   deliveredDate: {
     field: "deliveredTime",
@@ -22,6 +23,7 @@ const initialNormalFilterInfo: NormalFilterInfo = {
     filterType: "shipInfo",
     checkedStatus: false,
     count: 0,
+    displayFilterTab: "Delivered Date"
   },
   numberOfAttempt: {
     field: "numberOfAttemptedDeliveries",
@@ -33,6 +35,7 @@ const initialNormalFilterInfo: NormalFilterInfo = {
     filterType: "shipInfo",
     checkedStatus: false,
     count: 0,
+    displayFilterTab: "Number Of Attempted Deliveries"
   },
   packageKg: {
     field: "packageWeightKg",
@@ -44,6 +47,7 @@ const initialNormalFilterInfo: NormalFilterInfo = {
     filterType: "shipInfo",
     checkedStatus: false,
     count: 0,
+    displayFilterTab: "Package Weight (Kg)"
   },
   packageLbs: {
     field: "packageWeightLbs",
@@ -55,6 +59,7 @@ const initialNormalFilterInfo: NormalFilterInfo = {
     filterType: "shipInfo",
     checkedStatus: false,
     count: 0,
+    displayFilterTab: "Package Weight (Lbs)"
   },
   purchaseOrderNumber: {
     field: "purchaseOrderNumber",
@@ -66,6 +71,7 @@ const initialNormalFilterInfo: NormalFilterInfo = {
     filterType: "shipInfo",
     checkedStatus: false,
     count: 0,
+    displayFilterTab: "Purchase Order Number"
   },
   reference: {
     field: "reference",
@@ -77,6 +83,7 @@ const initialNormalFilterInfo: NormalFilterInfo = {
     filterType: "shipInfo",
     checkedStatus: false,
     count: 0,
+    displayFilterTab: "Reference"
   },
   scheduledDeliveryDate: {
     field: "scheduledDeliveryDate",
@@ -88,6 +95,7 @@ const initialNormalFilterInfo: NormalFilterInfo = {
     filterType: "shipInfo",
     checkedStatus: false,
     count: 0,
+    displayFilterTab: "Scheduled Delivery Date"
   },
   shipDate: {
     field: "shipDate",
@@ -99,6 +107,7 @@ const initialNormalFilterInfo: NormalFilterInfo = {
     filterType: "shipInfo",
     checkedStatus: false,
     count: 0,
+    displayFilterTab: "Ship Date"
   },
   recipientContactName: {
     field: "recipientContactName",
@@ -110,6 +119,7 @@ const initialNormalFilterInfo: NormalFilterInfo = {
     filterType: "recpInfo",
     checkedStatus: false,
     count: 0,
+    displayFilterTab: "Recipient Contact Name"
   },
   recipientCompany: {
     field: "recipientCompany",
@@ -121,6 +131,7 @@ const initialNormalFilterInfo: NormalFilterInfo = {
     filterType: "recpInfo",
     checkedStatus: false,
     count: 0,
+    displayFilterTab: "Recipient Company"
   },
   recipientAddress: {
     field: "recipientAddress",
@@ -132,6 +143,7 @@ const initialNormalFilterInfo: NormalFilterInfo = {
     filterType: "recpInfo",
     checkedStatus: false,
     count: 0,
+    displayFilterTab: "Recipient Address"
   },
   recipientCity: {
     field: "recipientCity",
@@ -143,6 +155,7 @@ const initialNormalFilterInfo: NormalFilterInfo = {
     filterType: "recpInfo",
     checkedStatus: false,
     count: 0,
+    displayFilterTab: "Recipient City"
   },
   recipientState: {
     field: "recipientState",
@@ -154,6 +167,7 @@ const initialNormalFilterInfo: NormalFilterInfo = {
     filterType: "recpInfo",
     checkedStatus: false,
     count: 0,
+    displayFilterTab: "Recipient State"
   },
   recipientCountry: {
     field: "recipientCountry",
@@ -165,6 +179,7 @@ const initialNormalFilterInfo: NormalFilterInfo = {
     filterType: "recpInfo",
     checkedStatus: false,
     count: 0,
+    displayFilterTab: "Recipient Country"
   },
   recipientPostal: {
     field: "recipientPostal",
@@ -176,6 +191,7 @@ const initialNormalFilterInfo: NormalFilterInfo = {
     filterType: "recpInfo",
     checkedStatus: false,
     count: 0,
+    displayFilterTab: "Recipient Country"
   },
 };
 

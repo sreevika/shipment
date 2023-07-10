@@ -622,28 +622,7 @@ export default function HomePage() {
     )
   ).length;
 
-  let ShipmentInformationArr = [
-    { name: "Account Number", value: "accountNo" },
-    { name: "Delivered Date", value: "deliveredDate" },
-    { name: "Number Of Attempted Deliveries", value: "numberOfAttempt" },
-    { name: "Package Weight (Kg)", value: "packageKg" },
-    { name: "Package Weight (Lbs)", value: "packageLbs" },
-    { name: "Purchase Order Number", value: "purchaseOrderNumber" },
-    { name: "Reference", value: "reference" },
-    { name: "Scheduled Delivery Date", value: "scheduledDeliveryDate" },
-    { name: "Ship Date", value: "shipDate" },
-  ];
-
-  let RecipientInfomationArr = [
-    { name: "Recipient Contact Name", value: "recipientContactName" },
-    { name: "Recipient Company", value: "recipientCompany" },
-    { name: "Recipient Address", value: "recipientAddress" },
-    { name: "Recipient City", value: "recipientCity" },
-    { name: "Recipient State", value: "recipientState" },
-    { name: "Recipient Country", value: "recipientCountry" },
-    { name: "Recipient Postal", value: "recipientPostal" },
-  ];
-
+ 
   //Find date interval
   const toDate = new Date();
   const fromDate = new Date(toDate.getTime() - 14 * 24 * 60 * 60 * 1000);
@@ -765,20 +744,29 @@ export default function HomePage() {
   const [li_recipientPostal, set_li_recipientPostal] = useState<any[]>([]);
 
   const [selectedOption, setSelectedOption] = useState("");
-  const shipperInfoChange = (value: string) => {
-    setSelectedOption(value);
-    if (value == "accountNo") {
-      const accountNumberArr = _.chain(originalRows)
-        .groupBy("accountNumber")
-        .map((items, name) => ({
-          name,
-          count: items.length,
-          type: "accountNo",
-        }))
-        .value();
 
+  const generateGroupByData = (fieldName: _.ValueIteratee<Shipment> | undefined) => {
+    return _.chain(originalRows)
+      .groupBy(fieldName)
+      .map((items, name) => ({
+        name,
+        count: items.length,
+        type: fieldName,
+      }))
+      .value();
+  };
+  
+
+  const shipperInfoChange = (value: string) => {
+  
+    setSelectedOption(value);
+    if (value == "accountNumber") {
+     
+      const accountNumberArr = generateGroupByData(value);
+   
       set_li_accountNumber(accountNumberArr);
-    } else if (value == "deliveredDate") {
+    } else if (value == "deliveredTime") {
+    
       const deliveredDateArr = _(originalRows)
         .groupBy((item) => {
           const formattedDate = moment(item.deliveredTime).format("MM/DD/YYYY");
@@ -790,56 +778,26 @@ export default function HomePage() {
           type: "deliveredDate",
         }))
         .value();
+        
       set_li_deliveredDate(deliveredDateArr);
-    } else if (value == "numberOfAttempt") {
-      const numberOfAttemptArr = _(originalRows)
-        .groupBy("numberOfAttemptedDeliveries")
-        .map((items, name) => ({
-          name,
-          count: items.length,
-          type: "numberOfAttempt",
-        }))
-        .value();
+    } else if (value == "numberOfAttemptedDeliveries") {
+      const numberOfAttemptArr = generateGroupByData(value);
+    
       set_li_numberOfAttempt(numberOfAttemptArr);
-    } else if (value == "packageKg") {
-      const packageKgArr = _(originalRows)
-        .groupBy("packageWeightKg")
-        .map((items, name) => ({
-          name,
-          count: items.length,
-          type: "packageKg",
-        }))
-        .value();
+    } else if (value == "packageWeightKg") {
+      const packageKgArr = generateGroupByData(value);
+      
       set_li_packageKg(packageKgArr);
-    } else if (value == "packageLbs") {
-      const packageLbsArr = _(originalRows)
-        .groupBy("packageWeightLbs")
-        .map((items, name) => ({
-          name,
-          count: items.length,
-          type: "packageLbs",
-        }))
-        .value();
+    } else if (value == "packageWeightLbs") {
+      const packageLbsArr = generateGroupByData(value);
+    
       set_li_packageLbs(packageLbsArr);
     } else if (value == "purchaseOrderNumber") {
-      const purchaseOrderNumberArr = _(originalRows)
-        .groupBy("purchaseOrderNumber")
-        .map((items, name) => ({
-          name,
-          count: items.length,
-          type: "purchaseOrderNumber",
-        }))
-        .value();
+      const purchaseOrderNumberArr =  generateGroupByData(value);
       set_li_purchaseOrderNumber(purchaseOrderNumberArr);
     } else if (value == "reference") {
-      const referenceArr = _(originalRows)
-        .groupBy("reference")
-        .map((items, name) => ({
-          name,
-          count: items.length,
-          type: "reference",
-        }))
-        .value();
+      const referenceArr =  generateGroupByData(value);
+ 
       set_li_reference(referenceArr);
     } else if (value == "scheduledDeliveryDate") {
       const scheduledDeliveryDateArr = _(originalRows)
@@ -871,74 +829,28 @@ export default function HomePage() {
         .value();
       set_li_shipDate(shipDateArr);
     } else if (value == "recipientContactName") {
-      const recipientContactNameArr = _(originalRows)
-        .groupBy("recipientContactName")
-        .map((items, name) => ({
-          name,
-          count: items.length,
-          type: "recipientContactName",
-        }))
-        .value();
+      const recipientContactNameArr =  generateGroupByData(value);
+    
       set_li_recipientName(recipientContactNameArr);
     } else if (value == "recipientCompany") {
-      const recipientCompanyArr = _(originalRows)
-        .groupBy("recipientCompany")
-        .map((items, name) => ({
-          name,
-          count: items.length,
-          type: "recipientCompany",
-        }))
-        .value();
+      const recipientCompanyArr =  generateGroupByData(value);
+     
       set_li_recipientCompany(recipientCompanyArr);
     } else if (value == "recipientAddress") {
-      const recipientAddressArr = _(originalRows)
-        .groupBy("recipientAddress")
-        .map((items, name) => ({
-          name,
-          count: items.length,
-          type: "recipientAddress",
-        }))
-        .value();
+      const recipientAddressArr =  generateGroupByData(value);
+    
       set_li_recipientAddress(recipientAddressArr);
     } else if (value == "recipientCity") {
-      const recipientCityArr = _(originalRows)
-        .groupBy("recipientCity")
-        .map((items, name) => ({
-          name,
-          count: items.length,
-          type: "recipientCity",
-        }))
-        .value();
+      const recipientCityArr =  generateGroupByData(value);
       set_li_recipientCity(recipientCityArr);
     } else if (value == "recipientState") {
-      const recipientStateArr = _(originalRows)
-        .groupBy("recipientState")
-        .map((items, name) => ({
-          name,
-          count: items.length,
-          type: "recipientState",
-        }))
-        .value();
+      const recipientStateArr =  generateGroupByData(value);
       set_li_recipientState(recipientStateArr);
     } else if (value == "recipientCountry") {
-      const recipientCountryArr = _(originalRows)
-        .groupBy("recipientCountry")
-        .map((items, name) => ({
-          name,
-          count: items.length,
-          type: "recipientCountry",
-        }))
-        .value();
+      const recipientCountryArr =  generateGroupByData(value);
       set_li_recipientCountry(recipientCountryArr);
     } else if (value == "recipientPostal") {
-      const recipientPostalArr = _(originalRows)
-        .groupBy("recipientPostal")
-        .map((items, name) => ({
-          name,
-          count: items.length,
-          type: "recipientPostal",
-        }))
-        .value();
+      const recipientPostalArr =  generateGroupByData(value);
       set_li_recipientPostal(recipientPostalArr);
     }
   };
@@ -1012,20 +924,27 @@ export default function HomePage() {
   const [innerFilterJson, setInnerFilterJson] = useState<any[]>([]);
 
   // first layer filter
-  const showInnerFilter = (val: number) => {
+  const showInnerFilter = (val: String) => {
     // shipment status
-    if (val == 1) {
+    if (val == "shipStatus") {
       setInnerFilter(1);
       set_firstlevelClick(true);
-    } else if (val == 2) {
+    } else if (val == "shipInfo") {
       set_firstlevelClick(true);
       // shipment info
-      setInnerFilterJson(ShipmentInformationArr);
+      let shipInfo = Object.values(initialNormalFilterInfo).filter(
+        normalFilterInfo => normalFilterInfo.filterType === "shipInfo"
+      );
+      
+      setInnerFilterJson(shipInfo);
       setInnerFilter(2);
-    } else if (val == 4) {
+    } else if (val == "recpInfo") {
       set_firstlevelClick(true);
       //recipient
-      setInnerFilterJson(RecipientInfomationArr);
+      let recpInfo = Object.values(initialNormalFilterInfo).filter(
+        normalFilterInfo => normalFilterInfo.filterType === "recpInfo"
+      );
+      setInnerFilterJson(recpInfo);
       setInnerFilter(4);
     }
   };
@@ -1715,7 +1634,7 @@ export default function HomePage() {
                             ? "filter-section-item active"
                             : "filter-section-item"
                         }
-                        onClick={() => showInnerFilter(1)}
+                        onClick={() => showInnerFilter("shipStatus")}
                       >
                         <button className="filter-section-btn">
                           <div className="filter-section-btn-icon">
@@ -1757,7 +1676,7 @@ export default function HomePage() {
                             ? "filter-section-item active"
                             : "filter-section-item"
                         }
-                        onClick={() => showInnerFilter(2)}
+                        onClick={() => showInnerFilter("shipInfo")}
                       >
                         <button className="filter-section-btn">
                           <div className="filter-section-btn-icon">
@@ -1800,7 +1719,7 @@ export default function HomePage() {
                             ? "filter-section-item active"
                             : "filter-section-item"
                         }
-                        onClick={() => showInnerFilter(4)}
+                        onClick={() => showInnerFilter("recpInfo")}
                       >
                         <button className="filter-section-btn">
                           <div className="filter-section-btn-icon">
@@ -1878,20 +1797,20 @@ export default function HomePage() {
                           {innerFilterJson.map((item) => (
                             <li
                               className="filter-section-item"
-                              onClick={() => clickedItem(item.value)}
+                              onClick={() => clickedItem(item.field)}
                             >
                               {/* add selected class if its selected */}
                               <button
                                 className={
-                                  selectedDiv == item.value
+                                  selectedDiv == item.field
                                     ? "filter-section-btn selected"
                                     : "filter-section-btn"
                                 }
-                                onClick={() => shipperInfoChange(item.value)}
+                                onClick={() => shipperInfoChange(item.field)}
                               >
                                 <div className="filter-section-btn-icon"></div>
                                 <div className="filter-section-btn-text">
-                                  {item.name}
+                                  {item.displayFilterTab}
                                 </div>
                                 <div className="filter-section-btn-count"></div>
                               </button>
@@ -1906,7 +1825,7 @@ export default function HomePage() {
                             : "filter-section__body-level-3"
                         }
                       >
-                        {selectedOption === "accountNo" ? (
+                        {selectedOption === "accountNumber" ? (
                           <ul className="filter-section-list">
                             {li_accountNumber.map((item) => (
                               <li
@@ -1934,7 +1853,7 @@ export default function HomePage() {
                               </li>
                             ))}
                           </ul>
-                        ) : selectedOption === "deliveredDate" ? (
+                        ) : selectedOption === "deliveredTime" ? (
                           <ul className="filter-section-list">
                             {li_deliveredDate.map((item) => (
                               <li
@@ -1962,7 +1881,7 @@ export default function HomePage() {
                               </li>
                             ))}
                           </ul>
-                        ) : selectedOption === "numberOfAttempt" ? (
+                        ) : selectedOption === "numberOfAttemptedDeliveries" ? (
                           <ul className="filter-section-list">
                             {li_numberOfAttempt.map((item) => (
                               <li
@@ -1990,7 +1909,7 @@ export default function HomePage() {
                               </li>
                             ))}
                           </ul>
-                        ) : selectedOption === "packageKg" ? (
+                        ) : selectedOption === "packageWeightKg" ? (
                           <ul className="filter-section-list">
                             {li_packageKg.map((item) => (
                               <li
@@ -2018,7 +1937,7 @@ export default function HomePage() {
                               </li>
                             ))}
                           </ul>
-                        ) : selectedOption === "packageLbs" ? (
+                        ) : selectedOption === "packageWeightLbs" ? (
                           <ul className="filter-section-list">
                             {li_packageLbs.map((item) => (
                               <li
