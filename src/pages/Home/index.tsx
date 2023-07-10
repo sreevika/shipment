@@ -43,7 +43,6 @@ import StatusFilterInfo from "../../interfaces/statusFilterInfo";
 import NormalFilterInfo from "../../interfaces/normalFilterInfo";
 import SelectedFilterListInfo from "../../interfaces/selectedFilterListInfo";
 
-
 let originalRows: Shipment[] = [];
 let originalRows_backup: Shipment[] = [];
 const EDUCONNECT_URL = `https://shipmenttrackingapi-qa.signsharecloud.com/api`;
@@ -53,9 +52,9 @@ let selectedListKeyStatus: any[] = [];
 let selectedListKeyShipper: any[] = [];
 let sectionShipperInfo: NormalFilterInfo = {};
 
-// for selected  filter List 
-let selectedFilterListForUI : SelectedFilterListInfo[] =[];
-let selectedFilterListFor_selected : SelectedFilterListInfo[] =[];
+// for selected  filter List
+let selectedFilterListForUI: SelectedFilterListInfo[] = [];
+let selectedFilterListFor_selected: SelectedFilterListInfo[] = [];
 export default function HomePage() {
   const [rows, setRows] = useState<Shipment[]>([]);
   const token = localStorage.getItem("Authorization");
@@ -108,8 +107,6 @@ export default function HomePage() {
     filter_layer1_recipientPostal: [],
   });
 
-
-  
   //ag change
 
   const StatusFilterInfo: StatusFilterInfo = {
@@ -248,6 +245,7 @@ export default function HomePage() {
   const [firstlevelClick, set_firstlevelClick] = useState(true);
 
   const handleLogout = () => {
+    localStorage.setItem("Authorization", "");
     navigate("/login"); // Use the navigate function to navigate to the login page
   };
   let originalRows1 = originalRows;
@@ -332,17 +330,15 @@ export default function HomePage() {
     const { name, checked, value } = event.target;
     setShipmentStatus({ ...shipmentStatus, [name]: checked });
     let tempArr = [];
-    
+
     const filterInfo1: SelectedFilterListInfo = {
       field: value,
       filterType: 1,
       sectionValue: `shipmentStatus.${name}`,
       type: "",
-      filterVariable: "filter_layer1_"+value,
+      filterVariable: "filter_layer1_" + value,
       display: value,
     };
-    
-    
 
     if (checked) {
       tempArr = [...userinfo, value];
@@ -907,7 +903,7 @@ export default function HomePage() {
     target: { name: any; checked: any; value: any };
   }) => {
     const { name, checked, value } = event.target;
-    
+
     let selectedOptionTemp = [];
     selectedOptionTemp = filter_model.concat(name);
     set_filter_model(selectedOptionTemp);
@@ -915,24 +911,21 @@ export default function HomePage() {
     selectedListKeyShipper = selectedListKeyShipper.concat(name);
     const { filterVariable } = sectionShipperInfo[name];
 
-
-    
     const filterInfo1: SelectedFilterListInfo = {
       field: name,
       filterType: 2,
       sectionValue: value,
       type: "array",
       filterVariable: `filterConditions.${filterVariable}`,
-      display:  showFilterNameInUI(sectionShipperInfo, name)+" : "+value,
+      display: showFilterNameInUI(sectionShipperInfo, name) + " : " + value,
     };
-  
+
     if (checked) {
       setFilterConditions((prevState: any) => ({
         ...prevState,
         [filterVariable]: [...prevState[filterVariable], value],
       }));
       selectedFilterListFor_selected.push(filterInfo1);
-
     } else {
       setFilterConditions((prevState: any) => ({
         ...prevState,
@@ -944,7 +937,7 @@ export default function HomePage() {
         (filterInfo) => !(filterInfo.field === filterInfo1.field)
       );
     }
-    console.log("AAAAAA"+JSON.stringify(selectedFilterListFor_selected))
+    console.log("AAAAAA" + JSON.stringify(selectedFilterListFor_selected));
   };
 
   const clearShipmentInfoAndRecipientDataByValue = (value: string) => {
@@ -1019,8 +1012,6 @@ export default function HomePage() {
     let filteredShipmentData_level: Shipment[] = [];
     let filteredNormalData_level: Shipment[] = [];
 
-
-
     //logic for status filter
     console.log("selectedListKeyStatus");
     console.log(selectedListKeyStatus);
@@ -1034,51 +1025,51 @@ export default function HomePage() {
     if (selectedFilterListForUI.length == 0)
       filteredShipmentData_level = originalRows;
     else {
+      const groupedFilters = selectedFilterListForUI.reduce(
+        (result, filterInfo) => {
+          const { field, sectionValue, filterType } = filterInfo;
 
-      const groupedFilters = selectedFilterListForUI.reduce((result, filterInfo) => {
-        const { field, sectionValue, filterType} = filterInfo;
-        
-        if (filterType === 2) {
-          if (result[field]) {
-            result[field].sectionValue.push(sectionValue);
+          if (filterType === 2) {
+            if (result[field]) {
+              result[field].sectionValue.push(sectionValue);
+            } else {
+              result[field] = {
+                field,
+                sectionValue: [sectionValue],
+                filterType,
+              };
+            }
           } else {
-            result[field] = {
-              field,
-              sectionValue: [sectionValue],
-              filterType,
-
-            };
+            result[field] = filterInfo;
           }
-        } else {
-          result[field] = filterInfo;
-        }
-        
-        return result;
-      }, {});
-    
-      
+
+          return result;
+        },
+        {}
+      );
+
       const groupedFiltersArray = Object.values(groupedFilters);
 
-      console.log("AAAAAAABB"+JSON.stringify(groupedFiltersArray))
-      
-      // need type checking 
+      console.log("AAAAAAABB" + JSON.stringify(groupedFiltersArray));
+
+      // need type checking
 
       groupedFiltersArray.forEach((item) => {
         if (item.filterType === 1) {
-        const { field, value } = StatusFilterInfo[item.field];
-        if (field) {
-          const filteredData = filterStatusData(
-            originalRows,
-            field,
-            value,
-            item.field
-          );
-          filteredShipmentData_level = filteredShipmentData_level.concat(filteredData);
-        }
-      } else {
-      
+          const { field, value } = StatusFilterInfo[item.field];
+          if (field) {
+            const filteredData = filterStatusData(
+              originalRows,
+              field,
+              value,
+              item.field
+            );
+            filteredShipmentData_level =
+              filteredShipmentData_level.concat(filteredData);
+          }
+        } else {
           const { field, sectionValue, type } = sectionShipperInfo[item.field];
-  
+
           if (field && sectionValue.length > 0) {
             if (filteredNormalData_level.length == 0) {
               filteredNormalData_level = filterShipperInfoData(
@@ -1096,22 +1087,20 @@ export default function HomePage() {
               );
             }
           }
-      
-      }
+        }
       });
-     
     }
     const countFilterType1 = selectedFilterListForUI.filter(
-      filterInfo => filterInfo.filterType === 1
+      (filterInfo) => filterInfo.filterType === 1
     ).length;
     const countFilterType2 = selectedFilterListForUI.filter(
-      filterInfo => filterInfo.filterType === 2
+      (filterInfo) => filterInfo.filterType === 2
     ).length;
-    if(countFilterType1 === 0) {
-      filteredShipmentData_level = originalRows
+    if (countFilterType1 === 0) {
+      filteredShipmentData_level = originalRows;
     }
-    if(countFilterType2 === 0) {
-      filteredNormalData_level = originalRows
+    if (countFilterType2 === 0) {
+      filteredNormalData_level = originalRows;
     }
 
     //ag changes
@@ -1202,7 +1191,6 @@ export default function HomePage() {
     filterValue: any[],
     type: string
   ) {
-
     const newArray = filterValue.map(
       (variable) =>
         showFilterNameInUI(sectionShipperInfo, filterProperty) +
@@ -1225,8 +1213,7 @@ export default function HomePage() {
             ? moment(item[filterProperty]).format("MM/DD/YYYY")
             : "00/00/0000"
         )
-      ); 
-      
+      );
     } else {
       var filteredData = originalRows.filter(
         (item) => filterArray.includes(item[filterProperty])
@@ -2382,7 +2369,7 @@ export default function HomePage() {
             )}
             <ul className="filter-section__applied">
               {selectedFilterListForUI.length > 0 &&
-                 selectedFilterListForUI.map((filterInfo, index) =>  (
+                selectedFilterListForUI.map((filterInfo, index) => (
                   <li className="filter-section__applied-list">
                     <div className="btn btn-filter-pill">
                       <span>{filterInfo.display}</span>
