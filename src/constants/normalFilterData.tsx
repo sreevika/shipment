@@ -11,7 +11,8 @@ const initialNormalFilterInfo: NormalFilterInfo = {
     filterType: "shipInfo",
     checkedStatus: false,
     count: 0,
-    displayFilterTab : "Account Number"
+    displayFilterTab: "Account Number",
+    orginalData: [],
   },
   deliveredDate: {
     field: "deliveredTime",
@@ -23,7 +24,8 @@ const initialNormalFilterInfo: NormalFilterInfo = {
     filterType: "shipInfo",
     checkedStatus: false,
     count: 0,
-    displayFilterTab: "Delivered Date"
+    displayFilterTab: "Delivered Date",
+    orginalData: [],
   },
   numberOfAttempt: {
     field: "numberOfAttemptedDeliveries",
@@ -35,7 +37,8 @@ const initialNormalFilterInfo: NormalFilterInfo = {
     filterType: "shipInfo",
     checkedStatus: false,
     count: 0,
-    displayFilterTab: "Number Of Attempted Deliveries"
+    displayFilterTab: "Number Of Attempted Deliveries",
+    orginalData: [],
   },
   packageKg: {
     field: "packageWeightKg",
@@ -47,7 +50,8 @@ const initialNormalFilterInfo: NormalFilterInfo = {
     filterType: "shipInfo",
     checkedStatus: false,
     count: 0,
-    displayFilterTab: "Package Weight (Kg)"
+    displayFilterTab: "Package Weight (Kg)",
+    orginalData: [],
   },
   packageLbs: {
     field: "packageWeightLbs",
@@ -59,7 +63,8 @@ const initialNormalFilterInfo: NormalFilterInfo = {
     filterType: "shipInfo",
     checkedStatus: false,
     count: 0,
-    displayFilterTab: "Package Weight (Lbs)"
+    displayFilterTab: "Package Weight (Lbs)",
+    orginalData: [],
   },
   purchaseOrderNumber: {
     field: "purchaseOrderNumber",
@@ -71,7 +76,8 @@ const initialNormalFilterInfo: NormalFilterInfo = {
     filterType: "shipInfo",
     checkedStatus: false,
     count: 0,
-    displayFilterTab: "Purchase Order Number"
+    displayFilterTab: "Purchase Order Number",
+    orginalData: [],
   },
   reference: {
     field: "reference",
@@ -83,7 +89,8 @@ const initialNormalFilterInfo: NormalFilterInfo = {
     filterType: "shipInfo",
     checkedStatus: false,
     count: 0,
-    displayFilterTab: "Reference"
+    displayFilterTab: "Reference",
+    orginalData: [],
   },
   scheduledDeliveryDate: {
     field: "scheduledDeliveryDate",
@@ -95,7 +102,8 @@ const initialNormalFilterInfo: NormalFilterInfo = {
     filterType: "shipInfo",
     checkedStatus: false,
     count: 0,
-    displayFilterTab: "Scheduled Delivery Date"
+    displayFilterTab: "Scheduled Delivery Date",
+    orginalData: [],
   },
   shipDate: {
     field: "shipDate",
@@ -107,7 +115,8 @@ const initialNormalFilterInfo: NormalFilterInfo = {
     filterType: "shipInfo",
     checkedStatus: false,
     count: 0,
-    displayFilterTab: "Ship Date"
+    displayFilterTab: "Ship Date",
+    orginalData: [],
   },
   recipientContactName: {
     field: "recipientContactName",
@@ -119,7 +128,8 @@ const initialNormalFilterInfo: NormalFilterInfo = {
     filterType: "recpInfo",
     checkedStatus: false,
     count: 0,
-    displayFilterTab: "Recipient Contact Name"
+    displayFilterTab: "Recipient Contact Name",
+    orginalData: [],
   },
   recipientCompany: {
     field: "recipientCompany",
@@ -131,7 +141,8 @@ const initialNormalFilterInfo: NormalFilterInfo = {
     filterType: "recpInfo",
     checkedStatus: false,
     count: 0,
-    displayFilterTab: "Recipient Company"
+    displayFilterTab: "Recipient Company",
+    orginalData: [],
   },
   recipientAddress: {
     field: "recipientAddress",
@@ -143,7 +154,8 @@ const initialNormalFilterInfo: NormalFilterInfo = {
     filterType: "recpInfo",
     checkedStatus: false,
     count: 0,
-    displayFilterTab: "Recipient Address"
+    displayFilterTab: "Recipient Address",
+    orginalData: [],
   },
   recipientCity: {
     field: "recipientCity",
@@ -155,7 +167,8 @@ const initialNormalFilterInfo: NormalFilterInfo = {
     filterType: "recpInfo",
     checkedStatus: false,
     count: 0,
-    displayFilterTab: "Recipient City"
+    displayFilterTab: "Recipient City",
+    orginalData: [],
   },
   recipientState: {
     field: "recipientState",
@@ -167,7 +180,8 @@ const initialNormalFilterInfo: NormalFilterInfo = {
     filterType: "recpInfo",
     checkedStatus: false,
     count: 0,
-    displayFilterTab: "Recipient State"
+    displayFilterTab: "Recipient State",
+    orginalData: [],
   },
   recipientCountry: {
     field: "recipientCountry",
@@ -179,7 +193,8 @@ const initialNormalFilterInfo: NormalFilterInfo = {
     filterType: "recpInfo",
     checkedStatus: false,
     count: 0,
-    displayFilterTab: "Recipient Country"
+    displayFilterTab: "Recipient Country",
+    orginalData: [],
   },
   recipientPostal: {
     field: "recipientPostal",
@@ -191,7 +206,8 @@ const initialNormalFilterInfo: NormalFilterInfo = {
     filterType: "recpInfo",
     checkedStatus: false,
     count: 0,
-    displayFilterTab: "Recipient Country"
+    displayFilterTab: "Recipient Country",
+    orginalData: [],
   },
 };
 

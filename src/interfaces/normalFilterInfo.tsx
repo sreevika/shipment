@@ -8,7 +8,8 @@ interface NormalFilterInfo {
     filterType: string;
     checkedStatus: boolean;
     count: number;
-    displayFilterTab :string;
+    displayFilterTab: string;
+    orginalData: any[];
   };
 }
 

@@ -622,13 +622,10 @@ export default function HomePage() {
     )
   ).length;
 
- 
   //Find date interval
   const toDate = new Date();
   const fromDate = new Date(toDate.getTime() - 14 * 24 * 60 * 60 * 1000);
-  // const todayDate = getFormattedDate(toDate);
-  // const lastDayDate = getFormattedDate(fromDate);
-  // console.log("sasaas" + todayDate);
+
   //reset before card sleection
   const resetFilters = () => {
     filterSection = [];
@@ -721,31 +718,39 @@ export default function HomePage() {
 
   //first layer filter selection
 
-  const [li_accountNumber, set_li_accountNumber] = useState<any[]>([]);
-  const [li_deliveredDate, set_li_deliveredDate] = useState<any[]>([]);
-  const [li_numberOfAttempt, set_li_numberOfAttempt] = useState<any[]>([]);
-  const [li_packageKg, set_li_packageKg] = useState<any[]>([]);
-  const [li_packageLbs, set_li_packageLbs] = useState<any[]>([]);
-  const [li_purchaseOrderNumber, set_li_purchaseOrderNumber] = useState<any[]>(
-    []
-  );
-  const [li_reference, set_li_reference] = useState<any[]>([]);
-  const [li_scheduledDeliveryDate, set_li_scheduledDeliveryDate] = useState<
-    any[]
-  >([]);
-  const [li_shipDate, set_li_shipDate] = useState<any[]>([]);
-  const [li_recipientName, set_li_recipientName] = useState<any[]>([]);
-  const [li_recipientCompany, set_li_recipientCompany] = useState<any[]>([]);
+  // Object.keys(initialNormalFilterInfo).forEach((key) => {
+  //   const [state, setState] = useState<any[]>([]);
+  //   initialNormalFilterInfo[key].orginalData = state;
+  //   initialNormalFilterInfo[key].setState = setState;
+  // });
 
-  const [li_recipientAddress, set_li_recipientAddress] = useState<any[]>([]);
-  const [li_recipientCity, set_li_recipientCity] = useState<any[]>([]);
-  const [li_recipientState, set_li_recipientState] = useState<any[]>([]);
-  const [li_recipientCountry, set_li_recipientCountry] = useState<any[]>([]);
-  const [li_recipientPostal, set_li_recipientPostal] = useState<any[]>([]);
+  // const [li_accountNumber, set_li_accountNumber] = useState<any[]>([]);
+  // const [li_deliveredDate, set_li_deliveredDate] = useState<any[]>([]);
+  // const [li_numberOfAttempt, set_li_numberOfAttempt] = useState<any[]>([]);
+  // const [li_packageKg, set_li_packageKg] = useState<any[]>([]);
+  // const [li_packageLbs, set_li_packageLbs] = useState<any[]>([]);
+  // const [li_purchaseOrderNumber, set_li_purchaseOrderNumber] = useState<any[]>(
+  //   []
+  // );
+  // const [li_reference, set_li_reference] = useState<any[]>([]);
+  // const [li_scheduledDeliveryDate, set_li_scheduledDeliveryDate] = useState<
+  //   any[]
+  // >([]);
+  // const [li_shipDate, set_li_shipDate] = useState<any[]>([]);
+  // const [li_recipientName, set_li_recipientName] = useState<any[]>([]);
+  // const [li_recipientCompany, set_li_recipientCompany] = useState<any[]>([]);
+
+  // const [li_recipientAddress, set_li_recipientAddress] = useState<any[]>([]);
+  // const [li_recipientCity, set_li_recipientCity] = useState<any[]>([]);
+  // const [li_recipientState, set_li_recipientState] = useState<any[]>([]);
+  // const [li_recipientCountry, set_li_recipientCountry] = useState<any[]>([]);
+  // const [li_recipientPostal, set_li_recipientPostal] = useState<any[]>([]);
 
   const [selectedOption, setSelectedOption] = useState("");
 
-  const generateGroupByData = (fieldName: _.ValueIteratee<Shipment> | undefined) => {
+  const generateGroupByData = (
+    fieldName: _.ValueIteratee<Shipment> | undefined
+  ) => {
     return _.chain(originalRows)
       .groupBy(fieldName)
       .map((items, name) => ({
@@ -753,106 +758,113 @@ export default function HomePage() {
         count: items.length,
         type: fieldName,
       }))
+      .orderBy(["name"], ["asc"]) // Order by the "name" property in ascending order
       .value();
   };
-  
 
   const shipperInfoChange = (value: string) => {
-  
-    setSelectedOption(value);
-    if (value == "accountNumber") {
-     
-      const accountNumberArr = generateGroupByData(value);
-   
-      set_li_accountNumber(accountNumberArr);
-    } else if (value == "deliveredTime") {
-    
-      const deliveredDateArr = _(originalRows)
-        .groupBy((item) => {
-          const formattedDate = moment(item.deliveredTime).format("MM/DD/YYYY");
-          return moment(formattedDate).isValid() ? formattedDate : "00/00/0000";
-        })
-        .map((items, name) => ({
-          name,
-          count: items.length,
-          type: "deliveredDate",
-        }))
-        .value();
-        
-      set_li_deliveredDate(deliveredDateArr);
-    } else if (value == "numberOfAttemptedDeliveries") {
-      const numberOfAttemptArr = generateGroupByData(value);
-    
-      set_li_numberOfAttempt(numberOfAttemptArr);
-    } else if (value == "packageWeightKg") {
-      const packageKgArr = generateGroupByData(value);
-      
-      set_li_packageKg(packageKgArr);
-    } else if (value == "packageWeightLbs") {
-      const packageLbsArr = generateGroupByData(value);
-    
-      set_li_packageLbs(packageLbsArr);
-    } else if (value == "purchaseOrderNumber") {
-      const purchaseOrderNumberArr =  generateGroupByData(value);
-      set_li_purchaseOrderNumber(purchaseOrderNumberArr);
-    } else if (value == "reference") {
-      const referenceArr =  generateGroupByData(value);
- 
-      set_li_reference(referenceArr);
-    } else if (value == "scheduledDeliveryDate") {
-      const scheduledDeliveryDateArr = _(originalRows)
-        .groupBy((item) => {
-          const formattedDate = moment(item.scheduledDeliveryDate).format(
-            "MM/DD/YYYY"
-          );
-          return moment(formattedDate).isValid() ? formattedDate : "00/00/0000";
-        })
-        .map((items, name) => ({
-          name,
-          count: items.length,
-          type: "scheduledDeliveryDate",
-        }))
-        .value();
+    console.log(selectedOption);
+    Object.keys(initialNormalFilterInfo).forEach((key) => {
+      if (initialNormalFilterInfo[key].field === value) {
+        setSelectedOption(key);
+        if (initialNormalFilterInfo[key].type == "date") {
+          initialNormalFilterInfo[key].orginalData = generateGroupByData(value);
+        } else {
+          initialNormalFilterInfo[key].orginalData = generateGroupByData(value);
+        }
+      }
+    });
+    // if (value == "accountNumber") {
+    //   const accountNumberArr = generateGroupByData(value);
+    //   initialNormalFilterInfo.accountNo.orginalData = accountNumberArr;
+    //   // set_li_accountNumber(accountNumberArr);
+    // } else if (value == "deliveredTime") {
+    //   const deliveredDateArr = _(originalRows)
+    //     .groupBy((item) => {
+    //       const formattedDate = moment(item.deliveredTime).format("MM/DD/YYYY");
+    //       return moment(formattedDate).isValid() ? formattedDate : "00/00/0000";
+    //     })
+    //     .map((items, name) => ({
+    //       name,
+    //       count: items.length,
+    //       type: "deliveredDate",
+    //     }))
+    //     .value();
+    //   initialNormalFilterInfo.deliveredDate.orginalData = deliveredDateArr;
+    //   // set_li_deliveredDate(deliveredDateArr);
+    // } else if (value == "numberOfAttemptedDeliveries") {
+    //   const numberOfAttemptArr = generateGroupByData(value);
+    //   initialNormalFilterInfo.numberOfAttempt.orginalData = numberOfAttemptArr;
+    //   // set_li_numberOfAttempt(numberOfAttemptArr);
+    // } else if (value == "packageWeightKg") {
+    //   const packageKgArr = generateGroupByData(value);
 
-      set_li_scheduledDeliveryDate(scheduledDeliveryDateArr);
-    } else if (value == "shipDate") {
-      const shipDateArr = _(originalRows)
-        .groupBy((item) => {
-          const formattedDate = moment(item.shipDate).format("MM/DD/YYYY");
-          return moment(formattedDate).isValid() ? formattedDate : "00/00/0000";
-        })
-        .map((items, name) => ({
-          name,
-          count: items.length,
-          type: "shipDate",
-        }))
-        .value();
-      set_li_shipDate(shipDateArr);
-    } else if (value == "recipientContactName") {
-      const recipientContactNameArr =  generateGroupByData(value);
-    
-      set_li_recipientName(recipientContactNameArr);
-    } else if (value == "recipientCompany") {
-      const recipientCompanyArr =  generateGroupByData(value);
-     
-      set_li_recipientCompany(recipientCompanyArr);
-    } else if (value == "recipientAddress") {
-      const recipientAddressArr =  generateGroupByData(value);
-    
-      set_li_recipientAddress(recipientAddressArr);
-    } else if (value == "recipientCity") {
-      const recipientCityArr =  generateGroupByData(value);
-      set_li_recipientCity(recipientCityArr);
-    } else if (value == "recipientState") {
-      const recipientStateArr =  generateGroupByData(value);
-      set_li_recipientState(recipientStateArr);
-    } else if (value == "recipientCountry") {
-      const recipientCountryArr =  generateGroupByData(value);
-      set_li_recipientCountry(recipientCountryArr);
-    } else if (value == "recipientPostal") {
-      const recipientPostalArr =  generateGroupByData(value);
-      set_li_recipientPostal(recipientPostalArr);
-    }
+    //   set_li_packageKg(packageKgArr);
+    // } else if (value == "packageWeightLbs") {
+    //   const packageLbsArr = generateGroupByData(value);
+
+    //   set_li_packageLbs(packageLbsArr);
+    // } else if (value == "purchaseOrderNumber") {
+    //   const purchaseOrderNumberArr = generateGroupByData(value);
+    //   set_li_purchaseOrderNumber(purchaseOrderNumberArr);
+    // } else if (value == "reference") {
+    //   const referenceArr = generateGroupByData(value);
+
+    //   set_li_reference(referenceArr);
+    // } else if (value == "scheduledDeliveryDate") {
+    //   const scheduledDeliveryDateArr = _(originalRows)
+    //     .groupBy((item) => {
+    //       const formattedDate = moment(item.scheduledDeliveryDate).format(
+    //         "MM/DD/YYYY"
+    //       );
+    //       return moment(formattedDate).isValid() ? formattedDate : "00/00/0000";
+    //     })
+    //     .map((items, name) => ({
+    //       name,
+    //       count: items.length,
+    //       type: "scheduledDeliveryDate",
+    //     }))
+    //     .value();
+
+    //   set_li_scheduledDeliveryDate(scheduledDeliveryDateArr);
+    // } else if (value == "shipDate") {
+    //   const shipDateArr = _(originalRows)
+    //     .groupBy((item) => {
+    //       const formattedDate = moment(item.shipDate).format("MM/DD/YYYY");
+    //       return moment(formattedDate).isValid() ? formattedDate : "00/00/0000";
+    //     })
+    //     .map((items, name) => ({
+    //       name,
+    //       count: items.length,
+    //       type: "shipDate",
+    //     }))
+    //     .value();
+    //   set_li_shipDate(shipDateArr);
+    // } else if (value == "recipientContactName") {
+    //   const recipientContactNameArr = generateGroupByData(value);
+
+    //   set_li_recipientName(recipientContactNameArr);
+    // } else if (value == "recipientCompany") {
+    //   const recipientCompanyArr = generateGroupByData(value);
+
+    //   set_li_recipientCompany(recipientCompanyArr);
+    // } else if (value == "recipientAddress") {
+    //   const recipientAddressArr = generateGroupByData(value);
+
+    //   set_li_recipientAddress(recipientAddressArr);
+    // } else if (value == "recipientCity") {
+    //   const recipientCityArr = generateGroupByData(value);
+    //   set_li_recipientCity(recipientCityArr);
+    // } else if (value == "recipientState") {
+    //   const recipientStateArr = generateGroupByData(value);
+    //   set_li_recipientState(recipientStateArr);
+    // } else if (value == "recipientCountry") {
+    //   const recipientCountryArr = generateGroupByData(value);
+    //   set_li_recipientCountry(recipientCountryArr);
+    // } else if (value == "recipientPostal") {
+    //   const recipientPostalArr = generateGroupByData(value);
+    //   set_li_recipientPostal(recipientPostalArr);
+    // }
   };
 
   //check normal filter
@@ -861,39 +873,39 @@ export default function HomePage() {
   }) => {
     const { name, checked, value } = event.target;
 
-    let selectedOptionTemp = [];
-    selectedOptionTemp = filter_model.concat(name);
-    set_filter_model(selectedOptionTemp);
+    // let selectedOptionTemp = [];
+    // selectedOptionTemp = filter_model.concat(name);
+    // set_filter_model(selectedOptionTemp);
 
-    selectedListKeyShipper = selectedListKeyShipper.concat(name);
-    const { filterVariable } = normalFilterInfo[name];
+    // selectedListKeyShipper = selectedListKeyShipper.concat(name);
+    // const { filterVariable } = normalFilterInfo[name];
 
-    const filterInfo1: SelectedFilterListInfo = {
-      field: name,
-      filterType: 2,
-      sectionValue: value,
-      type: "array",
-      filterVariable: `filterConditions.${filterVariable}`,
-      display: showFilterNameInUI(normalFilterInfo, name) + " : " + value,
-    };
+    // const filterInfo1: SelectedFilterListInfo = {
+    //   field: name,
+    //   filterType: 2,
+    //   sectionValue: value,
+    //   type: "array",
+    //   filterVariable: `filterConditions.${filterVariable}`,
+    //   display: showFilterNameInUI(normalFilterInfo, name) + " : " + value,
+    // };
 
-    if (checked) {
-      setFilterConditions((prevState: any) => ({
-        ...prevState,
-        [filterVariable]: [...prevState[filterVariable], value],
-      }));
-      selectedFilterListFor_selected.push(filterInfo1);
-    } else {
-      setFilterConditions((prevState: any) => ({
-        ...prevState,
-        [filterVariable]: [...prevState[filterVariable]].filter(
-          (element: any) => element !== value
-        ),
-      }));
-      selectedFilterListFor_selected = selectedFilterListFor_selected.filter(
-        (filterInfo) => !(filterInfo.field === filterInfo1.field)
-      );
-    }
+    // if (checked) {
+    //   setFilterConditions((prevState: any) => ({
+    //     ...prevState,
+    //     [filterVariable]: [...prevState[filterVariable], value],
+    //   }));
+    //   selectedFilterListFor_selected.push(filterInfo1);
+    // } else {
+    //   setFilterConditions((prevState: any) => ({
+    //     ...prevState,
+    //     [filterVariable]: [...prevState[filterVariable]].filter(
+    //       (element: any) => element !== value
+    //     ),
+    //   }));
+    //   selectedFilterListFor_selected = selectedFilterListFor_selected.filter(
+    //     (filterInfo) => !(filterInfo.field === filterInfo1.field)
+    //   );
+    // }
   };
 
   const UnselectNormalFilterFromUI = (value: SelectedFilterListInfo) => {
@@ -933,16 +945,16 @@ export default function HomePage() {
       set_firstlevelClick(true);
       // shipment info
       let shipInfo = Object.values(initialNormalFilterInfo).filter(
-        normalFilterInfo => normalFilterInfo.filterType === "shipInfo"
+        (normalFilterInfo) => normalFilterInfo.filterType === "shipInfo"
       );
-      
+
       setInnerFilterJson(shipInfo);
       setInnerFilter(2);
     } else if (val == "recpInfo") {
       set_firstlevelClick(true);
       //recipient
       let recpInfo = Object.values(initialNormalFilterInfo).filter(
-        normalFilterInfo => normalFilterInfo.filterType === "recpInfo"
+        (normalFilterInfo) => normalFilterInfo.filterType === "recpInfo"
       );
       setInnerFilterJson(recpInfo);
       setInnerFilter(4);
@@ -1825,457 +1837,43 @@ export default function HomePage() {
                             : "filter-section__body-level-3"
                         }
                       >
-                        {selectedOption === "accountNumber" ? (
-                          <ul className="filter-section-list">
-                            {li_accountNumber.map((item) => (
-                              <li
-                                className="filter-section-item"
-                                onClick={() => clickedItem(item.name)}
-                              >
-                                <button
-                                  className={
-                                    selectedDiv_level2 == item.name
-                                      ? "filter-section-btn selected"
-                                      : "filter-section-btn"
-                                  }
-                                >
-                                  <Checkbox
-                                    label={item.name}
-                                    checked={filterConditions.filter_layer1_accountNo.includes(
-                                      item.name
-                                    )}
-                                    onChange={normalFilterCheckboxChange}
-                                    name="accountNo"
-                                    count={item.count}
-                                    value={item.name}
-                                  />
-                                </button>
-                              </li>
-                            ))}
-                          </ul>
-                        ) : selectedOption === "deliveredTime" ? (
-                          <ul className="filter-section-list">
-                            {li_deliveredDate.map((item) => (
-                              <li
-                                className="filter-section-item"
-                                onClick={() => clickedItem(item.name)}
-                              >
-                                <button
-                                  className={
-                                    selectedDiv_level2 == item.name
-                                      ? "filter-section-btn selected"
-                                      : "filter-section-btn"
-                                  }
-                                >
-                                  <Checkbox
-                                    label={item.name}
-                                    checked={filterConditions.filter_layer1_deliveredDate.includes(
-                                      item.name
-                                    )}
-                                    onChange={normalFilterCheckboxChange}
-                                    name="deliveredDate"
-                                    count={item.count}
-                                    value={item.name}
-                                  />
-                                </button>
-                              </li>
-                            ))}
-                          </ul>
-                        ) : selectedOption === "numberOfAttemptedDeliveries" ? (
-                          <ul className="filter-section-list">
-                            {li_numberOfAttempt.map((item) => (
-                              <li
-                                className="filter-section-item"
-                                onClick={() => clickedItem(item.name)}
-                              >
-                                <button
-                                  className={
-                                    selectedDiv_level2 == item.name
-                                      ? "filter-section-btn selected"
-                                      : "filter-section-btn"
-                                  }
-                                >
-                                  <Checkbox
-                                    label={item.name}
-                                    checked={filterConditions.filter_layer1_attemptDelivery.includes(
-                                      item.name
-                                    )}
-                                    onChange={normalFilterCheckboxChange}
-                                    name="numberOfAttempt"
-                                    count={item.count}
-                                    value={item.name}
-                                  />
-                                </button>
-                              </li>
-                            ))}
-                          </ul>
-                        ) : selectedOption === "packageWeightKg" ? (
-                          <ul className="filter-section-list">
-                            {li_packageKg.map((item) => (
-                              <li
-                                className="filter-section-item"
-                                onClick={() => clickedItem(item.name)}
-                              >
-                                <button
-                                  className={
-                                    selectedDiv_level2 == item.name
-                                      ? "filter-section-btn selected"
-                                      : "filter-section-btn"
-                                  }
-                                >
-                                  <Checkbox
-                                    label={item.name}
-                                    checked={filterConditions.filter_layer1_packageKg.includes(
-                                      item.name
-                                    )}
-                                    onChange={normalFilterCheckboxChange}
-                                    name="packageKg"
-                                    count={item.count}
-                                    value={item.name}
-                                  />
-                                </button>
-                              </li>
-                            ))}
-                          </ul>
-                        ) : selectedOption === "packageWeightLbs" ? (
-                          <ul className="filter-section-list">
-                            {li_packageLbs.map((item) => (
-                              <li
-                                className="filter-section-item"
-                                onClick={() => clickedItem(item.name)}
-                              >
-                                <button
-                                  className={
-                                    selectedDiv_level2 == item.name
-                                      ? "filter-section-btn selected"
-                                      : "filter-section-btn"
-                                  }
-                                >
-                                  <Checkbox
-                                    label={item.name}
-                                    checked={filterConditions.filter_layer1_packageLbs.includes(
-                                      item.name
-                                    )}
-                                    onChange={normalFilterCheckboxChange}
-                                    name="packageLbs"
-                                    count={item.count}
-                                    value={item.name}
-                                  />
-                                </button>
-                              </li>
-                            ))}
-                          </ul>
-                        ) : selectedOption === "purchaseOrderNumber" ? (
-                          <ul className="filter-section-list">
-                            {li_purchaseOrderNumber.map((item) => (
-                              <li
-                                className="filter-section-item"
-                                onClick={() => clickedItem(item.name)}
-                              >
-                                <button
-                                  className={
-                                    selectedDiv_level2 == item.name
-                                      ? "filter-section-btn selected"
-                                      : "filter-section-btn"
-                                  }
-                                >
-                                  <Checkbox
-                                    label={item.name}
-                                    checked={filterConditions.filter_layer1_purchaseOrder.includes(
-                                      item.name
-                                    )}
-                                    onChange={normalFilterCheckboxChange}
-                                    name="purchaseOrderNumber"
-                                    count={item.count}
-                                    value={item.name}
-                                  />
-                                </button>
-                              </li>
-                            ))}
-                          </ul>
-                        ) : selectedOption === "reference" ? (
-                          <ul className="filter-section-list">
-                            {li_reference.map((item) => (
-                              <li
-                                className="filter-section-item"
-                                onClick={() => clickedItem(item.name)}
-                              >
-                                <button
-                                  className={
-                                    selectedDiv_level2 == item.name
-                                      ? "filter-section-btn selected"
-                                      : "filter-section-btn"
-                                  }
-                                >
-                                  <Checkbox
-                                    label={item.name}
-                                    checked={filterConditions.filter_layer1_reference.includes(
-                                      item.name
-                                    )}
-                                    onChange={normalFilterCheckboxChange}
-                                    name="reference"
-                                    count={item.count}
-                                    value={item.name}
-                                  />
-                                </button>
-                              </li>
-                            ))}
-                          </ul>
-                        ) : selectedOption === "scheduledDeliveryDate" ? (
-                          <ul className="filter-section-list">
-                            {li_scheduledDeliveryDate.map((item) => (
-                              <li
-                                className="filter-section-item"
-                                onClick={() => clickedItem(item.name)}
-                              >
-                                <button
-                                  className={
-                                    selectedDiv_level2 == item.name
-                                      ? "filter-section-btn selected"
-                                      : "filter-section-btn"
-                                  }
-                                >
-                                  <Checkbox
-                                    label={item.name}
-                                    checked={filterConditions.filter_layer1_scheduledDeliveryDate.includes(
-                                      item.name
-                                    )}
-                                    onChange={normalFilterCheckboxChange}
-                                    name="scheduledDeliveryDate"
-                                    count={item.count}
-                                    value={item.name}
-                                  />
-                                </button>
-                              </li>
-                            ))}
-                          </ul>
-                        ) : selectedOption === "shipDate" ? (
-                          <ul className="filter-section-list">
-                            {li_shipDate.map((item) => (
-                              <li
-                                className="filter-section-item"
-                                onClick={() => clickedItem(item.name)}
-                              >
-                                <button
-                                  className={
-                                    selectedDiv_level2 == item.name
-                                      ? "filter-section-btn selected"
-                                      : "filter-section-btn"
-                                  }
-                                >
-                                  <Checkbox
-                                    label={item.name}
-                                    checked={filterConditions.filter_layer1_shipDate.includes(
-                                      item.name
-                                    )}
-                                    onChange={normalFilterCheckboxChange}
-                                    name="shipDate"
-                                    count={item.count}
-                                    value={item.name}
-                                  />
-                                </button>
-                              </li>
-                            ))}
-                          </ul>
-                        ) : selectedOption === "recipientContactName" ? (
-                          <ul className="filter-section-list">
-                            {li_recipientName.map((item) => (
-                              <li
-                                className="filter-section-item"
-                                onClick={() => clickedItem(item.name)}
-                              >
-                                <button
-                                  className={
-                                    selectedDiv_level2 == item.name
-                                      ? "filter-section-btn selected"
-                                      : "filter-section-btn"
-                                  }
-                                >
-                                  <Checkbox
-                                    label={item.name}
-                                    checked={filterConditions.filter_layer1_recipientContactName.includes(
-                                      item.name
-                                    )}
-                                    onChange={normalFilterCheckboxChange}
-                                    name="recipientContactName"
-                                    count={item.count}
-                                    value={item.name}
-                                  />
-                                </button>
-                              </li>
-                            ))}
-                          </ul>
-                        ) : selectedOption === "recipientCompany" ? (
-                          <ul className="filter-section-list">
-                            {li_recipientCompany.map((item) => (
-                              <li
-                                className="filter-section-item"
-                                onClick={() => clickedItem(item.name)}
-                              >
-                                <button
-                                  className={
-                                    selectedDiv_level2 == item.name
-                                      ? "filter-section-btn selected"
-                                      : "filter-section-btn"
-                                  }
-                                >
-                                  <Checkbox
-                                    label={item.name}
-                                    checked={filterConditions.filter_layer1_recipientCompany.includes(
-                                      item.name
-                                    )}
-                                    onChange={normalFilterCheckboxChange}
-                                    name="recipientCompany"
-                                    count={item.count}
-                                    value={item.name}
-                                  />
-                                </button>
-                              </li>
-                            ))}
-                          </ul>
-                        ) : selectedOption === "recipientAddress" ? (
-                          <ul className="filter-section-list">
-                            {li_recipientAddress.map((item) => (
-                              <li
-                                className="filter-section-item"
-                                onClick={() => clickedItem(item.name)}
-                              >
-                                <button
-                                  className={
-                                    selectedDiv_level2 == item.name
-                                      ? "filter-section-btn selected"
-                                      : "filter-section-btn"
-                                  }
-                                >
-                                  <Checkbox
-                                    label={item.name}
-                                    checked={filterConditions.filter_layer1_recipientAddress.includes(
-                                      item.name
-                                    )}
-                                    onChange={normalFilterCheckboxChange}
-                                    name="recipientAddress"
-                                    count={item.count}
-                                    value={item.name}
-                                  />
-                                </button>
-                              </li>
-                            ))}
-                          </ul>
-                        ) : selectedOption === "recipientCity" ? (
-                          <ul className="filter-section-list">
-                            {li_recipientCity.map((item) => (
-                              <li
-                                className="filter-section-item"
-                                onClick={() => clickedItem(item.name)}
-                              >
-                                <button
-                                  className={
-                                    selectedDiv_level2 == item.name
-                                      ? "filter-section-btn selected"
-                                      : "filter-section-btn"
-                                  }
-                                >
-                                  <Checkbox
-                                    label={item.name}
-                                    checked={filterConditions.filter_layer1_recipientCity.includes(
-                                      item.name
-                                    )}
-                                    onChange={normalFilterCheckboxChange}
-                                    name="recipientCity"
-                                    count={item.count}
-                                    value={item.name}
-                                  />
-                                </button>
-                              </li>
-                            ))}
-                          </ul>
-                        ) : selectedOption === "recipientState" ? (
-                          <ul className="filter-section-list">
-                            {li_recipientState.map((item) => (
-                              <li
-                                className="filter-section-item"
-                                onClick={() => clickedItem(item.name)}
-                              >
-                                <button
-                                  className={
-                                    selectedDiv_level2 == item.name
-                                      ? "filter-section-btn selected"
-                                      : "filter-section-btn"
-                                  }
-                                >
-                                  <Checkbox
-                                    label={item.name}
-                                    checked={filterConditions.filter_layer1_recipientState.includes(
-                                      item.name
-                                    )}
-                                    onChange={normalFilterCheckboxChange}
-                                    name="recipientState"
-                                    count={item.count}
-                                    value={item.name}
-                                  />
-                                </button>
-                              </li>
-                            ))}
-                          </ul>
-                        ) : selectedOption === "recipientCountry" ? (
-                          <ul className="filter-section-list">
-                            {li_recipientCountry.map((item) => (
-                              <li
-                                className="filter-section-item"
-                                onClick={() => clickedItem(item.name)}
-                              >
-                                <button
-                                  className={
-                                    selectedDiv_level2 == item.name
-                                      ? "filter-section-btn selected"
-                                      : "filter-section-btn"
-                                  }
-                                >
-                                  <Checkbox
-                                    label={item.name}
-                                    checked={filterConditions.filter_layer1_recipientCountry.includes(
-                                      item.name
-                                    )}
-                                    onChange={normalFilterCheckboxChange}
-                                    name="recipientCountry"
-                                    count={item.count}
-                                    value={item.name}
-                                  />
-                                </button>
-                              </li>
-                            ))}
-                          </ul>
-                        ) : selectedOption === "recipientPostal" ? (
-                          <ul className="filter-section-list">
-                            {li_recipientPostal.map((item) => (
-                              <li
-                                className="filter-section-item"
-                                onClick={() => clickedItem(item.name)}
-                              >
-                                <button
-                                  className={
-                                    selectedDiv_level2 == item.name
-                                      ? "filter-section-btn selected"
-                                      : "filter-section-btn"
-                                  }
-                                >
-                                  <Checkbox
-                                    label={item.name}
-                                    checked={filterConditions.filter_layer1_recipientPostal.includes(
-                                      item.name
-                                    )}
-                                    onChange={normalFilterCheckboxChange}
-                                    name="recipientPostal"
-                                    count={item.count}
-                                    value={item.name}
-                                  />
-                                </button>
-                              </li>
-                            ))}
-                          </ul>
-                        ) : (
-                          ""
-                        )}
+                        {(() => {
+                          debugger;
+                          const selectedOptionData =
+                            initialNormalFilterInfo[selectedOption];
+
+                          if (selectedOptionData) {
+                            return (
+                              <ul className="filter-section-list">
+                                {selectedOptionData.orginalData.map((item) => (
+                                  <li
+                                    className="filter-section-item"
+                                    onClick={() => clickedItem(item.name)}
+                                  >
+                                    <button
+                                      className={
+                                        selectedDiv_level2 === item.name
+                                          ? "filter-section-btn selected"
+                                          : "filter-section-btn"
+                                      }
+                                    >
+                                      <Checkbox
+                                        label={item.name}
+                                        checked={false}
+                                        onChange={normalFilterCheckboxChange}
+                                        name={selectedOption}
+                                        count={item.count}
+                                        value={item.name}
+                                      />
+                                    </button>
+                                  </li>
+                                ))}
+                              </ul>
+                            );
+                          } else {
+                            return null;
+                          }
+                        })()}
                       </div>
                     </>
                   ) : (
