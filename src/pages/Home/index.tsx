@@ -39,7 +39,6 @@ import {
 } from "../../components/commonFunctions";
 import Checkbox from "../../components/checkbox";
 import FilterConditions from "../../interfaces/filterConditions";
-// import StatusFilterInfo from "../../interfaces/statusFilterInfo";
 import SelectedFilterListInfo from "../../interfaces/selectedFilterListInfo";
 import NormalFilterInfo from "../../interfaces/normalFilterInfo";
 import initialStatusFilterInfo from "../../constants/statusFIlterData";
@@ -51,20 +50,15 @@ const EDUCONNECT_URL = `https://shipmenttrackingapi-qa.signsharecloud.com/api`;
 
 // For showing the selected List
 let selectedListArray: any[] = [];
-let selectedListKeyStatus: any[] = [];
-let selectedListKeyShipper: any[] = [];
-// let normalFilterInfo: NormalFilterInfo = {};
-
 // for selected  filter List
 let selectedFilterListForUI: SelectedFilterListInfo[] = [];
-let selectedFilterListFor_selected: SelectedFilterListInfo[] = [];
+
 export default function HomePage() {
   const [rows, setRows] = useState<Shipment[]>([]);
   const token = localStorage.getItem("Authorization");
   const config = {
     headers: { Authorization: `Bearer ${token}` },
   };
-  //new
   const [statusFilterInfo, setStatusFilterInfo] = useState(
     initialStatusFilterInfo
   );
@@ -94,163 +88,32 @@ export default function HomePage() {
 
   const navigate = useNavigate(); // Use the useNavigate hook here
 
-  //ag change
-
   // Add other properties as needed
-  let [filterConditions, setFilterConditions] = useState<FilterConditions>({
-    filter_layer1_accountNo: [],
-    filter_layer1_deliveredDate: [],
-    filter_layer1_attemptDelivery: [],
-    filter_layer1_packageKg: [],
-    filter_layer1_packageLbs: [],
-    filter_layer1_purchaseOrder: [],
-    filter_layer1_reference: [],
-    filter_layer1_scheduledDeliveryDate: [],
-    filter_layer1_shipDate: [],
-    filter_layer1_recipientContactName: [],
-    filter_layer1_recipientCompany: [],
-    filter_layer1_recipientAddress: [],
-    filter_layer1_recipientCity: [],
-    filter_layer1_recipientState: [],
-    filter_layer1_recipientCountry: [],
-    filter_layer1_recipientPostal: [],
-  });
-
-  //ag change
-
-  // const StatusFilterInfo: StatusFilterInfo = {
-  //   delayed: { field: "isDelayed", value: true, display: "Delayed" },
-  //   delivered: { field: "isDelivered", value: true, display: "Delivered" },
-  //   exception: { field: "isException", value: true, display: "Exception" },
-  //   inTransit: { field: "status", value: "In transit", display: "In transit" },
-  //   label: { field: "status", value: "Initiated", display: "Label" },
-  // };
-  //ag changes
-  const normalFilterInfo: NormalFilterInfo = {
-    accountNo: {
-      field: "accountNumber",
-      sectionValue: filterConditions.filter_layer1_accountNo,
-      type: "string",
-      filterVariable: "filter_layer1_accountNo",
-      display: "Account No",
-    },
-    deliveredDate: {
-      field: "deliveredTime",
-      sectionValue: filterConditions.filter_layer1_deliveredDate,
-      type: "date",
-      filterVariable: "filter_layer1_deliveredDate",
-      display: "Delivered Date",
-    },
-    numberOfAttempt: {
-      field: "numberOfAttemptedDeliveries",
-      sectionValue: filterConditions.filter_layer1_attemptDelivery,
-      type: "number",
-      filterVariable: "filter_layer1_attemptDelivery",
-      display: "No of Attempt",
-    },
-    packageKg: {
-      field: "packageWeightKg",
-      sectionValue: filterConditions.filter_layer1_packageKg,
-      type: "string",
-      filterVariable: "filter_layer1_packageKg",
-      display: "PKG(KG)",
-    },
-    packageLbs: {
-      field: "packageWeightLbs",
-      sectionValue: filterConditions.filter_layer1_packageLbs,
-      type: "string",
-      filterVariable: "filter_layer1_packageLbs",
-      display: "PKG(Lbs)",
-    },
-    purchaseOrderNumber: {
-      field: "purchaseOrderNumber",
-      sectionValue: filterConditions.filter_layer1_purchaseOrder,
-      type: "string",
-      filterVariable: "filter_layer1_purchaseOrder",
-      display: "PO No",
-    },
-    reference: {
-      field: "reference",
-      sectionValue: filterConditions.filter_layer1_reference,
-      type: "string",
-      filterVariable: "filter_layer1_reference",
-      display: "Reference",
-    },
-    scheduledDeliveryDate: {
-      field: "scheduledDeliveryDate",
-      sectionValue: filterConditions.filter_layer1_scheduledDeliveryDate,
-      type: "date",
-      filterVariable: "filter_layer1_scheduledDeliveryDate",
-      display: "Sch. Delivery Date",
-    },
-    shipDate: {
-      field: "shipDate",
-      sectionValue: filterConditions.filter_layer1_shipDate,
-      type: "date",
-      filterVariable: "filter_layer1_shipDate",
-      display: "Ship Date",
-    },
-    recipientContactName: {
-      field: "recipientContactName",
-      sectionValue: filterConditions.filter_layer1_recipientContactName,
-      type: "string",
-      filterVariable: "filter_layer1_recipientContactName",
-      display: "Recipient Name",
-    },
-    recipientCompany: {
-      field: "recipientCompany",
-      sectionValue: filterConditions.filter_layer1_recipientCompany,
-      type: "string",
-      filterVariable: "filter_layer1_recipientCompany",
-      display: "Recipient Company",
-    },
-    recipientAddress: {
-      field: "recipientAddress",
-      sectionValue: filterConditions.filter_layer1_recipientAddress,
-      type: "string",
-      filterVariable: "filter_layer1_recipientAddress",
-      display: "Recipient Address",
-    },
-    recipientCity: {
-      field: "recipientCity",
-      sectionValue: filterConditions.filter_layer1_recipientCity,
-      type: "string",
-      filterVariable: "filter_layer1_recipientCity",
-      display: "Recipient City",
-    },
-    recipientState: {
-      field: "recipientState",
-      sectionValue: filterConditions.filter_layer1_recipientState,
-      type: "string",
-      filterVariable: "filter_layer1_recipientState",
-      display: "Recipient State",
-    },
-    recipientCountry: {
-      field: "recipientCountry",
-      sectionValue: filterConditions.filter_layer1_recipientCountry,
-      type: "string",
-      filterVariable: "filter_layer1_recipientCountry",
-      display: "Recipient Country",
-    },
-    recipientPostal: {
-      field: "recipientPostal",
-      sectionValue: filterConditions.filter_layer1_recipientPostal,
-      type: "string",
-      filterVariable: "filter_layer1_recipientPostal",
-      display: "Recipient Postal",
-    },
-  };
+  // let [filterConditions, setFilterConditions] = useState<FilterConditions>({
+  //   filter_layer1_accountNo: [],
+  //   filter_layer1_deliveredDate: [],
+  //   filter_layer1_attemptDelivery: [],
+  //   filter_layer1_packageKg: [],
+  //   filter_layer1_packageLbs: [],
+  //   filter_layer1_purchaseOrder: [],
+  //   filter_layer1_reference: [],
+  //   filter_layer1_scheduledDeliveryDate: [],
+  //   filter_layer1_shipDate: [],
+  //   filter_layer1_recipientContactName: [],
+  //   filter_layer1_recipientCompany: [],
+  //   filter_layer1_recipientAddress: [],
+  //   filter_layer1_recipientCity: [],
+  //   filter_layer1_recipientState: [],
+  //   filter_layer1_recipientCountry: [],
+  //   filter_layer1_recipientPostal: [],
+  // });
 
   const [searchType, setSearchType] = useState("Store ID");
   const [searchValue, setSearchValue] = useState("");
   const [dropDown, setDropDown] = useState(false);
   const [storeId, setStoreId] = useState("");
   const dropdownRef = useRef(null);
-  const [selectedList, setSelectedList] = useState<any[]>([]);
   const [showFilter, setShowFilter] = useState(false);
-
-  const [userinfo, setUserInfo] = useState<any[]>([]);
-  const [filter_model, set_filter_model] = useState<any[]>([]);
   const [firstlevelClick, set_firstlevelClick] = useState(true);
 
   const handleLogout = () => {
@@ -259,30 +122,8 @@ export default function HomePage() {
   };
   let originalRows1 = originalRows;
   let filterBlockData = originalRows;
-  let filterSection: any[] = [];
-
-  //checkbox changes
-  // statusFilterInfo['delayed'].sectionValue=true;
-  const [shipmentStatus, setShipmentStatus] = useState({
-    chk_delayed: false,
-    chk_delivered: false,
-    chk_exception: false,
-    chk_inTranist: false,
-    chk_labelCreated: false,
-  });
-
-  const resetShipmentStatus = () => {
-    setShipmentStatus({
-      chk_delayed: false,
-      chk_delivered: false,
-      chk_exception: false,
-      chk_inTranist: false,
-      chk_labelCreated: false,
-    });
-  };
 
   // shipment info array
-  //ag change;
   const getIntersection = (arr1: any[], arr2: any[]) => {
     return arr1.filter((item) =>
       arr2.some(
@@ -292,56 +133,8 @@ export default function HomePage() {
     );
   };
 
-  //needed
-  // const UnselectStatusFilterFromUI = (value: SelectedFilterListInfo) => {
-  //   //sreevika : check value.display is correct
-  //   switch (value.display) {
-  //     case "delayed":
-  //       setShipmentStatus((prevState) => ({
-  //         ...prevState,
-  //         chk_delayed: false,
-  //       }));
-  //       break;
-  //     case "delivered":
-  //       setShipmentStatus((prevState) => ({
-  //         ...prevState,
-  //         chk_delivered: false,
-  //       }));
-  //       break;
-  //     case "exception":
-  //       setShipmentStatus((prevState) => ({
-  //         ...prevState,
-  //         chk_exception: false,
-  //       }));
-  //       break;
-  //     case "inTransit":
-  //       setShipmentStatus((prevState) => ({
-  //         ...prevState,
-  //         chk_inTransit: false,
-  //       }));
-  //       break;
-  //     case "label":
-  //       setShipmentStatus((prevState) => ({
-  //         ...prevState,
-  //         chk_labelCreated: false,
-  //       }));
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  //   //sreevika
-  //   // let filterArr = userinfo.filter((e) => e !== value.display);
-  //   // setUserInfo(filterArr);
-  // };
-
-  // useEffect(() => {}, [setShipmentStatus]);
-  // useEffect(() => {
-  //   console.log("FILTER LOG 3" + userinfo);
-  // }, [userinfo]);
-  //new changes
-
-  //new
-  //calculate count for status field
+  //sreevika pls check
+  //set status filter counts
   Object.keys(initialStatusFilterInfo).forEach((key) => {
     const filterField = initialStatusFilterInfo[key].field;
     const filterValue = initialStatusFilterInfo[key].sectionValue;
@@ -354,7 +147,7 @@ export default function HomePage() {
     statusFilterInfo[key].count = count;
   });
 
-  //status field changes
+  //status field checkbox changes
   const statusFilterCheckboxChange = (event: any) => {
     const isChecked = event.target.checked;
     const checkboxValue = event.target.value;
@@ -366,45 +159,7 @@ export default function HomePage() {
         checkedStatus: isChecked,
       },
     }));
-    console.log("StatusFilterInfo");
-    console.log(statusFilterInfo);
-
-    // Perform other actions based on the checkbox value and isChecked
-    // ...
   };
-
-  //////////////////////////////////////////////////
-  const statusFilterCheckboxChange1 = (event: {
-    target: { name: any; checked: any; value: any };
-  }) => {
-    const { name, checked, value } = event.target;
-    // setShipmentStatus({ ...shipmentStatus, [name]: checked });
-    statusFilterInfo[name].checkedStatus = checked;
-    console.log(value);
-    // const filterInfo1: SelectedFilterListInfo = {
-    //   field: value,
-    //   filterType: 1,
-    //   sectionValue: `shipmentStatus.${name}`,
-    //   type: "",
-    //   filterVariable: "filter_layer1_" + value,
-    //   display: value,
-    // };
-
-    // if (checked) {
-    //   tempArr = [...userinfo, value];
-    //   selectedFilterListFor_selected.push(filterInfo1);
-    // } else {
-    //   tempArr = userinfo.filter((e) => e !== value);
-    //   selectedFilterListFor_selected = selectedFilterListFor_selected.filter(
-    //     (filterInfo) => !(filterInfo.field === filterInfo1.field)
-    //   );
-    // }
-    // selectedListKeyStatus = tempArr;
-    // console.log("AAAA" + JSON.stringify(selectedFilterListFor_selected));
-    // setUserInfo(tempArr);
-  };
-
-  //useEffect(() => {}, [shipmentStatus]);
 
   const selectSearchType = () => {
     setDropDown(!dropDown);
@@ -423,34 +178,33 @@ export default function HomePage() {
     setRows(originalRows);
 
     setStoreId("");
-    setSelectedList([]);
     setCardSelected("");
     resetFilters();
   };
 
-  // -----------------------------------------------------//
-  // Common functions need to move as components
-  const getInputKeyByValueForStatusFilter = (
-    input: string
-  ): string | undefined => {
-    for (const key in statusFilterInfo) {
-      if (statusFilterInfo.hasOwnProperty(key)) {
-        if (statusFilterInfo[key].display === input) {
-          return key;
-        }
-      }
-    }
-    return undefined;
-  };
+  // // -----------------------------------------------------//
+  // // Common functions need to move as components
+  // const getInputKeyByValueForStatusFilter = (
+  //   input: string
+  // ): string | undefined => {
+  //   for (const key in statusFilterInfo) {
+  //     if (statusFilterInfo.hasOwnProperty(key)) {
+  //       if (statusFilterInfo[key].display === input) {
+  //         return key;
+  //       }
+  //     }
+  //   }
+  //   return undefined;
+  // };
 
-  const getSectionKeyByDisplay = (displayValue: string): string | undefined => {
-    const foundSectionKey = Object.keys(normalFilterInfo).find((sectionKey) =>
-      displayValue
-        .toLowerCase()
-        .includes(normalFilterInfo[sectionKey].display.toLowerCase())
-    );
-    return foundSectionKey;
-  };
+  // const getSectionKeyByDisplay = (displayValue: string): string | undefined => {
+  //   const foundSectionKey = Object.keys(normalFilterInfo).find((sectionKey) =>
+  //     displayValue
+  //       .toLowerCase()
+  //       .includes(normalFilterInfo[sectionKey].display.toLowerCase())
+  //   );
+  //   return foundSectionKey;
+  // };
 
   // -----------------------------------------------------//
   const resetAllFilters = () => {
@@ -459,34 +213,34 @@ export default function HomePage() {
     setSearchValue("");
     setCardSelected("");
 
-    filterSection = [];
-    setUserInfo([]);
-    resetShipmentStatus();
+    // filterSection = [];
+    // setUserInfo([]);
+    // resetShipmentStatus();
 
-    selectedListArray = [];
-    selectedListKeyShipper = [];
-    selectedListKeyStatus = [];
-    setSelectedList([]);
+    // selectedListArray = [];
+    // selectedListKeyShipper = [];
+    // selectedListKeyStatus = [];
+    // setSelectedList([]);
 
-    setFilterConditions((prevState) => ({
-      ...prevState,
-      filter_layer1_accountNo: [],
-      filter_layer1_deliveredDate: [],
-      filter_layer1_attemptDelivery: [],
-      filter_layer1_packageKg: [],
-      filter_layer1_packageLbs: [],
-      filter_layer1_purchaseOrder: [],
-      filter_layer1_reference: [],
-      filter_layer1_scheduledDeliveryDate: [],
-      filter_layer1_shipDate: [],
-      filter_layer1_recipientContactName: [],
-      filter_layer1_recipientCompany: [],
-      filter_layer1_recipientAddress: [],
-      filter_layer1_recipientCity: [],
-      filter_layer1_recipientState: [],
-      filter_layer1_recipientCountry: [],
-      filter_layer1_recipientPostal: [],
-    }));
+    // setFilterConditions((prevState) => ({
+    //   ...prevState,
+    //   filter_layer1_accountNo: [],
+    //   filter_layer1_deliveredDate: [],
+    //   filter_layer1_attemptDelivery: [],
+    //   filter_layer1_packageKg: [],
+    //   filter_layer1_packageLbs: [],
+    //   filter_layer1_purchaseOrder: [],
+    //   filter_layer1_reference: [],
+    //   filter_layer1_scheduledDeliveryDate: [],
+    //   filter_layer1_shipDate: [],
+    //   filter_layer1_recipientContactName: [],
+    //   filter_layer1_recipientCompany: [],
+    //   filter_layer1_recipientAddress: [],
+    //   filter_layer1_recipientCity: [],
+    //   filter_layer1_recipientState: [],
+    //   filter_layer1_recipientCountry: [],
+    //   filter_layer1_recipientPostal: [],
+    // }));
 
     originalRows = originalRows_backup;
     setRows(originalRows);
@@ -494,12 +248,17 @@ export default function HomePage() {
 
   // Clear filter as each item on the selected List
   const clearFilter = (value: SelectedFilterListInfo) => {
-    // let filterArr
-    console.log(value);
-    selectedFilterListForUI = selectedFilterListForUI.filter(
-      (e) => e.display != value.display
-    );
-    statusFilterInfo[value.key].checkedStatus = false;
+    // status filters
+    if (value.filterType == 1) {
+      selectedFilterListForUI = selectedFilterListForUI.filter(
+        (e) => e.display != value.display
+      );
+      statusFilterInfo[value.key].checkedStatus = false;
+    }
+    //shipping and receipient filters
+    else if (value.filterType == 2) {
+    }
+
     // if (
     //   Object.values(StatusFilterInfo).some((status) => status.display === value)
     // ) {
@@ -541,9 +300,6 @@ export default function HomePage() {
 
     applyFilters();
   };
-  // useEffect(() => {}, [shipmentStatus]);
-  // useEffect(() => {}, [userinfo]);
-  // useEffect(() => {}, [selectedList]);
 
   const searchData = (event: { key: string }) => {
     setAnyFilter(true);
@@ -714,37 +470,6 @@ export default function HomePage() {
     setSelectedDiv_level2(value);
     set_firstlevelClick(false);
   };
-  // useEffect(() => {}, [firstlevelClick]);
-
-  //first layer filter selection
-
-  // Object.keys(intialNormalFilterInfo).forEach((key) => {
-  //   const [state, setState] = useState<any[]>([]);
-  //   intialNormalFilterInfo[key].orginalData = state;
-  //   intialNormalFilterInfo[key].setState = setState;
-  // });
-
-  // const [li_accountNumber, set_li_accountNumber] = useState<any[]>([]);
-  // const [li_deliveredDate, set_li_deliveredDate] = useState<any[]>([]);
-  // const [li_numberOfAttempt, set_li_numberOfAttempt] = useState<any[]>([]);
-  // const [li_packageKg, set_li_packageKg] = useState<any[]>([]);
-  // const [li_packageLbs, set_li_packageLbs] = useState<any[]>([]);
-  // const [li_purchaseOrderNumber, set_li_purchaseOrderNumber] = useState<any[]>(
-  //   []
-  // );
-  // const [li_reference, set_li_reference] = useState<any[]>([]);
-  // const [li_scheduledDeliveryDate, set_li_scheduledDeliveryDate] = useState<
-  //   any[]
-  // >([]);
-  // const [li_shipDate, set_li_shipDate] = useState<any[]>([]);
-  // const [li_recipientName, set_li_recipientName] = useState<any[]>([]);
-  // const [li_recipientCompany, set_li_recipientCompany] = useState<any[]>([]);
-
-  // const [li_recipientAddress, set_li_recipientAddress] = useState<any[]>([]);
-  // const [li_recipientCity, set_li_recipientCity] = useState<any[]>([]);
-  // const [li_recipientState, set_li_recipientState] = useState<any[]>([]);
-  // const [li_recipientCountry, set_li_recipientCountry] = useState<any[]>([]);
-  // const [li_recipientPostal, set_li_recipientPostal] = useState<any[]>([]);
 
   const [selectedOption, setSelectedOption] = useState("");
 
@@ -774,97 +499,6 @@ export default function HomePage() {
         }
       }
     });
-    // if (value == "accountNumber") {
-    //   const accountNumberArr = generateGroupByData(value);
-    //   intialNormalFilterInfo.accountNo.orginalData = accountNumberArr;
-    //   // set_li_accountNumber(accountNumberArr);
-    // } else if (value == "deliveredTime") {
-    //   const deliveredDateArr = _(originalRows)
-    //     .groupBy((item) => {
-    //       const formattedDate = moment(item.deliveredTime).format("MM/DD/YYYY");
-    //       return moment(formattedDate).isValid() ? formattedDate : "00/00/0000";
-    //     })
-    //     .map((items, name) => ({
-    //       name,
-    //       count: items.length,
-    //       type: "deliveredDate",
-    //     }))
-    //     .value();
-    //   intialNormalFilterInfo.deliveredDate.orginalData = deliveredDateArr;
-    //   // set_li_deliveredDate(deliveredDateArr);
-    // } else if (value == "numberOfAttemptedDeliveries") {
-    //   const numberOfAttemptArr = generateGroupByData(value);
-    //   intialNormalFilterInfo.numberOfAttempt.orginalData = numberOfAttemptArr;
-    //   // set_li_numberOfAttempt(numberOfAttemptArr);
-    // } else if (value == "packageWeightKg") {
-    //   const packageKgArr = generateGroupByData(value);
-
-    //   set_li_packageKg(packageKgArr);
-    // } else if (value == "packageWeightLbs") {
-    //   const packageLbsArr = generateGroupByData(value);
-
-    //   set_li_packageLbs(packageLbsArr);
-    // } else if (value == "purchaseOrderNumber") {
-    //   const purchaseOrderNumberArr = generateGroupByData(value);
-    //   set_li_purchaseOrderNumber(purchaseOrderNumberArr);
-    // } else if (value == "reference") {
-    //   const referenceArr = generateGroupByData(value);
-
-    //   set_li_reference(referenceArr);
-    // } else if (value == "scheduledDeliveryDate") {
-    //   const scheduledDeliveryDateArr = _(originalRows)
-    //     .groupBy((item) => {
-    //       const formattedDate = moment(item.scheduledDeliveryDate).format(
-    //         "MM/DD/YYYY"
-    //       );
-    //       return moment(formattedDate).isValid() ? formattedDate : "00/00/0000";
-    //     })
-    //     .map((items, name) => ({
-    //       name,
-    //       count: items.length,
-    //       type: "scheduledDeliveryDate",
-    //     }))
-    //     .value();
-
-    //   set_li_scheduledDeliveryDate(scheduledDeliveryDateArr);
-    // } else if (value == "shipDate") {
-    //   const shipDateArr = _(originalRows)
-    //     .groupBy((item) => {
-    //       const formattedDate = moment(item.shipDate).format("MM/DD/YYYY");
-    //       return moment(formattedDate).isValid() ? formattedDate : "00/00/0000";
-    //     })
-    //     .map((items, name) => ({
-    //       name,
-    //       count: items.length,
-    //       type: "shipDate",
-    //     }))
-    //     .value();
-    //   set_li_shipDate(shipDateArr);
-    // } else if (value == "recipientContactName") {
-    //   const recipientContactNameArr = generateGroupByData(value);
-
-    //   set_li_recipientName(recipientContactNameArr);
-    // } else if (value == "recipientCompany") {
-    //   const recipientCompanyArr = generateGroupByData(value);
-
-    //   set_li_recipientCompany(recipientCompanyArr);
-    // } else if (value == "recipientAddress") {
-    //   const recipientAddressArr = generateGroupByData(value);
-
-    //   set_li_recipientAddress(recipientAddressArr);
-    // } else if (value == "recipientCity") {
-    //   const recipientCityArr = generateGroupByData(value);
-    //   set_li_recipientCity(recipientCityArr);
-    // } else if (value == "recipientState") {
-    //   const recipientStateArr = generateGroupByData(value);
-    //   set_li_recipientState(recipientStateArr);
-    // } else if (value == "recipientCountry") {
-    //   const recipientCountryArr = generateGroupByData(value);
-    //   set_li_recipientCountry(recipientCountryArr);
-    // } else if (value == "recipientPostal") {
-    //   const recipientPostalArr = generateGroupByData(value);
-    //   set_li_recipientPostal(recipientPostalArr);
-    // }
   };
 
   //check normal filter
@@ -964,7 +598,7 @@ export default function HomePage() {
         const newItem: SelectedFilterListInfo = {
           display: item.display,
           field: item.field,
-          filterType: 0,
+          filterType: 1,
           sectionValue: undefined,
           type: "",
           filterVariable: "",
@@ -992,23 +626,25 @@ export default function HomePage() {
       const item = shipAndRecpFilterInfo[key];
       if (item.sectionValue.length > 0) {
         // Perform desired actions with the checked item
-        const tempData = filterShipperInfoData(
-          originalRows,
+        if (filteredData.length == 0) filteredData = originalRows;
+        filteredData = filterShipperInfoData(
+          filteredData,
           item.field,
           item.sectionValue,
           item.type
         );
-        filteredData = filteredData.concat(tempData);
+        // filteredData = filteredData.concat(tempData);
         //add items to show in selected list
         const newItem: SelectedFilterListInfo = {
           display: item.display,
           field: item.field,
-          filterType: 0,
+          filterType: 2,
           sectionValue: item.sectionValue,
           type: "",
           filterVariable: "",
           key: key,
         };
+        //sreevika (may be need to add multple entries)
         const existingItem = selectedFilterListForUI.find(
           (item) => item.key === key
         );
@@ -1022,182 +658,6 @@ export default function HomePage() {
     });
     return filteredData;
   };
-  /////////////////////////////////////////////////////////////
-  // type 0- apply, 1- clear
-  // const applyFilter = () => {
-  //   //if any selected filter availableshow reset buttom
-  //   setAnyFilter(true);
-
-  //   //close filter box
-  //   setShowFilter(false);
-
-  //   //check the store id availablity
-  //   if (searchValue == "" || searchType != "Store ID") {
-  //     setStoreId("");
-  //     setSearchValue("");
-  //     originalRows = originalRows_backup;
-  //     // setRows(originalRows);
-  //   }
-
-  //   //need to check
-  //   setSelectedList([]);
-  //   setCardSelected("");
-
-  //   let filteredShipmentData_level: Shipment[] = [];
-  //   let filteredNormalData_level: Shipment[] = [];
-
-  //   //logic for status filter
-  //   selectedListKeyStatus = selectedListKeyStatus.filter(
-  //     (value, index, self) => {
-  //       return self.indexOf(value) === index;
-  //     }
-  //   );
-  //   console.log("selectedFilterListFor_selected");
-  //   console.log(selectedFilterListFor_selected);
-  //   selectedFilterListForUI = selectedFilterListFor_selected;
-
-  //   if (selectedFilterListForUI.length == 0)
-  //     filteredShipmentData_level = originalRows;
-  //   else {
-  //     const groupedFilters = selectedFilterListForUI.reduce(
-  //       (result, filterInfo) => {
-  //         const { field, sectionValue, filterType } = filterInfo;
-
-  //         if (filterType === 2) {
-  //           if (result[field]) {
-  //             result[field].sectionValue.push(sectionValue);
-  //           } else {
-  //             result[field] = {
-  //               field,
-  //               sectionValue: [sectionValue],
-  //               filterType,
-  //             };
-  //           }
-  //         } else {
-  //           result[field] = filterInfo;
-  //         }
-
-  //         return result;
-  //       },
-  //       {}
-  //     );
-
-  //     const groupedFiltersArray = Object.values(groupedFilters);
-
-  //     // need type checking
-
-  //     groupedFiltersArray.forEach((item) => {
-  //       if (item.filterType === 1) {
-  //         const { field, sectionValue } = statusFilterInfo[item.field];
-  //         if (field) {
-  //           const filteredData = filterStatusData(
-  //             originalRows,
-  //             field,
-  //             sectionValue,
-  //             item.field
-  //           );
-  //           filteredShipmentData_level =
-  //             filteredShipmentData_level.concat(filteredData);
-  //         }
-  //       } else {
-  //         const { field, sectionValue, type } = normalFilterInfo[item.field];
-
-  //         if (field && sectionValue.length > 0) {
-  //           if (filteredNormalData_level.length == 0) {
-  //             filteredNormalData_level = filterShipperInfoData(
-  //               originalRows,
-  //               field,
-  //               sectionValue,
-  //               type
-  //             );
-  //           } else {
-  //             filteredNormalData_level = filterShipperInfoData(
-  //               filteredNormalData_level,
-  //               field,
-  //               sectionValue,
-  //               type
-  //             );
-  //           }
-  //         }
-  //       }
-  //     });
-  //   }
-  //   const countFilterType1 = selectedFilterListForUI.filter(
-  //     (filterInfo) => filterInfo.filterType === 1
-  //   ).length;
-  //   const countFilterType2 = selectedFilterListForUI.filter(
-  //     (filterInfo) => filterInfo.filterType === 2
-  //   ).length;
-  //   if (countFilterType1 === 0) {
-  //     filteredShipmentData_level = originalRows;
-  //   }
-  //   if (countFilterType2 === 0) {
-  //     filteredNormalData_level = originalRows;
-  //   }
-
-  //   //ag changes
-  //   //logic for Normal filter
-  //   // selectedListKeyShipper = selectedListKeyShipper.filter(
-  //   //   (value, index, self) => {
-  //   //     return self.indexOf(value) === index;
-  //   //   }
-  //   // );
-  //   // if (selectedListKeyShipper.length == 0)
-  //   //   filteredNormalData_level = originalRows;
-  //   // else {
-  //   //   const distinctValues = [...new Set(selectedListKeyShipper)];
-
-  //   //   distinctValues.forEach((section) => {
-  //   //     const { field, sectionValue, type } = normalFilterInfo[section];
-
-  //   //     if (field && sectionValue.length > 0) {
-  //   //       if (filteredNormalData_level.length == 0) {
-  //   //         filteredNormalData_level = filterShipperInfoData(
-  //   //           originalRows,
-  //   //           field,
-  //   //           sectionValue,
-  //   //           type
-  //   //         );
-  //   //       } else {
-  //   //         filteredNormalData_level = filterShipperInfoData(
-  //   //           filteredNormalData_level,
-  //   //           field,
-  //   //           sectionValue,
-  //   //           type
-  //   //         );
-  //   //       }
-  //   //     }
-  //   //   });
-  //   //}
-
-  //   //get combined records
-  //   const intersectionArray = getIntersection(
-  //     filteredShipmentData_level,
-  //     filteredNormalData_level
-  //   );
-
-  //   //logic for selected filters
-  //   //check duplicate
-  //   const uniqueArray = selectedListArray.filter((value, index, self) => {
-  //     return self.indexOf(value) === index;
-  //   });
-
-  //   //to show selected filters
-  //   setSelectedList(uniqueArray);
-  //   //need to check
-  //   //getting duplicate values
-  //   const uniqueArray_table = intersectionArray.filter((value, index, self) => {
-  //     return self.indexOf(value) === index;
-  //   });
-
-  //   // if (uniqueArray_table.length == 0) {
-  //   //   //show records in table
-  //   //   setRows(originalRows);
-  //   // } else {
-  //   //show records in table
-  //   setRows(uniqueArray_table);
-  //   // }
-  // };
 
   //generic function to handle status filters
   function filterStatusData(
@@ -1222,14 +682,7 @@ export default function HomePage() {
     filterValue: any[],
     type: string
   ) {
-    // const newArray = filterValue.map(
-    //   (variable) =>
-    //     showFilterNameInUI(normalFilterInfo, filterProperty) + " : " + variable
-    // );
-
-    // selectedListArray = selectedListArray.concat(newArray);
-
-    //sreevika
+    //sreevika (check logic)
     let filterArray: any[] = [];
     if (type == "number") {
       filterArray = filterValue.map((str) => Number(str));
@@ -1254,8 +707,6 @@ export default function HomePage() {
 
     return filteredData;
   }
-
-  // useEffect(() => {}, [selectedList]);
 
   // ------------------------------------------- Sorting --------------------------------------------//
 
