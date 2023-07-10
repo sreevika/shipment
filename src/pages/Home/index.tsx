@@ -562,13 +562,27 @@ export default function HomePage() {
   ////////////////////////////////////////////////////////
   //new
   const applyFilters = () => {
-    console.log(statusFilterInfo);
+    let shipmentDataFilteredByStatus: Shipment[] = [];
+    let shipmentDataFilteredByShipAndRecp: Shipment[] = [];
     setShowFilter(false);
-    const shipmentDataFilteredByStatus: Shipment[] = applyFilterByStatus();
-    const shipmentDataFilteredByShipAndRecp: Shipment[] =
-      applyFilterByShipAndRecp();
 
-    console.log(shipmentDataFilteredByShipAndRecp);
+    //find checked status filter count
+    const checkedStatusFilterCount = Object.values(statusFilterInfo).filter(
+      (filter) => filter.checkedStatus === true
+    ).length;
+    if (checkedStatusFilterCount == 0)
+      shipmentDataFilteredByStatus = originalRows;
+    else shipmentDataFilteredByStatus = applyFilterByStatus();
+
+    //find normal status filter count
+    const checkedNormalFilterCount = Object.values(
+      shipAndRecpFilterInfo
+    ).filter((filter) => filter.sectionValue.length > 0).length;
+
+    if (checkedNormalFilterCount == 0)
+      shipmentDataFilteredByShipAndRecp = originalRows;
+    else shipmentDataFilteredByShipAndRecp = applyFilterByShipAndRecp();
+
     //get combined records
     const intersectionArray = getIntersection(
       shipmentDataFilteredByStatus,
