@@ -43,7 +43,7 @@ import FilterConditions from "../../interfaces/filterConditions";
 import SelectedFilterListInfo from "../../interfaces/selectedFilterListInfo";
 import NormalFilterInfo from "../../interfaces/normalFilterInfo";
 import initialStatusFilterInfo from "../../constants/statusFIlterData";
-import initialNormalFilterInfo from "../../constants/normalFilterData";
+import intialNormalFilterInfo from "../../constants/normalFilterData";
 
 let originalRows: Shipment[] = [];
 let originalRows_backup: Shipment[] = [];
@@ -69,7 +69,7 @@ export default function HomePage() {
     initialStatusFilterInfo
   );
   const [shipAndRecpFilterInfo, setShipAndRecpFilterInfo] = useState(
-    initialNormalFilterInfo
+    intialNormalFilterInfo
   );
   useEffect(() => {
     const fetchData = async () => {
@@ -718,10 +718,10 @@ export default function HomePage() {
 
   //first layer filter selection
 
-  // Object.keys(initialNormalFilterInfo).forEach((key) => {
+  // Object.keys(intialNormalFilterInfo).forEach((key) => {
   //   const [state, setState] = useState<any[]>([]);
-  //   initialNormalFilterInfo[key].orginalData = state;
-  //   initialNormalFilterInfo[key].setState = setState;
+  //   intialNormalFilterInfo[key].orginalData = state;
+  //   intialNormalFilterInfo[key].setState = setState;
   // });
 
   // const [li_accountNumber, set_li_accountNumber] = useState<any[]>([]);
@@ -764,19 +764,19 @@ export default function HomePage() {
 
   const shipperInfoChange = (value: string) => {
     console.log(selectedOption);
-    Object.keys(initialNormalFilterInfo).forEach((key) => {
-      if (initialNormalFilterInfo[key].field === value) {
+    Object.keys(intialNormalFilterInfo).forEach((key) => {
+      if (intialNormalFilterInfo[key].field === value) {
         setSelectedOption(key);
-        if (initialNormalFilterInfo[key].type == "date") {
-          initialNormalFilterInfo[key].orginalData = generateGroupByData(value);
+        if (intialNormalFilterInfo[key].type == "date") {
+          intialNormalFilterInfo[key].orginalData = generateGroupByData(value);
         } else {
-          initialNormalFilterInfo[key].orginalData = generateGroupByData(value);
+          intialNormalFilterInfo[key].orginalData = generateGroupByData(value);
         }
       }
     });
     // if (value == "accountNumber") {
     //   const accountNumberArr = generateGroupByData(value);
-    //   initialNormalFilterInfo.accountNo.orginalData = accountNumberArr;
+    //   intialNormalFilterInfo.accountNo.orginalData = accountNumberArr;
     //   // set_li_accountNumber(accountNumberArr);
     // } else if (value == "deliveredTime") {
     //   const deliveredDateArr = _(originalRows)
@@ -790,11 +790,11 @@ export default function HomePage() {
     //       type: "deliveredDate",
     //     }))
     //     .value();
-    //   initialNormalFilterInfo.deliveredDate.orginalData = deliveredDateArr;
+    //   intialNormalFilterInfo.deliveredDate.orginalData = deliveredDateArr;
     //   // set_li_deliveredDate(deliveredDateArr);
     // } else if (value == "numberOfAttemptedDeliveries") {
     //   const numberOfAttemptArr = generateGroupByData(value);
-    //   initialNormalFilterInfo.numberOfAttempt.orginalData = numberOfAttemptArr;
+    //   intialNormalFilterInfo.numberOfAttempt.orginalData = numberOfAttemptArr;
     //   // set_li_numberOfAttempt(numberOfAttemptArr);
     // } else if (value == "packageWeightKg") {
     //   const packageKgArr = generateGroupByData(value);
@@ -872,62 +872,27 @@ export default function HomePage() {
     target: { name: any; checked: any; value: any };
   }) => {
     const { name, checked, value } = event.target;
-
-    // let selectedOptionTemp = [];
-    // selectedOptionTemp = filter_model.concat(name);
-    // set_filter_model(selectedOptionTemp);
-
-    // selectedListKeyShipper = selectedListKeyShipper.concat(name);
-    // const { filterVariable } = normalFilterInfo[name];
-
-    // const filterInfo1: SelectedFilterListInfo = {
-    //   field: name,
-    //   filterType: 2,
-    //   sectionValue: value,
-    //   type: "array",
-    //   filterVariable: `filterConditions.${filterVariable}`,
-    //   display: showFilterNameInUI(normalFilterInfo, name) + " : " + value,
-    // };
-
-    // if (checked) {
-    //   setFilterConditions((prevState: any) => ({
-    //     ...prevState,
-    //     [filterVariable]: [...prevState[filterVariable], value],
-    //   }));
-    //   selectedFilterListFor_selected.push(filterInfo1);
-    // } else {
-    //   setFilterConditions((prevState: any) => ({
-    //     ...prevState,
-    //     [filterVariable]: [...prevState[filterVariable]].filter(
-    //       (element: any) => element !== value
-    //     ),
-    //   }));
-    //   selectedFilterListFor_selected = selectedFilterListFor_selected.filter(
-    //     (filterInfo) => !(filterInfo.field === filterInfo1.field)
-    //   );
-    // }
-  };
-
-  const UnselectNormalFilterFromUI = (value: SelectedFilterListInfo) => {
-    // let nameKey = getSectionKeyByDisplay(value.split(":")[0]);
-    // let keyValue: string = value.split(":")[1].trim();
-
-    if (value.field && normalFilterInfo[value.field]) {
-      //sreevika (if field and array key if diff)
-      const { filterVariable } = normalFilterInfo[value.field];
-
-      setFilterConditions((prevState: FilterConditions) => ({
-        ...prevState,
-        [filterVariable]: prevState[
-          filterVariable as keyof FilterConditions
-        ].filter((element: string) => element !== value.sectionValue),
-      }));
+    let tempArray: any = [];
+    if (checked) {
+      const existingItem = intialNormalFilterInfo[name].sectionValue.find(
+        (item: any) => item == value
+      );
+      if (!existingItem) {
+        tempArray = intialNormalFilterInfo[name].sectionValue;
+        tempArray.push(value);
+      }
+    } else {
+      tempArray = intialNormalFilterInfo[name].sectionValue;
+      tempArray = tempArray.filter((item: any) => item != value);
     }
+    setShipAndRecpFilterInfo((prevState) => ({
+      ...prevState,
+      [name]: {
+        ...prevState[name],
+        sectionValue: tempArray,
+      },
+    }));
   };
-
-  // useEffect(() => {
-  //   console.log("XXXX" + JSON.stringify(filterConditions));
-  // }, [filterConditions]);
 
   const toggleFilter = () => {
     setShowFilter(!showFilter);
@@ -944,7 +909,7 @@ export default function HomePage() {
     } else if (val == "shipInfo") {
       set_firstlevelClick(true);
       // shipment info
-      let shipInfo = Object.values(initialNormalFilterInfo).filter(
+      let shipInfo = Object.values(intialNormalFilterInfo).filter(
         (normalFilterInfo) => normalFilterInfo.filterType === "shipInfo"
       );
 
@@ -953,7 +918,7 @@ export default function HomePage() {
     } else if (val == "recpInfo") {
       set_firstlevelClick(true);
       //recipient
-      let recpInfo = Object.values(initialNormalFilterInfo).filter(
+      let recpInfo = Object.values(intialNormalFilterInfo).filter(
         (normalFilterInfo) => normalFilterInfo.filterType === "recpInfo"
       );
       setInnerFilterJson(recpInfo);
@@ -1838,9 +1803,8 @@ export default function HomePage() {
                         }
                       >
                         {(() => {
-                          debugger;
                           const selectedOptionData =
-                            initialNormalFilterInfo[selectedOption];
+                            intialNormalFilterInfo[selectedOption];
 
                           if (selectedOptionData) {
                             return (
@@ -1859,7 +1823,13 @@ export default function HomePage() {
                                     >
                                       <Checkbox
                                         label={item.name}
-                                        checked={false}
+                                        checked={
+                                          intialNormalFilterInfo[
+                                            selectedOption
+                                          ]?.sectionValue?.includes(
+                                            item.name
+                                          ) ?? false
+                                        }
                                         onChange={normalFilterCheckboxChange}
                                         name={selectedOption}
                                         count={item.count}

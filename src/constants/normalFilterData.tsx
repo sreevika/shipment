@@ -1,10 +1,10 @@
 import NormalFilterInfo from "../interfaces/normalFilterInfo";
 
-const initialNormalFilterInfo: NormalFilterInfo = {
+const intialNormalFilterInfo: NormalFilterInfo = {
   accountNo: {
     field: "accountNumber",
     //sectionValue: filterConditions.filter_layer1_accountNo,
-    sectionValue: undefined,
+    sectionValue: [],
     type: "string",
     filterVariable: "filter_layer1_accountNo",
     display: "Account No",
@@ -17,7 +17,7 @@ const initialNormalFilterInfo: NormalFilterInfo = {
   deliveredDate: {
     field: "deliveredTime",
     //sectionValue: filterConditions.filter_layer1_deliveredDate,
-    sectionValue: undefined,
+    sectionValue: [],
     type: "date",
     filterVariable: "filter_layer1_deliveredDate",
     display: "Delivered Date",
@@ -30,7 +30,7 @@ const initialNormalFilterInfo: NormalFilterInfo = {
   numberOfAttempt: {
     field: "numberOfAttemptedDeliveries",
     //sectionValue: filterConditions.filter_layer1_attemptDelivery,
-    sectionValue: undefined,
+    sectionValue: [],
     type: "number",
     filterVariable: "filter_layer1_attemptDelivery",
     display: "No of Attempt",
@@ -43,7 +43,7 @@ const initialNormalFilterInfo: NormalFilterInfo = {
   packageKg: {
     field: "packageWeightKg",
     //sectionValue: filterConditions.filter_layer1_packageKg,
-    sectionValue: undefined,
+    sectionValue: [],
     type: "string",
     filterVariable: "filter_layer1_packageKg",
     display: "PKG(KG)",
@@ -56,7 +56,7 @@ const initialNormalFilterInfo: NormalFilterInfo = {
   packageLbs: {
     field: "packageWeightLbs",
     //sectionValue: filterConditions.filter_layer1_packageLbs,
-    sectionValue: undefined,
+    sectionValue: [],
     type: "string",
     filterVariable: "filter_layer1_packageLbs",
     display: "PKG(Lbs)",
@@ -69,7 +69,7 @@ const initialNormalFilterInfo: NormalFilterInfo = {
   purchaseOrderNumber: {
     field: "purchaseOrderNumber",
     //sectionValue: filterConditions.filter_layer1_purchaseOrder,
-    sectionValue: undefined,
+    sectionValue: [],
     type: "string",
     filterVariable: "filter_layer1_purchaseOrder",
     display: "PO No",
@@ -82,7 +82,7 @@ const initialNormalFilterInfo: NormalFilterInfo = {
   reference: {
     field: "reference",
     //sectionValue: filterConditions.filter_layer1_reference,
-    sectionValue: undefined,
+    sectionValue: [],
     type: "string",
     filterVariable: "filter_layer1_reference",
     display: "Reference",
@@ -95,7 +95,7 @@ const initialNormalFilterInfo: NormalFilterInfo = {
   scheduledDeliveryDate: {
     field: "scheduledDeliveryDate",
     //sectionValue: filterConditions.filter_layer1_scheduledDeliveryDate,
-    sectionValue: undefined,
+    sectionValue: [],
     type: "date",
     filterVariable: "filter_layer1_scheduledDeliveryDate",
     display: "Sch. Delivery Date",
@@ -108,7 +108,7 @@ const initialNormalFilterInfo: NormalFilterInfo = {
   shipDate: {
     field: "shipDate",
     //sectionValue: filterConditions.filter_layer1_shipDate,
-    sectionValue: undefined,
+    sectionValue: [],
     type: "date",
     filterVariable: "filter_layer1_shipDate",
     display: "Ship Date",
@@ -121,7 +121,7 @@ const initialNormalFilterInfo: NormalFilterInfo = {
   recipientContactName: {
     field: "recipientContactName",
     //sectionValue: filterConditions.filter_layer1_recipientContactName,
-    sectionValue: undefined,
+    sectionValue: [],
     type: "string",
     filterVariable: "filter_layer1_recipientContactName",
     display: "Recipient Name",
@@ -134,7 +134,7 @@ const initialNormalFilterInfo: NormalFilterInfo = {
   recipientCompany: {
     field: "recipientCompany",
     //sectionValue: filterConditions.filter_layer1_recipientCompany,
-    sectionValue: undefined,
+    sectionValue: [],
     type: "string",
     filterVariable: "filter_layer1_recipientCompany",
     display: "Recipient Company",
@@ -147,7 +147,7 @@ const initialNormalFilterInfo: NormalFilterInfo = {
   recipientAddress: {
     field: "recipientAddress",
     //sectionValue: filterConditions.filter_layer1_recipientAddress,
-    sectionValue: undefined,
+    sectionValue: [],
     type: "string",
     filterVariable: "filter_layer1_recipientAddress",
     display: "Recipient Address",
@@ -160,7 +160,7 @@ const initialNormalFilterInfo: NormalFilterInfo = {
   recipientCity: {
     field: "recipientCity",
     //sectionValue: filterConditions.filter_layer1_recipientCity,
-    sectionValue: undefined,
+    sectionValue: [],
     type: "string",
     filterVariable: "filter_layer1_recipientCity",
     display: "Recipient City",
@@ -173,7 +173,7 @@ const initialNormalFilterInfo: NormalFilterInfo = {
   recipientState: {
     field: "recipientState",
     //sectionValue: filterConditions.filter_layer1_recipientState,
-    sectionValue: undefined,
+    sectionValue: [],
     type: "string",
     filterVariable: "filter_layer1_recipientState",
     display: "Recipient State",
@@ -186,7 +186,7 @@ const initialNormalFilterInfo: NormalFilterInfo = {
   recipientCountry: {
     field: "recipientCountry",
     //sectionValue: filterConditions.filter_layer1_recipientCountry,
-    sectionValue: undefined,
+    sectionValue: [],
     type: "string",
     filterVariable: "filter_layer1_recipientCountry",
     display: "Recipient Country",
@@ -199,7 +199,7 @@ const initialNormalFilterInfo: NormalFilterInfo = {
   recipientPostal: {
     field: "recipientPostal",
     //sectionValue: filterConditions.filter_layer1_recipientPostal,
-    sectionValue: undefined,
+    sectionValue: [],
     type: "string",
     filterVariable: "filter_layer1_recipientPostal",
     display: "Recipient Postal",
@@ -211,4 +211,4 @@ const initialNormalFilterInfo: NormalFilterInfo = {
   },
 };
 
-export default initialNormalFilterInfo;
+export default intialNormalFilterInfo;
