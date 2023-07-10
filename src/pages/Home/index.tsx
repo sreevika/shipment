@@ -907,19 +907,32 @@ export default function HomePage() {
     target: { name: any; checked: any; value: any };
   }) => {
     const { name, checked, value } = event.target;
+    
     let selectedOptionTemp = [];
     selectedOptionTemp = filter_model.concat(name);
     set_filter_model(selectedOptionTemp);
 
     selectedListKeyShipper = selectedListKeyShipper.concat(name);
-    console.log("ABBBB---" + JSON.stringify(selectedListKeyShipper));
     const { filterVariable } = sectionShipperInfo[name];
 
+
+    
+    const filterInfo1: SelectedFilterListInfo = {
+      field: name,
+      filterType: 2,
+      sectionValue: value,
+      type: "array",
+      filterVariable: `filterConditions.${filterVariable}`,
+      display:  showFilterNameInUI(sectionShipperInfo, name)+" : "+value,
+    };
+  
     if (checked) {
       setFilterConditions((prevState: any) => ({
         ...prevState,
         [filterVariable]: [...prevState[filterVariable], value],
       }));
+      selectedFilterListFor_selected.push(filterInfo1);
+
     } else {
       setFilterConditions((prevState: any) => ({
         ...prevState,
@@ -927,7 +940,11 @@ export default function HomePage() {
           (element: any) => element !== value
         ),
       }));
+      selectedFilterListFor_selected = selectedFilterListFor_selected.filter(
+        (filterInfo) => !(filterInfo.field === filterInfo1.field)
+      );
     }
+    console.log("AAAAAA"+JSON.stringify(selectedFilterListFor_selected))
   };
 
   const clearShipmentInfoAndRecipientDataByValue = (value: string) => {
@@ -1013,63 +1030,124 @@ export default function HomePage() {
       }
     );
     selectedFilterListForUI = selectedFilterListFor_selected;
+
     if (selectedFilterListForUI.length == 0)
       filteredShipmentData_level = originalRows;
     else {
 
+      const groupedFilters = selectedFilterListForUI.reduce((result, filterInfo) => {
+        const { field, sectionValue, filterType} = filterInfo;
+        
+        if (filterType === 2) {
+          if (result[field]) {
+            result[field].sectionValue.push(sectionValue);
+          } else {
+            result[field] = {
+              field,
+              sectionValue: [sectionValue],
+              filterType,
+
+            };
+          }
+        } else {
+          result[field] = filterInfo;
+        }
+        
+        return result;
+      }, {});
+    
+      
+      const groupedFiltersArray = Object.values(groupedFilters);
+
+      console.log("AAAAAAABB"+JSON.stringify(groupedFiltersArray))
       
       // need type checking 
 
-      selectedFilterListForUI.forEach((filterInfo) => {
-      
-        const { field, value } = StatusFilterInfo[filterInfo.field];
+      groupedFiltersArray.forEach((item) => {
+        if (item.filterType === 1) {
+        const { field, value } = StatusFilterInfo[item.field];
         if (field) {
           const filteredData = filterStatusData(
             originalRows,
             field,
             value,
-            filterInfo.field
+            item.field
           );
           filteredShipmentData_level = filteredShipmentData_level.concat(filteredData);
         }
+      } else {
+      
+          const { field, sectionValue, type } = sectionShipperInfo[item.field];
+  
+          if (field && sectionValue.length > 0) {
+            if (filteredNormalData_level.length == 0) {
+              filteredNormalData_level = filterShipperInfoData(
+                originalRows,
+                field,
+                sectionValue,
+                type
+              );
+            } else {
+              filteredNormalData_level = filterShipperInfoData(
+                filteredNormalData_level,
+                field,
+                sectionValue,
+                type
+              );
+            }
+          }
+      
+      }
       });
      
+    }
+    const countFilterType1 = selectedFilterListForUI.filter(
+      filterInfo => filterInfo.filterType === 1
+    ).length;
+    const countFilterType2 = selectedFilterListForUI.filter(
+      filterInfo => filterInfo.filterType === 2
+    ).length;
+    if(countFilterType1 === 0) {
+      filteredShipmentData_level = originalRows
+    }
+    if(countFilterType2 === 0) {
+      filteredNormalData_level = originalRows
     }
 
     //ag changes
     //logic for Normal filter
-    selectedListKeyShipper = selectedListKeyShipper.filter(
-      (value, index, self) => {
-        return self.indexOf(value) === index;
-      }
-    );
-    if (selectedListKeyShipper.length == 0)
-      filteredNormalData_level = originalRows;
-    else {
-      const distinctValues = [...new Set(selectedListKeyShipper)];
+    // selectedListKeyShipper = selectedListKeyShipper.filter(
+    //   (value, index, self) => {
+    //     return self.indexOf(value) === index;
+    //   }
+    // );
+    // if (selectedListKeyShipper.length == 0)
+    //   filteredNormalData_level = originalRows;
+    // else {
+    //   const distinctValues = [...new Set(selectedListKeyShipper)];
 
-      distinctValues.forEach((section) => {
-        const { field, sectionValue, type } = sectionShipperInfo[section];
+    //   distinctValues.forEach((section) => {
+    //     const { field, sectionValue, type } = sectionShipperInfo[section];
 
-        if (field && sectionValue.length > 0) {
-          if (filteredNormalData_level.length == 0) {
-            filteredNormalData_level = filterShipperInfoData(
-              originalRows,
-              field,
-              sectionValue,
-              type
-            );
-          } else {
-            filteredNormalData_level = filterShipperInfoData(
-              filteredNormalData_level,
-              field,
-              sectionValue,
-              type
-            );
-          }
-        }
-      });
-    }
+    //     if (field && sectionValue.length > 0) {
+    //       if (filteredNormalData_level.length == 0) {
+    //         filteredNormalData_level = filterShipperInfoData(
+    //           originalRows,
+    //           field,
+    //           sectionValue,
+    //           type
+    //         );
+    //       } else {
+    //         filteredNormalData_level = filterShipperInfoData(
+    //           filteredNormalData_level,
+    //           field,
+    //           sectionValue,
+    //           type
+    //         );
+    //       }
+    //     }
+    //   });
+    //}
 
     //get combined records
     const intersectionArray = getIntersection(
@@ -1124,6 +1202,7 @@ export default function HomePage() {
     filterValue: any[],
     type: string
   ) {
+
     const newArray = filterValue.map(
       (variable) =>
         showFilterNameInUI(sectionShipperInfo, filterProperty) +
@@ -1146,7 +1225,8 @@ export default function HomePage() {
             ? moment(item[filterProperty]).format("MM/DD/YYYY")
             : "00/00/0000"
         )
-      );
+      ); 
+      
     } else {
       var filteredData = originalRows.filter(
         (item) => filterArray.includes(item[filterProperty])
