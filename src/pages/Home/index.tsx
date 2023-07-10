@@ -41,6 +41,8 @@ import Checkbox from "../../components/checkbox";
 import FilterConditions from "../../interfaces/filterConditions";
 import StatusFilterInfo from "../../interfaces/statusFilterInfo";
 import NormalFilterInfo from "../../interfaces/normalFilterInfo";
+import SelectedFilterListInfo from "../../interfaces/selectedFilterListInfo";
+
 
 let originalRows: Shipment[] = [];
 let originalRows_backup: Shipment[] = [];
@@ -50,6 +52,10 @@ let selectedListArray: any[] = [];
 let selectedListKeyStatus: any[] = [];
 let selectedListKeyShipper: any[] = [];
 let sectionShipperInfo: NormalFilterInfo = {};
+
+// for selected  filter List 
+let selectedFilterListForUI : SelectedFilterListInfo[] =[];
+let selectedFilterListFor_selected : SelectedFilterListInfo[] =[];
 export default function HomePage() {
   const [rows, setRows] = useState<Shipment[]>([]);
   const token = localStorage.getItem("Authorization");
@@ -101,6 +107,9 @@ export default function HomePage() {
     filter_layer1_recipientCountry: [],
     filter_layer1_recipientPostal: [],
   });
+
+
+  
   //ag change
 
   const StatusFilterInfo: StatusFilterInfo = {
@@ -323,16 +332,31 @@ export default function HomePage() {
     const { name, checked, value } = event.target;
     setShipmentStatus({ ...shipmentStatus, [name]: checked });
     let tempArr = [];
+    
+    const filterInfo1: SelectedFilterListInfo = {
+      field: value,
+      filterType: 1,
+      sectionValue: `shipmentStatus.${name}`,
+      type: "",
+      filterVariable: "filter_layer1_"+value,
+      display: value,
+    };
+    
+    
 
     if (checked) {
       tempArr = [...userinfo, value];
+      selectedFilterListFor_selected.push(filterInfo1);
+
       // selectedListKeyStatus = selectedListKeyStatus.concat(value);
     } else {
       tempArr = userinfo.filter((e) => e !== value);
-      // selectedListKeyStatus = selectedListKeyStatus.concat(value);
+      selectedFilterListFor_selected = selectedFilterListFor_selected.filter(
+        (filterInfo) => !(filterInfo.field === filterInfo1.field)
+      );
     }
     selectedListKeyStatus = tempArr;
-    console.log("AAAA" + JSON.stringify(selectedListKeyStatus));
+    console.log("AAAA" + JSON.stringify(selectedFilterListFor_selected));
     setUserInfo(tempArr);
   };
 
@@ -978,16 +1002,7 @@ export default function HomePage() {
     let filteredShipmentData_level: Shipment[] = [];
     let filteredNormalData_level: Shipment[] = [];
 
-    // console.log("FILTER LOGG 1" + filterSection);
-    // console.log("FILTER LOGG 2" + userinfo);
-    // if (filterSection.length > 0) {
-    //   tempArray = filterSection;
-    // } else {
-    //   tempArray = userinfo;
-    //   filterSection = userinfo;
-    // }
-    //need to check
-    // console.log("AAAAA" + selectedListKeyStatus);
+
 
     //logic for status filter
     console.log("selectedListKeyStatus");
@@ -997,23 +1012,28 @@ export default function HomePage() {
         return self.indexOf(value) === index;
       }
     );
-
-    if (selectedListKeyStatus.length == 0)
+    selectedFilterListForUI = selectedFilterListFor_selected;
+    if (selectedFilterListForUI.length == 0)
       filteredShipmentData_level = originalRows;
     else {
-      selectedListKeyStatus.forEach((section) => {
-        const { field, value } = StatusFilterInfo[section];
+
+      
+      // need type checking 
+
+      selectedFilterListForUI.forEach((filterInfo) => {
+      
+        const { field, value } = StatusFilterInfo[filterInfo.field];
         if (field) {
           const filteredData = filterStatusData(
             originalRows,
             field,
             value,
-            section
+            filterInfo.field
           );
-          filteredShipmentData_level =
-            filteredShipmentData_level.concat(filteredData);
+          filteredShipmentData_level = filteredShipmentData_level.concat(filteredData);
         }
       });
+     
     }
 
     //ag changes
@@ -2281,14 +2301,14 @@ export default function HomePage() {
               ""
             )}
             <ul className="filter-section__applied">
-              {selectedList.length > 0 &&
-                selectedList.map((item) => (
+              {selectedFilterListForUI.length > 0 &&
+                 selectedFilterListForUI.map((filterInfo, index) =>  (
                   <li className="filter-section__applied-list">
                     <div className="btn btn-filter-pill">
-                      <span>{item}</span>
+                      <span>{filterInfo.display}</span>
                       <button
                         className="btn btn-close-pill"
-                        onClick={() => clearFilter(item)}
+                        onClick={() => clearFilter(filterInfo)}
                       >
                         <svg
                           width="12"
