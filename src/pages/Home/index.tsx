@@ -50,7 +50,9 @@ let selectedListArray: any[] = [];
 // for selected  filter List
 let selectedFilterListForUI: SelectedFilterListInfo[] = [];
 
+
 export default function HomePage() {
+  const [ShowLoader, setShowLoader] = useState(true);
   const [rows, setRows] = useState<Shipment[]>([]);
   const token = localStorage.getItem("Authorization");
   const config = {
@@ -75,6 +77,7 @@ export default function HomePage() {
         originalRows = response.data.data;
         originalRows_backup = response.data.data;
         setRows(response.data.data);
+        setShowLoader(false);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -223,6 +226,23 @@ export default function HomePage() {
   const searchData = (event: { key: string }) => {
     setAnyFilter(true);
 
+    
+      //reset filters in filter box
+      setStatusFilterInfo(initialStatusFilterInfo);
+    
+      Object.keys(shipAndRecpFilterInfo).forEach((element) => {
+        setShipAndRecpFilterInfo((prevState) => ({
+          ...prevState,
+          [element]: {
+            ...prevState[element],
+            sectionValue: [],
+          },
+        }));
+      });
+
+      //remove all filters from selected list
+      selectedFilterListForUI = [];
+
     if (event.key === "Enter") {
       setCardSelected("");
 
@@ -258,13 +278,18 @@ export default function HomePage() {
             );
           });
         }
+
+        
       } else {
         originalRows1 = originalRows_backup;
         originalRows = originalRows1;
         resetAllFilters();
       }
-
-      setRows(originalRows1);
+  
+      
+      
+    
+        setRows(originalRows1);
     }
   };
 
@@ -720,13 +745,22 @@ export default function HomePage() {
       filterArray = filterValue.map((str) => (str === "null" ? null : str));
     }
     if (type == "date") {
-      var filteredData = originalRows.filter((item) =>
-        filterArray.includes(
-          moment(moment(item[filterProperty]).format("MM/DD/YYYY")).isValid()
-            ? moment(item[filterProperty]).format("MM/DD/YYYY")
-            : "00/00/0000"
-        )
-      );
+
+      var filteredData = originalRows.filter((item) => {
+        const dateValue = formatDate(item[filterProperty], dateFormatToDisplay);
+        const formattedDate = moment(dateValue, "MM/DD/YYYY", true).format("MM/DD/YYYY");
+        const isValidDate = moment(formattedDate, "MM/DD/YYYY", true).isValid();
+      
+        return filterArray.includes(isValidDate ? formattedDate : "0000-00-00");
+      });
+     
+      // var filteredData = originalRows.filter((item) =>
+      //   filterArray.includes(
+      //     moment(moment(item[filterProperty]).format("MM/DD/YYYY")).isValid()
+      //       ? moment(item[filterProperty]).format("MM/DD/YYYY")
+      //       : "0000-00-00"
+      //   )
+      // );
     } else {
       var filteredData = originalRows.filter(
         (item) => filterArray.includes(item[filterProperty])
@@ -740,22 +774,34 @@ export default function HomePage() {
 
   // ------------------------------------------- Sorting --------------------------------------------//
 
-  const [order, setOrder] = useState("asc");
+
   const sortedRows = () => {
-
-     const order ="asc";
-
-    const compareFn = order === "asc" ? (a: { trackingNumber: string; }, b: { trackingNumber: any; }) => a.trackingNumber.localeCompare(b.trackingNumber) : (a, b) => b.trackingNumber.localeCompare(a.trackingNumber);
-    return rows.sort(compareFn);
+    const order = "asc";
+    const compareFn = order === "asc" ? (a: any, b: any) => a.trackingNumber.localeCompare(b.trackingNumber) : (a: any, b: any) => b.trackingNumber.localeCompare(a.trackingNumber);
+    const row1 = rows.sort(compareFn);
+   
+    setRows(row1);
+    console.log(rows);
   };
+  
 
-
+  
+  const handleSort = () => {
+    sortedRows();
+  };
+  
+  useEffect(() => {
+    sortedRows();
+  }, []);
   
 
   // Rest of your code...
 
   return (
     <>
+<div  style={ShowLoader ? { display: "block" } : { display: "none" }} className="overlay" >
+  <span className="loader"></span>
+</div>
       <div ref={dropdownRef}>
         <nav className="header-navigation">
           <div className="container max-container header-navigation-container">
@@ -1447,7 +1493,7 @@ export default function HomePage() {
                   <TableHead>
                     <TableRow>
                       <TableCell width="274">
-                        <button className="filter-table__header filter-table__header--button" onClick={sortedRows} >
+                        <button className="filter-table__header filter-table__header--button" onClick={handleSort} >
                           <div className="filter-table__title">
                             TRACKING NUMBER
                           </div>

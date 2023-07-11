@@ -1,4 +1,5 @@
 interface Shipment {
+  filterProperty: null;
   id: number;
   trackingNumberUniqueId: string;
   trackingNumber: string;

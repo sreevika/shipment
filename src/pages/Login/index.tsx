@@ -29,6 +29,7 @@ interface LoginData {
 }
 
 export default function LoginPage() {
+  const [ShowLoader, setShowLoader] = useState(false);
   const [uname, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [nameError, setNameError] = useState("");
@@ -73,6 +74,7 @@ export default function LoginPage() {
   };
 
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
+    setShowLoader(true);
     e.preventDefault();
     if (uname.trim() === "") {
       setNameError("Name is required.");
@@ -94,7 +96,7 @@ export default function LoginPage() {
         // localStorage.removeItem("password");
       }
       const loginUser = { username: uname, password: password };
-
+      setShowLoader(false);
       const response = await ApiService.verifyLogin(loginUser);
       setLoginResponse(response.data);
     }
@@ -120,6 +122,9 @@ export default function LoginPage() {
 
   return (
     <>
+    <div  style={ShowLoader ? { display: "block" } : { display: "none" }} className="overlay" >
+  <span className="loader"></span>
+</div>
       <div className="wrapper-elm body__content">
         <div className=" container-fluid-login h-custom">
           <div className="row d-flex justify-content-center align-items-center h-100">
