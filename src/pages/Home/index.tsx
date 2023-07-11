@@ -159,7 +159,7 @@ export default function HomePage() {
   };
 
   const resetAllFilters = () => {
-    debugger;
+  
     setStoreId("");
     setSearchValue("");
     setCardSelected("");
@@ -206,44 +206,22 @@ export default function HomePage() {
       shipAndRecpFilterInfo[value.key].sectionValue = shipAndRecpFilterInfo[
         value.key
       ].sectionValue.filter((e: any) => e != value.sectionValue);
+    }   
+    else if (value.filterType == 3 || value.filterType == 4 ) {
+      selectedFilterListForUI = selectedFilterListForUI.filter(
+        (e) => e.key != value.key
+      );
+      setCardSelected("");
+      if (searchValue != "") {
+        if (searchType != "Store ID") {
+          setSearchValue("");
+        }
+      }
+      
+     
     }
 
-    // if (
-    //   Object.values(StatusFilterInfo).some((status) => status.display === value)
-    // ) {
-    //   let filterArr = selectedList.filter((e) => e !== value);
-    //   let filterArr1 = userinfo.filter(
-    //     (e) => e !== getInputKeyByValueForStatusFilter(value)
-    //   );
-
-    //   setUserInfo(filterArr1);
-
-    //   filterSection = filterArr;
-    // }
-
-    // //remove from selected array
-    // if (selectedListArray.includes(value.display)) {
-    //   selectedListArray = selectedListArray.filter((e) => e !== value);
-
-    //   if (
-    //     !selectedListArray.some((item) => item.includes(value.display.trim()))
-    //   ) {
-    //     selectedListKeyShipper = selectedListKeyShipper.filter(
-    //       (e) => e !== getSectionKeyByDisplay(value.display)
-    //     );
-    //   }
-    // }
-    // if (value.filterType == 2) {
-    //   UnselectNormalFilterFromUI(value);
-    // } else if (value.filterType == 1) {
-    //   UnselectStatusFilterFromUI(value);
-    // }
-
-    //sreevika
-    // if (selectedListKeyStatus.includes(value)) {
-    //   selectedListKeyStatus = selectedListKeyStatus.filter((e) => e !== value);
-    //   selectedListArray = selectedListArray.filter((e) => e !== value);
-    // }
+    
 
     applyFilters();
   };
@@ -264,6 +242,23 @@ export default function HomePage() {
           originalRows_backup = originalRows;
           originalRows = originalRows1;
         } else {
+
+          //add items to show in selected list
+          const newItem: SelectedFilterListInfo = {
+            display: searchValue,
+            field: searchValue,
+            filterType: 3,
+            sectionValue: undefined,
+            type: "",
+            filterVariable: "",
+            key: searchValue,
+          };
+          const existingItem = selectedFilterListForUI.find(
+            (item) => item.key === searchValue
+          );
+          if (!existingItem) {
+            selectedFilterListForUI.push(newItem);
+          }
           originalRows1 = originalRows.filter((item) => {
             return Object.keys(item).some(
               () => item.trackingNumber == searchValue
@@ -328,30 +323,42 @@ export default function HomePage() {
   //Find date interval
   const toDate = new Date();
   const fromDate = new Date(toDate.getTime() - 14 * 24 * 60 * 60 * 1000);
-
-  //reset before card sleection
-  // const resetFilters = () => {
-  //   filterSection = [];
-  //   setUserInfo([]);
-  //   resetShipmentStatus();
-  // };
-
+  const filterDataByProperty = (data: any[], propertyName: string, value: boolean) => {
+    return data.filter((item) => item[propertyName] === value);
+  };
   const [isCardSelected, setCardSelected] = useState("");
   const [anyFilter, setAnyFilter] = useState(false);
   const filterByBlock = (value: string) => {
     if (value == isCardSelected) {
       setCardSelected("");
-      clearFilter(value);
+     // clearFilter(value);
     } else {
       resetAllFilters();
       setAnyFilter(true);
       let tempArr = [];
       tempArr.push(getFilterValueforUI(value));
-      setSelectedList(tempArr);
+     // setSelectedList(tempArr);
 
       setCardSelected(value);
       if (searchType != "Store ID") {
         setSearchValue("");
+      }
+
+       //add items to show in selected list
+       const newItem: SelectedFilterListInfo = {
+        display: value,
+        field: value,
+        filterType: 3,
+        sectionValue: undefined,
+        type: "",
+        filterVariable: "",
+        key: value,
+      };
+      const existingItem = selectedFilterListForUI.find(
+        (item) => item.key === value
+      );
+      if (!existingItem) {
+        selectedFilterListForUI.push(newItem);
       }
 
       if (value === "") setRows(originalRows);
@@ -360,31 +367,23 @@ export default function HomePage() {
         if (value === "all") {
           filteredData = originalRows;
         } else if (value === "onTime") {
-          filteredData = originalRows.filter((item) => {
-            return Object.keys(item).some(() => item.isOnTime == true);
-          });
+         filteredData = filterDataByProperty(originalRows, "isOnTime", true);
+
         } else if (value === "exception") {
-          filteredData = originalRows.filter((item) => {
-            return Object.keys(item).some(
-              () => item.isException == true && item.isDelivered == false
-            );
-          });
+          filteredData = filterDataByProperty(originalRows, "isException", true);
+        
         } else if (value === "delivered") {
-          filteredData = originalRows.filter((item) => {
-            return Object.keys(item).some(() => item.isDelivered == true);
-          });
+          filteredData = filterDataByProperty(originalRows, "isDelivered", true);
+        
         } else if (value === "delayed") {
-          filteredData = originalRows.filter((item) => {
-            return Object.keys(item).some(() => item.isDelayed == true);
-          });
+          filteredData = filterDataByProperty(originalRows, "isDelayed", true);
+        
         } else if (value === "early") {
-          filteredData = originalRows.filter((item) => {
-            return Object.keys(item).some(() => item.isEarly == true);
-          });
+          filteredData = filterDataByProperty(originalRows, "isEarly", true);
+      
         } else if (value === "cancelled") {
-          filteredData = originalRows.filter((item) => {
-            return Object.keys(item).some(() => item.isCancelled == true);
-          });
+          filteredData = filterDataByProperty(originalRows, "isCancelled", true);
+         
         } else if (value === "outForDelivery") {
           filteredData = originalRows.filter((item) => {
             return Object.keys(item).some(
