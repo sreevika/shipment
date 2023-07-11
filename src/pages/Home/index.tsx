@@ -267,8 +267,10 @@ export default function HomePage() {
         }
       } else {
         originalRows1 = originalRows_backup;
+        originalRows = originalRows1;
+        resetAllFilters();
       }
-
+   
       setRows(originalRows1);
     }
   };
