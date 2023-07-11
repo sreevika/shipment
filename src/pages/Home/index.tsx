@@ -420,29 +420,43 @@ export default function HomePage() {
 
   const [selectedOption, setSelectedOption] = useState("");
 
-  const generateGroupByData = (
-    fieldName: _.ValueIteratee<Shipment> | undefined
-  ) => {
-    return _.chain(originalRows)
-      .groupBy(fieldName)
+ 
+  const generateGroupByData = (data, propertyName,type) => {
+
+    if(type == "string") {
+       return _.chain(data)
+      .groupBy(propertyName)
       .map((items, name) => ({
         name,
         count: items.length,
-        type: fieldName,
+        type: propertyName,
       }))
       .orderBy(["name"], ["asc"]) // Order by the "name" property in ascending order
       .value();
+    } else {
+      return _(data)
+      .groupBy((item) => {
+        const formattedDate = moment(item[propertyName]).format("MM/DD/YYYY");
+        return moment(formattedDate).isValid() ? formattedDate : "00/00/0000";
+      })
+      .map((items, name) => ({
+        name,
+        count: items.length,
+        type: propertyName,
+      }))
+      .value();
+    }
+  
   };
+  
 
   const shipperInfoChange = (value: string) => {
     Object.keys(shipAndRecpFilterInfo).forEach((key) => {
       if (shipAndRecpFilterInfo[key].field === value) {
         setSelectedOption(key);
-        if (shipAndRecpFilterInfo[key].type == "date") {
-          shipAndRecpFilterInfo[key].orginalData = generateGroupByData(value);
-        } else {
-          shipAndRecpFilterInfo[key].orginalData = generateGroupByData(value);
-        }
+     
+          shipAndRecpFilterInfo[key].orginalData = generateGroupByData(originalRows,value, shipAndRecpFilterInfo[key].type);
+       
       }
     });
   };
