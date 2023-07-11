@@ -628,6 +628,7 @@ export default function HomePage() {
     setRows(uniqueArray_table);
     //close filter box
     setShowFilter(false);
+    setCardSelected("");
     if (checkedStatusFilterCount + checkedNormalFilterCount == 0)
       setAnyFilter(false);
     else setAnyFilter(true);
