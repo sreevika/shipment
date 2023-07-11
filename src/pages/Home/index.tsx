@@ -87,27 +87,6 @@ export default function HomePage() {
   }, []); // Empty dependency array ensures the effect runs only once
 
   const navigate = useNavigate(); // Use the useNavigate hook here
-
-  // Add other properties as needed
-  // let [filterConditions, setFilterConditions] = useState<FilterConditions>({
-  //   filter_layer1_accountNo: [],
-  //   filter_layer1_deliveredDate: [],
-  //   filter_layer1_attemptDelivery: [],
-  //   filter_layer1_packageKg: [],
-  //   filter_layer1_packageLbs: [],
-  //   filter_layer1_purchaseOrder: [],
-  //   filter_layer1_reference: [],
-  //   filter_layer1_scheduledDeliveryDate: [],
-  //   filter_layer1_shipDate: [],
-  //   filter_layer1_recipientContactName: [],
-  //   filter_layer1_recipientCompany: [],
-  //   filter_layer1_recipientAddress: [],
-  //   filter_layer1_recipientCity: [],
-  //   filter_layer1_recipientState: [],
-  //   filter_layer1_recipientCountry: [],
-  //   filter_layer1_recipientPostal: [],
-  // });
-
   const [searchType, setSearchType] = useState("Store ID");
   const [searchValue, setSearchValue] = useState("");
   const [dropDown, setDropDown] = useState(false);
@@ -182,68 +161,24 @@ export default function HomePage() {
     resetFilters();
   };
 
-  // // -----------------------------------------------------//
-  // // Common functions need to move as components
-  // const getInputKeyByValueForStatusFilter = (
-  //   input: string
-  // ): string | undefined => {
-  //   for (const key in statusFilterInfo) {
-  //     if (statusFilterInfo.hasOwnProperty(key)) {
-  //       if (statusFilterInfo[key].display === input) {
-  //         return key;
-  //       }
-  //     }
-  //   }
-  //   return undefined;
-  // };
-
-  // const getSectionKeyByDisplay = (displayValue: string): string | undefined => {
-  //   const foundSectionKey = Object.keys(normalFilterInfo).find((sectionKey) =>
-  //     displayValue
-  //       .toLowerCase()
-  //       .includes(normalFilterInfo[sectionKey].display.toLowerCase())
-  //   );
-  //   return foundSectionKey;
-  // };
-
-  // -----------------------------------------------------//
   const resetAllFilters = () => {
     debugger;
     setStoreId("");
     setSearchValue("");
     setCardSelected("");
 
-    // filterSection = [];
-    // setUserInfo([]);
-    // resetShipmentStatus();
+    //reset card filter to do (sreevika)
 
-    // selectedListArray = [];
-    // selectedListKeyShipper = [];
-    // selectedListKeyStatus = [];
-    // setSelectedList([]);
+    //reset filters in filter box
+    setStatusFilterInfo(initialStatusFilterInfo);
+    setShipAndRecpFilterInfo(intialNormalFilterInfo);
 
-    // setFilterConditions((prevState) => ({
-    //   ...prevState,
-    //   filter_layer1_accountNo: [],
-    //   filter_layer1_deliveredDate: [],
-    //   filter_layer1_attemptDelivery: [],
-    //   filter_layer1_packageKg: [],
-    //   filter_layer1_packageLbs: [],
-    //   filter_layer1_purchaseOrder: [],
-    //   filter_layer1_reference: [],
-    //   filter_layer1_scheduledDeliveryDate: [],
-    //   filter_layer1_shipDate: [],
-    //   filter_layer1_recipientContactName: [],
-    //   filter_layer1_recipientCompany: [],
-    //   filter_layer1_recipientAddress: [],
-    //   filter_layer1_recipientCity: [],
-    //   filter_layer1_recipientState: [],
-    //   filter_layer1_recipientCountry: [],
-    //   filter_layer1_recipientPostal: [],
-    // }));
-
+    //remove all filters from selected list
+    selectedFilterListForUI = [];
     originalRows = originalRows_backup;
     setRows(originalRows);
+    setShowFilter(false);
+    setAnyFilter(false);
   };
 
   // Clear filter as each item on the selected List
@@ -564,12 +499,12 @@ export default function HomePage() {
   const applyFilters = () => {
     let shipmentDataFilteredByStatus: Shipment[] = [];
     let shipmentDataFilteredByShipAndRecp: Shipment[] = [];
-    setShowFilter(false);
-
+    selectedFilterListForUI = [];
     //find checked status filter count
     const checkedStatusFilterCount = Object.values(statusFilterInfo).filter(
       (filter) => filter.checkedStatus === true
     ).length;
+    //if no status filter is checked then status filtered data= orginaldata
     if (checkedStatusFilterCount == 0)
       shipmentDataFilteredByStatus = originalRows;
     else shipmentDataFilteredByStatus = applyFilterByStatus();
@@ -579,6 +514,7 @@ export default function HomePage() {
       shipAndRecpFilterInfo
     ).filter((filter) => filter.sectionValue.length > 0).length;
 
+    //if no normal filter is checked then normal filtered data= orginaldata
     if (checkedNormalFilterCount == 0)
       shipmentDataFilteredByShipAndRecp = originalRows;
     else shipmentDataFilteredByShipAndRecp = applyFilterByShipAndRecp();
@@ -591,7 +527,13 @@ export default function HomePage() {
     const uniqueArray_table = intersectionArray.filter((value, index, self) => {
       return self.indexOf(value) === index;
     });
+    //show filtered records in table
     setRows(uniqueArray_table);
+    //close filter box
+    setShowFilter(false);
+    if (checkedStatusFilterCount + checkedNormalFilterCount == 0)
+      setAnyFilter(false);
+    else setAnyFilter(true);
   };
 
   //apply Shipment Status Filters
