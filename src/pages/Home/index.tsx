@@ -729,6 +729,18 @@ export default function HomePage() {
 
   // ------------------------------------------- Sorting --------------------------------------------//
 
+  const [order, setOrder] = useState("asc");
+  const sortedRows = () => {
+
+     const order ="asc";
+
+    const compareFn = order === "asc" ? (a: { trackingNumber: string; }, b: { trackingNumber: any; }) => a.trackingNumber.localeCompare(b.trackingNumber) : (a, b) => b.trackingNumber.localeCompare(a.trackingNumber);
+    return rows.sort(compareFn);
+  };
+
+
+  
+
   // Rest of your code...
 
   return (
@@ -1424,7 +1436,7 @@ export default function HomePage() {
                   <TableHead>
                     <TableRow>
                       <TableCell width="274">
-                        <button className="filter-table__header filter-table__header--button">
+                        <button className="filter-table__header filter-table__header--button" onClick={sortedRows} >
                           <div className="filter-table__title">
                             TRACKING NUMBER
                           </div>
