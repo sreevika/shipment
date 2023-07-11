@@ -53,6 +53,8 @@ let selectedFilterListForUI: SelectedFilterListInfo[] = [];
 
 export default function HomePage() {
   const [ShowLoader, setShowLoader] = useState(true);
+  const [order, setOrder] = useState("asc");
+  const [sortedColumn, setSortedColumn] = useState("trackingNumber");
   const [rows, setRows] = useState<Shipment[]>([]);
   const token = localStorage.getItem("Authorization");
   const config = {
@@ -76,7 +78,11 @@ export default function HomePage() {
         );
         originalRows = response.data.data;
         originalRows_backup = response.data.data;
-        setRows(response.data.data);
+        const compareFn = (a: any, b: any) => a.trackingNumber.localeCompare(b.trackingNumber);
+    
+      const sortedRows = response.data.data.sort(compareFn);
+        setRows(sortedRows);
+       
         setShowLoader(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -774,25 +780,23 @@ export default function HomePage() {
 
   // ------------------------------------------- Sorting --------------------------------------------//
 
-
-  const sortedRows = () => {
-    const order = "asc";
-    const compareFn = order === "asc" ? (a: any, b: any) => a.trackingNumber.localeCompare(b.trackingNumber) : (a: any, b: any) => b.trackingNumber.localeCompare(a.trackingNumber);
-    const row1 = rows.sort(compareFn);
-   
-    setRows(row1);
-    console.log(rows);
+  const sortedRows = (sortingKey: string) => {
+    setSortedColumn(sortingKey);
+    // Get the current order from state or set an initial order
+    const currentOrder = order === "asc" ? "desc" : "asc";
+    
+    const compareFn = currentOrder === "asc"
+      ? (a: any, b: any) => a[sortingKey].localeCompare(b[sortingKey])
+      : (a: any, b: any) => b[sortingKey].localeCompare(a[sortingKey]);
+  
+    const sortedRows = [...rows].sort(compareFn);
+  
+    setRows(sortedRows);
+    setOrder(currentOrder); // Update the order state
+    console.log(sortedRows);
   };
-  
+ 
 
-  
-  const handleSort = () => {
-    sortedRows();
-  };
-  
-  useEffect(() => {
-    sortedRows();
-  }, []);
   
 
   // Rest of your code...
@@ -1493,11 +1497,11 @@ export default function HomePage() {
                   <TableHead>
                     <TableRow>
                       <TableCell width="274">
-                        <button className="filter-table__header filter-table__header--button" onClick={handleSort} >
+                        <button className="filter-table__header filter-table__header--button" onClick={() => sortedRows("trackingNumber")} >
                           <div className="filter-table__title">
                             TRACKING NUMBER
                           </div>
-                          <div className="filter-table__sort-icon ascending">
+                          <div className={(order === "asc" && sortedColumn =="trackingNumber")  ? "filter-table__sort-icon ascending" :"filter-table__sort-icon desending" }>
                             <svg
                               width="10"
                               height="5"
@@ -1515,9 +1519,9 @@ export default function HomePage() {
                         </button>
                       </TableCell>
                       <TableCell align="left" className="status-cell">
-                        <button className="filter-table__header filter-table__header--button">
+                        <button className="filter-table__header filter-table__header--button" onClick={() => sortedRows("status")} >
                           <div className="filter-table__title">STATUS</div>
-                          <div className="filter-table__sort-icon desending">
+                          <div className={(order === "asc"  && sortedColumn =="status") ? "filter-table__sort-icon ascending" :"filter-table__sort-icon desending" }>
                             <svg
                               width="10"
                               height="5"
@@ -1562,21 +1566,7 @@ export default function HomePage() {
                             {" "}
                             SCHEDULED DELIVERY TIME BEFORE
                           </div>
-                          <div className="filter-table__sort-icon desending">
-                            <svg
-                              width="10"
-                              height="5"
-                              viewBox="0 0 10 5"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M0 5L5 0L10 5H0Z"
-                                fill="black"
-                                fillOpacity="0.75"
-                              />
-                            </svg>
-                          </div>
+                         
                         </button>
                       </TableCell>
                       <TableCell align="left">
@@ -1584,21 +1574,7 @@ export default function HomePage() {
                           <div className="filter-table__title">
                             SHIPPER NAME
                           </div>
-                          <div className="filter-table__sort-icon desending">
-                            <svg
-                              width="10"
-                              height="5"
-                              viewBox="0 0 10 5"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M0 5L5 0L10 5H0Z"
-                                fill="black"
-                                fillOpacity="0.75"
-                              />
-                            </svg>
-                          </div>
+                        
                         </button>
                       </TableCell>
                       <TableCell align="left">
@@ -1606,21 +1582,7 @@ export default function HomePage() {
                           <div className="filter-table__title">
                             SHIPPER COMPANY
                           </div>
-                          <div className="filter-table__sort-icon desending">
-                            <svg
-                              width="10"
-                              height="5"
-                              viewBox="0 0 10 5"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M0 5L5 0L10 5H0Z"
-                                fill="black"
-                                fillOpacity="0.75"
-                              />
-                            </svg>
-                          </div>
+                         
                         </button>
                       </TableCell>
                       <TableCell align="left">
@@ -1628,21 +1590,7 @@ export default function HomePage() {
                           <div className="filter-table__title">
                             SHIPPER CITY
                           </div>
-                          <div className="filter-table__sort-icon desending">
-                            <svg
-                              width="10"
-                              height="5"
-                              viewBox="0 0 10 5"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M0 5L5 0L10 5H0Z"
-                                fill="black"
-                                fillOpacity="0.75"
-                              />
-                            </svg>
-                          </div>
+                         
                         </button>
                       </TableCell>
                       <TableCell align="left">
@@ -1650,41 +1598,13 @@ export default function HomePage() {
                           <div className="filter-table__title">
                             SHIPPER STATE
                           </div>
-                          <div className="filter-table__sort-icon desending">
-                            <svg
-                              width="10"
-                              height="5"
-                              viewBox="0 0 10 5"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M0 5L5 0L10 5H0Z"
-                                fill="black"
-                                fillOpacity="0.75"
-                              />
-                            </svg>
-                          </div>
+                         
                         </button>
                       </TableCell>
                       <TableCell align="left">
                         <button className="filter-table__header filter-table__header--button">
                           <div className="filter-table__title">SHIP DATE</div>
-                          <div className="filter-table__sort-icon desending">
-                            <svg
-                              width="10"
-                              height="5"
-                              viewBox="0 0 10 5"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M0 5L5 0L10 5H0Z"
-                                fill="black"
-                                fillOpacity="0.75"
-                              />
-                            </svg>
-                          </div>
+                         
                         </button>
                       </TableCell>
                       <TableCell align="left">
@@ -1692,41 +1612,13 @@ export default function HomePage() {
                           <div className="filter-table__title">
                             DELIVERY COMPANY
                           </div>
-                          <div className="filter-table__sort-icon desending">
-                            <svg
-                              width="10"
-                              height="5"
-                              viewBox="0 0 10 5"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M0 5L5 0L10 5H0Z"
-                                fill="black"
-                                fillOpacity="0.75"
-                              />
-                            </svg>
-                          </div>
+                          
                         </button>
                       </TableCell>
                       <TableCell align="left">
                         <button className="filter-table__header filter-table__header--button">
                           <div className="filter-table__title">STORE ID</div>
-                          <div className="filter-table__sort-icon desending">
-                            <svg
-                              width="10"
-                              height="5"
-                              viewBox="0 0 10 5"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M0 5L5 0L10 5H0Z"
-                                fill="black"
-                                fillOpacity="0.75"
-                              />
-                            </svg>
-                          </div>
+                         
                         </button>
                       </TableCell>
                       <TableCell align="left">
@@ -1734,21 +1626,7 @@ export default function HomePage() {
                           <div className="filter-table__title">
                             RECIPIENT CONTACT NAME
                           </div>
-                          <div className="filter-table__sort-icon desending">
-                            <svg
-                              width="10"
-                              height="5"
-                              viewBox="0 0 10 5"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M0 5L5 0L10 5H0Z"
-                                fill="black"
-                                fillOpacity="0.75"
-                              />
-                            </svg>
-                          </div>
+                         
                         </button>
                       </TableCell>
                       <TableCell align="left">
@@ -1756,21 +1634,7 @@ export default function HomePage() {
                           <div className="filter-table__title">
                             RECIPIENT COMPANY
                           </div>
-                          <div className="filter-table__sort-icon desending">
-                            <svg
-                              width="10"
-                              height="5"
-                              viewBox="0 0 10 5"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M0 5L5 0L10 5H0Z"
-                                fill="black"
-                                fillOpacity="0.75"
-                              />
-                            </svg>
-                          </div>
+                         
                         </button>
                       </TableCell>
                       <TableCell align="left">
@@ -1778,21 +1642,7 @@ export default function HomePage() {
                           <div className="filter-table__title">
                             RECIPIENT ADDRESS
                           </div>
-                          <div className="filter-table__sort-icon desending">
-                            <svg
-                              width="10"
-                              height="5"
-                              viewBox="0 0 10 5"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M0 5L5 0L10 5H0Z"
-                                fill="black"
-                                fillOpacity="0.75"
-                              />
-                            </svg>
-                          </div>
+                         
                         </button>
                       </TableCell>
                       <TableCell align="left">
@@ -1800,21 +1650,7 @@ export default function HomePage() {
                           <div className="filter-table__title">
                             RECIPIENT CITY
                           </div>
-                          <div className="filter-table__sort-icon desending">
-                            <svg
-                              width="10"
-                              height="5"
-                              viewBox="0 0 10 5"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M0 5L5 0L10 5H0Z"
-                                fill="black"
-                                fillOpacity="0.75"
-                              />
-                            </svg>
-                          </div>
+                         
                         </button>
                       </TableCell>
                       <TableCell align="left">
@@ -1822,21 +1658,7 @@ export default function HomePage() {
                           <div className="filter-table__title">
                             RECIPIENT STATE
                           </div>
-                          <div className="filter-table__sort-icon desending">
-                            <svg
-                              width="10"
-                              height="5"
-                              viewBox="0 0 10 5"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M0 5L5 0L10 5H0Z"
-                                fill="black"
-                                fillOpacity="0.75"
-                              />
-                            </svg>
-                          </div>
+                         
                         </button>
                       </TableCell>
                       <TableCell align="left">
@@ -1844,21 +1666,7 @@ export default function HomePage() {
                           <div className="filter-table__title">
                             RECIPIENT COUNTRY
                           </div>
-                          <div className="filter-table__sort-icon desending">
-                            <svg
-                              width="10"
-                              height="5"
-                              viewBox="0 0 10 5"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M0 5L5 0L10 5H0Z"
-                                fill="black"
-                                fillOpacity="0.75"
-                              />
-                            </svg>
-                          </div>
+                         
                         </button>
                       </TableCell>
                       <TableCell align="left">
@@ -1866,21 +1674,7 @@ export default function HomePage() {
                           <div className="filter-table__title">
                             ACCOUNT NUMBER
                           </div>
-                          <div className="filter-table__sort-icon desending">
-                            <svg
-                              width="10"
-                              height="5"
-                              viewBox="0 0 10 5"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M0 5L5 0L10 5H0Z"
-                                fill="black"
-                                fillOpacity="0.75"
-                              />
-                            </svg>
-                          </div>
+                         
                         </button>
                       </TableCell>
                       <TableCell align="left">
@@ -1888,21 +1682,7 @@ export default function HomePage() {
                           <div className="filter-table__title">
                             FEDEX COMPANY
                           </div>
-                          <div className="filter-table__sort-icon desending">
-                            <svg
-                              width="10"
-                              height="5"
-                              viewBox="0 0 10 5"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M0 5L5 0L10 5H0Z"
-                                fill="black"
-                                fillOpacity="0.75"
-                              />
-                            </svg>
-                          </div>
+                         
                         </button>
                       </TableCell>
                       <TableCell align="left">
@@ -1911,21 +1691,7 @@ export default function HomePage() {
                             {" "}
                             Number of Attempted Deliveries
                           </div>
-                          <div className="filter-table__sort-icon desending">
-                            <svg
-                              width="10"
-                              height="5"
-                              viewBox="0 0 10 5"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M0 5L5 0L10 5H0Z"
-                                fill="black"
-                                fillOpacity="0.75"
-                              />
-                            </svg>
-                          </div>
+                         
                         </button>
                       </TableCell>
                       <TableCell align="left">
@@ -1933,21 +1699,7 @@ export default function HomePage() {
                           <div className="filter-table__title">
                             DELIVERY DATE
                           </div>
-                          <div className="filter-table__sort-icon desending">
-                            <svg
-                              width="10"
-                              height="5"
-                              viewBox="0 0 10 5"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M0 5L5 0L10 5H0Z"
-                                fill="black"
-                                fillOpacity="0.75"
-                              />
-                            </svg>
-                          </div>
+                         
                         </button>
                       </TableCell>
                       <TableCell align="left">
@@ -1955,21 +1707,7 @@ export default function HomePage() {
                           <div className="filter-table__title">
                             MASTER TRACKING NUMBER
                           </div>
-                          <div className="filter-table__sort-icon desending">
-                            <svg
-                              width="10"
-                              height="5"
-                              viewBox="0 0 10 5"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M0 5L5 0L10 5H0Z"
-                                fill="black"
-                                fillOpacity="0.75"
-                              />
-                            </svg>
-                          </div>
+                         
                         </button>
                       </TableCell>
                     </TableRow>
