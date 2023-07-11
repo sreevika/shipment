@@ -38,9 +38,7 @@ import {
   showFilterNameInUI,
 } from "../../components/commonFunctions";
 import Checkbox from "../../components/checkbox";
-import FilterConditions from "../../interfaces/filterConditions";
 import SelectedFilterListInfo from "../../interfaces/selectedFilterListInfo";
-import NormalFilterInfo from "../../interfaces/normalFilterInfo";
 import initialStatusFilterInfo from "../../constants/statusFIlterData";
 import intialNormalFilterInfo from "../../constants/normalFilterData";
 
@@ -186,7 +184,7 @@ export default function HomePage() {
     // status filters
     if (value.filterType == 1) {
       selectedFilterListForUI = selectedFilterListForUI.filter(
-        (e) => e.display != value.display
+        (e) => e.key != value.key
       );
       statusFilterInfo[value.key].checkedStatus = false;
     }
@@ -590,23 +588,25 @@ export default function HomePage() {
           item.type
         );
         // filteredData = filteredData.concat(tempData);
-        //add items to show in selected list
-        const newItem: SelectedFilterListInfo = {
-          display: item.display,
-          field: item.field,
-          filterType: 2,
-          sectionValue: item.sectionValue,
-          type: "",
-          filterVariable: "",
-          key: key,
-        };
+        item.sectionValue.forEach((itemValue: any) => {
+          const existingItem = selectedFilterListForUI.find(
+            (item) => item.key === key && item.sectionValue.includes(itemValue)
+          );
+          if (!existingItem) {
+            //add items to show in selected list
+            const newItem: SelectedFilterListInfo = {
+              display: item.display + " : " + itemValue,
+              field: item.field,
+              filterType: 2,
+              sectionValue: itemValue,
+              type: "",
+              filterVariable: "",
+              key: key,
+            };
+            selectedFilterListForUI.push(newItem);
+          }
+        });
         //sreevika (may be need to add multple entries)
-        const existingItem = selectedFilterListForUI.find(
-          (item) => item.key === key
-        );
-        if (!existingItem) {
-          selectedFilterListForUI.push(newItem);
-        }
       }
     });
     filteredData = filteredData.filter((value, index, self) => {
