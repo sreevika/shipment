@@ -156,7 +156,7 @@ export default function HomePage() {
 
     setStoreId("");
     setCardSelected("");
-    resetFilters();
+    // resetFilters();
   };
 
   const resetAllFilters = () => {
@@ -190,6 +190,13 @@ export default function HomePage() {
     }
     //shipping and receipient filters
     else if (value.filterType == 2) {
+      selectedFilterListForUI = selectedFilterListForUI.filter(
+        (item) =>
+          item.key !== value.key || item.sectionValue !== value.sectionValue
+      );
+      shipAndRecpFilterInfo[value.key].sectionValue = shipAndRecpFilterInfo[
+        value.key
+      ].sectionValue.filter((e: any) => e != value.sectionValue);
     }
 
     // if (
@@ -316,11 +323,11 @@ export default function HomePage() {
   const fromDate = new Date(toDate.getTime() - 14 * 24 * 60 * 60 * 1000);
 
   //reset before card sleection
-  const resetFilters = () => {
-    filterSection = [];
-    setUserInfo([]);
-    resetShipmentStatus();
-  };
+  // const resetFilters = () => {
+  //   filterSection = [];
+  //   setUserInfo([]);
+  //   resetShipmentStatus();
+  // };
 
   const [isCardSelected, setCardSelected] = useState("");
   const [anyFilter, setAnyFilter] = useState(false);
@@ -494,6 +501,10 @@ export default function HomePage() {
   };
   ////////////////////////////////////////////////////////
   //new
+  const closeButton = () => {
+    setShowFilter(false);
+    //write logic to set shipAndRecpFilterInfo and statusFilterinfo based on selected filters
+  };
   const applyFilters = () => {
     let shipmentDataFilteredByStatus: Shipment[] = [];
     let shipmentDataFilteredByShipAndRecp: Shipment[] = [];
@@ -1297,7 +1308,7 @@ export default function HomePage() {
                   <div className="filter-section-action">
                     <button
                       className="btn btn-ship--secondary"
-                      onClick={toggleFilter}
+                      onClick={closeButton}
                     >
                       CLOSE
                     </button>
