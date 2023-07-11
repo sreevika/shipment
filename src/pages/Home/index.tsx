@@ -329,9 +329,19 @@ export default function HomePage() {
   const [isCardSelected, setCardSelected] = useState("");
   const [anyFilter, setAnyFilter] = useState(false);
   const filterByBlock = (value: string) => {
+     
+      const newItem: SelectedFilterListInfo = {
+        display: value,
+        field: value,
+        filterType: 3,
+        sectionValue: undefined,
+        type: "",
+        filterVariable: "",
+        key: value,
+      };
     if (value == isCardSelected) {
       setCardSelected("");
-     // clearFilter(value);
+      clearFilter(newItem);
     } else {
       resetAllFilters();
       setAnyFilter(true);
@@ -344,16 +354,7 @@ export default function HomePage() {
         setSearchValue("");
       }
 
-       //add items to show in selected list
-       const newItem: SelectedFilterListInfo = {
-        display: value,
-        field: value,
-        filterType: 3,
-        sectionValue: undefined,
-        type: "",
-        filterVariable: "",
-        key: value,
-      };
+      //add items to show in selected list
       const existingItem = selectedFilterListForUI.find(
         (item) => item.key === value
       );
