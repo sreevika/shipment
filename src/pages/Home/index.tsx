@@ -159,7 +159,6 @@ export default function HomePage() {
   };
 
   const resetAllFilters = () => {
-  
     setStoreId("");
     setSearchValue("");
     setCardSelected("");
@@ -206,8 +205,7 @@ export default function HomePage() {
       shipAndRecpFilterInfo[value.key].sectionValue = shipAndRecpFilterInfo[
         value.key
       ].sectionValue.filter((e: any) => e != value.sectionValue);
-    }   
-    else if (value.filterType == 3 || value.filterType == 4 ) {
+    } else if (value.filterType == 3 || value.filterType == 4) {
       selectedFilterListForUI = selectedFilterListForUI.filter(
         (e) => e.key != value.key
       );
@@ -217,11 +215,7 @@ export default function HomePage() {
           setSearchValue("");
         }
       }
-      
-     
     }
-
-    
 
     applyFilters();
   };
@@ -242,7 +236,6 @@ export default function HomePage() {
           originalRows_backup = originalRows;
           originalRows = originalRows1;
         } else {
-
           //add items to show in selected list
           const newItem: SelectedFilterListInfo = {
             display: searchValue,
@@ -270,7 +263,7 @@ export default function HomePage() {
         originalRows = originalRows1;
         resetAllFilters();
       }
-   
+
       setRows(originalRows1);
     }
   };
@@ -293,13 +286,13 @@ export default function HomePage() {
     originalRows.filter((item) => item.isEarly === true)
   ).length;
 
-  const inTransitCount = Object.keys(
-    originalRows.filter((item) => item.status === "In transit")
-  ).length;
+  // const inTransitCount = Object.keys(
+  //   originalRows.filter((item) => item.status === "In transit")
+  // ).length;
 
-  const labelCreatedCount = Object.keys(
-    originalRows.filter((item) => item.status === "Initiated")
-  ).length;
+  // const labelCreatedCount = Object.keys(
+  //   originalRows.filter((item) => item.status === "Initiated")
+  // ).length;
 
   const outForDeliveryCount = Object.keys(
     originalRows.filter(
@@ -325,22 +318,31 @@ export default function HomePage() {
   //Find date interval
   const toDate = new Date();
   const fromDate = new Date(toDate.getTime() - 14 * 24 * 60 * 60 * 1000);
-  const filterDataByProperty = (data: any[], propertyName: string, value: boolean) => {
+  const filterDataByProperty = (
+    data: any[],
+    propertyName: string,
+    value: boolean
+  ) => {
     return data.filter((item) => item[propertyName] === value);
   };
   const [isCardSelected, setCardSelected] = useState("");
   const [anyFilter, setAnyFilter] = useState(false);
+
+  //Apply filter for cards
   const filterByBlock = (value: string) => {
-     
-      const newItem: SelectedFilterListInfo = {
-        display: value,
-        field: value,
-        filterType: 3,
-        sectionValue: undefined,
-        type: "",
-        filterVariable: "",
-        key: value,
-      };
+    var displayName: string = value;
+    if (value == "deliveredToday") displayName = "DELIVERED TODAY";
+    else if (value == "outForDelivery") displayName = "OUT FOR DELIVERY";
+    else if (value == "onTime") displayName = "ON TIME";
+    const newItem: SelectedFilterListInfo = {
+      display: displayName,
+      field: value,
+      filterType: 3,
+      sectionValue: undefined,
+      type: "",
+      filterVariable: "",
+      key: value,
+    };
     if (value == isCardSelected) {
       setCardSelected("");
       clearFilter(newItem);
@@ -349,7 +351,7 @@ export default function HomePage() {
       setAnyFilter(true);
       let tempArr = [];
       tempArr.push(getFilterValueforUI(value));
-     // setSelectedList(tempArr);
+      // setSelectedList(tempArr);
 
       setCardSelected(value);
       if (searchType != "Store ID") {
@@ -370,23 +372,29 @@ export default function HomePage() {
         if (value === "all") {
           filteredData = originalRows;
         } else if (value === "onTime") {
-         filteredData = filterDataByProperty(originalRows, "isOnTime", true);
-
+          filteredData = filterDataByProperty(originalRows, "isOnTime", true);
         } else if (value === "exception") {
-          filteredData = filterDataByProperty(originalRows, "isException", true);
-        
+          filteredData = filterDataByProperty(
+            originalRows,
+            "isException",
+            true
+          );
         } else if (value === "delivered") {
-          filteredData = filterDataByProperty(originalRows, "isDelivered", true);
-        
+          filteredData = filterDataByProperty(
+            originalRows,
+            "isDelivered",
+            true
+          );
         } else if (value === "delayed") {
           filteredData = filterDataByProperty(originalRows, "isDelayed", true);
-        
         } else if (value === "early") {
           filteredData = filterDataByProperty(originalRows, "isEarly", true);
-      
         } else if (value === "cancelled") {
-          filteredData = filterDataByProperty(originalRows, "isCancelled", true);
-         
+          filteredData = filterDataByProperty(
+            originalRows,
+            "isCancelled",
+            true
+          );
         } else if (value === "outForDelivery") {
           filteredData = originalRows.filter((item) => {
             return Object.keys(item).some(
@@ -422,43 +430,46 @@ export default function HomePage() {
 
   const [selectedOption, setSelectedOption] = useState("");
 
- 
-  const generateGroupByData = (data, propertyName,type) => {
-
-    if(type == "string") {
-       return _.chain(data)
-      .groupBy(propertyName)
-      .map((items, name) => ({
-        name,
-        count: items.length,
-        type: propertyName,
-      }))
-      .orderBy(["name"], ["asc"]) // Order by the "name" property in ascending order
-      .value();
+  const generateGroupByData = (
+    data: any,
+    propertyName: string,
+    type: string
+  ) => {
+    if (type == "string") {
+      return _.chain(data)
+        .groupBy(propertyName)
+        .map((items, name) => ({
+          name,
+          count: items.length,
+          type: propertyName,
+        }))
+        .orderBy(["name"], ["asc"]) // Order by the "name" property in ascending order
+        .value();
     } else {
       return _(data)
-      .groupBy((item) => {
-        const formattedDate = moment(item[propertyName]).format("MM/DD/YYYY");
-        return moment(formattedDate).isValid() ? formattedDate : "00/00/0000";
-      })
-      .map((items, name) => ({
-        name,
-        count: items.length,
-        type: propertyName,
-      }))
-      .value();
+        .groupBy((item) => {
+          const formattedDate = moment(item[propertyName]).format("MM/DD/YYYY");
+          return moment(formattedDate).isValid() ? formattedDate : "00/00/0000";
+        })
+        .map((items, name) => ({
+          name,
+          count: items.length,
+          type: propertyName,
+        }))
+        .value();
     }
-  
   };
-  
 
   const shipperInfoChange = (value: string) => {
     Object.keys(shipAndRecpFilterInfo).forEach((key) => {
       if (shipAndRecpFilterInfo[key].field === value) {
         setSelectedOption(key);
-     
-          shipAndRecpFilterInfo[key].orginalData = generateGroupByData(originalRows,value, shipAndRecpFilterInfo[key].type);
-       
+
+        shipAndRecpFilterInfo[key].orginalData = generateGroupByData(
+          originalRows,
+          value,
+          shipAndRecpFilterInfo[key].type
+        );
       }
     });
   };
