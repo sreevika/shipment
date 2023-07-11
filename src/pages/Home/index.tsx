@@ -35,7 +35,6 @@ import {
   dashboardIconPack,
   formatDate,
   getFilterValueforUI,
-  showFilterNameInUI,
 } from "../../components/commonFunctions";
 import Checkbox from "../../components/checkbox";
 import SelectedFilterListInfo from "../../interfaces/selectedFilterListInfo";
@@ -169,7 +168,17 @@ export default function HomePage() {
 
     //reset filters in filter box
     setStatusFilterInfo(initialStatusFilterInfo);
-    setShipAndRecpFilterInfo(intialNormalFilterInfo);
+    //issue found
+    //setShipAndRecpFilterInfo(intialNormalFilterInfo);
+    Object.keys(shipAndRecpFilterInfo).forEach((element) => {
+      setShipAndRecpFilterInfo((prevState) => ({
+        ...prevState,
+        [element]: {
+          ...prevState[element],
+          sectionValue: [],
+        },
+      }));
+    });
 
     //remove all filters from selected list
     selectedFilterListForUI = [];
@@ -213,8 +222,6 @@ export default function HomePage() {
     // }
 
     // //remove from selected array
-    // console.log("selectedListArray");
-    // console.log(selectedListArray);
     // if (selectedListArray.includes(value.display)) {
     //   selectedListArray = selectedListArray.filter((e) => e !== value);
 
@@ -336,7 +343,7 @@ export default function HomePage() {
       setCardSelected("");
       clearFilter(value);
     } else {
-      resetFilters();
+      resetAllFilters();
       setAnyFilter(true);
       let tempArr = [];
       tempArr.push(getFilterValueforUI(value));
@@ -428,7 +435,6 @@ export default function HomePage() {
   };
 
   const shipperInfoChange = (value: string) => {
-    console.log(selectedOption);
     Object.keys(shipAndRecpFilterInfo).forEach((key) => {
       if (shipAndRecpFilterInfo[key].field === value) {
         setSelectedOption(key);
@@ -503,6 +509,36 @@ export default function HomePage() {
   //new
   const closeButton = () => {
     setShowFilter(false);
+    setStatusFilterInfo(initialStatusFilterInfo);
+    // setShipAndRecpFilterInfo(intialNormalFilterInfo);
+    //sreevika : need to check how intialNormalFilterInfo.section value getting values
+    Object.keys(shipAndRecpFilterInfo).forEach((element) => {
+      shipAndRecpFilterInfo[element].sectionValue = [];
+    });
+    selectedFilterListForUI.forEach((element) => {
+      if (element.filterType == 1) {
+        //status fiter
+        setStatusFilterInfo((prevState) => ({
+          ...prevState,
+          [element.key]: {
+            ...prevState[element.key],
+            checkedStatus: true,
+          },
+        }));
+      } else if (element.filterType == 2) {
+        var tempArray = shipAndRecpFilterInfo[element.key].sectionValue;
+        if (!tempArray.includes(element.sectionValue)) {
+          tempArray.push(element.sectionValue);
+        }
+        setShipAndRecpFilterInfo((prevState) => ({
+          ...prevState,
+          [element.key]: {
+            ...prevState[element.key],
+            sectionValue: tempArray,
+          },
+        }));
+      }
+    });
     //write logic to set shipAndRecpFilterInfo and statusFilterinfo based on selected filters
   };
   const applyFilters = () => {
@@ -1326,7 +1362,7 @@ export default function HomePage() {
             )}
             <ul className="filter-section__applied">
               {selectedFilterListForUI.length > 0 &&
-                selectedFilterListForUI.map((filterInfo, index) => (
+                selectedFilterListForUI.map((filterInfo) => (
                   <li className="filter-section__applied-list">
                     <div className="btn btn-filter-pill">
                       <span>{filterInfo.display}</span>
