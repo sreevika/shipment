@@ -1368,8 +1368,11 @@ export default function HomePage() {
                                 <div className="filter-section-btn-text">
                                   {item.displayFilterTab}
                                 </div>
-                                <div className="filter-section-btn-count"></div>
+                                <div className="filter-section-btn-count">
+                                 
+                                </div>
                               </button>
+                             
                             </li>
                           ))}
                         </ul>
