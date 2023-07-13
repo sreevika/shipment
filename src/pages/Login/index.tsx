@@ -74,7 +74,7 @@ export default function LoginPage() {
   };
 
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
-    setShowLoader(true);
+  
     e.preventDefault();
     if (uname.trim() === "") {
       setNameError("Name is required.");
@@ -83,6 +83,7 @@ export default function LoginPage() {
       setPasswordError("Password is required.");
     }
     if (uname.trim() !== "" && password.trim() !== "") {
+      setShowLoader(true);
       if (rememberMe) {
         localStorage.setItem("rememberMe", "true");
         localStorage.setItem("username", uname);
