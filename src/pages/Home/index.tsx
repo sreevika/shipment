@@ -481,7 +481,7 @@ export default function HomePage() {
           type: propertyName,
         }))
         .orderBy(["name"], ["asc"]) // Order by the "name" property in ascending order
-        .value(); 
+        .value();
     }
   };
 
@@ -676,6 +676,7 @@ export default function HomePage() {
   //apply Shipment Status Filters
   const applyFilterByShipAndRecp = () => {
     let filteredData: Shipment[] = [];
+    let selectedListTemp: SelectedFilterListInfo[] = [];
     Object.keys(shipAndRecpFilterInfo).forEach((key) => {
       const item = shipAndRecpFilterInfo[key];
       if (item.sectionValue.length > 0) {
@@ -689,26 +690,22 @@ export default function HomePage() {
         );
         // filteredData = filteredData.concat(tempData);
         item.sectionValue.forEach((itemValue: any) => {
-          const existingItem = selectedFilterListForUI.find(
-            (item) => item.key === key && item.sectionValue.includes(itemValue)
-          );
-          if (!existingItem) {
-            //add items to show in selected list
-            const newItem: SelectedFilterListInfo = {
-              display: item.display + " : " + itemValue,
-              field: item.field,
-              filterType: 2,
-              sectionValue: itemValue,
-              type: "",
-              filterVariable: "",
-              key: key,
-            };
-            selectedFilterListForUI.push(newItem);
-          }
+          //add items to show in selected list
+          const newItem: SelectedFilterListInfo = {
+            display: item.display + " : " + itemValue,
+            field: item.field,
+            filterType: 2,
+            sectionValue: itemValue,
+            type: "",
+            filterVariable: "",
+            key: key,
+          };
+          selectedListTemp.push(newItem);
         });
         //sreevika (may be need to add multple entries)
       }
     });
+    selectedFilterListForUI = selectedFilterListForUI.concat(selectedListTemp);
     filteredData = filteredData.filter((value, index, self) => {
       return self.indexOf(value) === index;
     });
@@ -1365,11 +1362,8 @@ export default function HomePage() {
                                 <div className="filter-section-btn-text">
                                   {item.displayFilterTab}
                                 </div>
-                                <div className="filter-section-btn-count">
-                                 
-                                </div>
+                                <div className="filter-section-btn-count"></div>
                               </button>
-                             
                             </li>
                           ))}
                         </ul>
