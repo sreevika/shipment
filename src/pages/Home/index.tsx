@@ -15,6 +15,7 @@ import transit from "../../assets/images/transit.png";
 import labelImg from "../../assets/images/label.png";
 import redAlertImg from "../../assets/images/red-alert.png";
 import yellowAlertImg from "../../assets/images/yellow-alert.png";
+import defaultImg from "../../assets/images/default-img.png";
 import { useNavigate } from "react-router-dom";
 import {
   Paper,
@@ -50,6 +51,7 @@ let selectedListArray: any[] = [];
 // for selected  filter List
 let selectedFilterListForUI: SelectedFilterListInfo[] = [];
 
+
 export default function HomePage() {
   const [ShowLoader, setShowLoader] = useState(true);
   const [order, setOrder] = useState("asc");
@@ -77,12 +79,11 @@ export default function HomePage() {
         );
         originalRows = response.data.data;
         originalRows_backup = response.data.data;
-        const compareFn = (a: any, b: any) =>
-          a.trackingNumber.localeCompare(b.trackingNumber);
-
-        const sortedRows = response.data.data.sort(compareFn);
+        const compareFn = (a: any, b: any) => a.trackingNumber.localeCompare(b.trackingNumber);
+    
+      const sortedRows = response.data.data.sort(compareFn);
         setRows(sortedRows);
-
+       
         setShowLoader(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -232,25 +233,26 @@ export default function HomePage() {
   const searchData = (event: { key: string }) => {
     setAnyFilter(true);
 
-    //reset filters in filter box
-    setStatusFilterInfo(initialStatusFilterInfo);
+    
+      //reset filters in filter box
+      setStatusFilterInfo(initialStatusFilterInfo);
+    
+      Object.keys(shipAndRecpFilterInfo).forEach((element) => {
+        setShipAndRecpFilterInfo((prevState) => ({
+          ...prevState,
+          [element]: {
+            ...prevState[element],
+            sectionValue: [],
+          },
+        }));
+      });
 
-    Object.keys(shipAndRecpFilterInfo).forEach((element) => {
-      setShipAndRecpFilterInfo((prevState) => ({
-        ...prevState,
-        [element]: {
-          ...prevState[element],
-          sectionValue: [],
-        },
-      }));
-    });
-
-    //remove all filters from selected list
-    selectedFilterListForUI = [];
+      //remove all filters from selected list
+      selectedFilterListForUI = [];
 
     if (event.key === "Enter") {
       setCardSelected("");
-      setSearchValue(searchValue.trim());
+
       if (searchValue != "") {
         if (searchType == "Store ID") {
           setStoreId(searchValue);
@@ -283,13 +285,18 @@ export default function HomePage() {
             );
           });
         }
+
+        
       } else {
         originalRows1 = originalRows_backup;
         originalRows = originalRows1;
         resetAllFilters();
       }
-
-      setRows(originalRows1);
+  
+      
+      
+    
+        setRows(originalRows1);
     }
   };
 
@@ -460,7 +467,17 @@ export default function HomePage() {
     propertyName: string,
     type: string
   ) => {
-    if (type == "date") {
+    if (type == "string") {
+      return _.chain(data)
+        .groupBy(propertyName)
+        .map((items, name) => ({
+          name,
+          count: items.length,
+          type: propertyName,
+        }))
+        .orderBy(["name"], ["asc"]) // Order by the "name" property in ascending order
+        .value();
+    } else {
       return _(data)
         .groupBy((item) => {
           const formattedDate = moment(item[propertyName]).format("MM/DD/YYYY");
@@ -472,16 +489,6 @@ export default function HomePage() {
           type: propertyName,
         }))
         .value();
-    } else {
-      return _.chain(data)
-        .groupBy(propertyName)
-        .map((items, name) => ({
-          name,
-          count: items.length,
-          type: propertyName,
-        }))
-        .orderBy(["name"], ["asc"]) // Order by the "name" property in ascending order
-        .value(); 
     }
   };
 
@@ -628,7 +635,6 @@ export default function HomePage() {
     setRows(uniqueArray_table);
     //close filter box
     setShowFilter(false);
-    setCardSelected("");
     if (checkedStatusFilterCount + checkedNormalFilterCount == 0)
       setAnyFilter(false);
     else setAnyFilter(true);
@@ -746,16 +752,15 @@ export default function HomePage() {
       filterArray = filterValue.map((str) => (str === "null" ? null : str));
     }
     if (type == "date") {
+
       var filteredData = originalRows.filter((item) => {
         const dateValue = formatDate(item[filterProperty], dateFormatToDisplay);
-        const formattedDate = moment(dateValue, "MM/DD/YYYY", true).format(
-          "MM/DD/YYYY"
-        );
+        const formattedDate = moment(dateValue, "MM/DD/YYYY", true).format("MM/DD/YYYY");
         const isValidDate = moment(formattedDate, "MM/DD/YYYY", true).isValid();
-
-        return filterArray.includes(isValidDate ? formattedDate : "00/00/0000");
+      
+        return filterArray.includes(isValidDate ? formattedDate : "0000-00-00");
       });
-
+     
       // var filteredData = originalRows.filter((item) =>
       //   filterArray.includes(
       //     moment(moment(item[filterProperty]).format("MM/DD/YYYY")).isValid()
@@ -780,29 +785,28 @@ export default function HomePage() {
     setSortedColumn(sortingKey);
     // Get the current order from state or set an initial order
     const currentOrder = order === "asc" ? "desc" : "asc";
-
-    const compareFn =
-      currentOrder === "asc"
-        ? (a: any, b: any) => a[sortingKey].localeCompare(b[sortingKey])
-        : (a: any, b: any) => b[sortingKey].localeCompare(a[sortingKey]);
-
+    
+    const compareFn = currentOrder === "asc"
+      ? (a: any, b: any) => a[sortingKey].localeCompare(b[sortingKey])
+      : (a: any, b: any) => b[sortingKey].localeCompare(a[sortingKey]);
+  
     const sortedRows = [...rows].sort(compareFn);
-
+  
     setRows(sortedRows);
     setOrder(currentOrder); // Update the order state
     console.log(sortedRows);
   };
+ 
+
+  
 
   // Rest of your code...
 
   return (
     <>
-      <div
-        style={ShowLoader ? { display: "block" } : { display: "none" }}
-        className="overlay"
-      >
-        <span className="loader"></span>
-      </div>
+<div  style={ShowLoader ? { display: "block" } : { display: "none" }} className="overlay" >
+  <span className="loader"></span>
+</div>
       <div ref={dropdownRef}>
         <nav className="header-navigation">
           <div className="container max-container header-navigation-container">
@@ -1497,21 +1501,11 @@ export default function HomePage() {
                   <TableHead>
                     <TableRow>
                       <TableCell width="274">
-                        <button
-                          className="filter-table__header filter-table__header--button"
-                          onClick={() => sortedRows("trackingNumber")}
-                        >
+                        <button className="filter-table__header filter-table__header--button" onClick={() => sortedRows("trackingNumber")} >
                           <div className="filter-table__title">
                             TRACKING NUMBER
                           </div>
-                          <div
-                            className={
-                              order === "asc" &&
-                              sortedColumn == "trackingNumber"
-                                ? "filter-table__sort-icon ascending"
-                                : "filter-table__sort-icon desending"
-                            }
-                          >
+                          <div className={(order === "asc" && sortedColumn =="trackingNumber")  ? "filter-table__sort-icon ascending" :"filter-table__sort-icon desending" }>
                             <svg
                               width="10"
                               height="5"
@@ -1529,18 +1523,9 @@ export default function HomePage() {
                         </button>
                       </TableCell>
                       <TableCell align="left" className="status-cell">
-                        <button
-                          className="filter-table__header filter-table__header--button"
-                          onClick={() => sortedRows("status")}
-                        >
+                        <button className="filter-table__header filter-table__header--button" onClick={() => sortedRows("status")} >
                           <div className="filter-table__title">STATUS</div>
-                          <div
-                            className={
-                              order === "asc" && sortedColumn == "status"
-                                ? "filter-table__sort-icon ascending"
-                                : "filter-table__sort-icon desending"
-                            }
-                          >
+                          <div className={(order === "asc"  && sortedColumn =="status") ? "filter-table__sort-icon ascending" :"filter-table__sort-icon desending" }>
                             <svg
                               width="10"
                               height="5"
@@ -1585,6 +1570,7 @@ export default function HomePage() {
                             {" "}
                             SCHEDULED DELIVERY TIME BEFORE
                           </div>
+                         
                         </button>
                       </TableCell>
                       <TableCell align="left">
@@ -1592,6 +1578,7 @@ export default function HomePage() {
                           <div className="filter-table__title">
                             SHIPPER NAME
                           </div>
+                        
                         </button>
                       </TableCell>
                       <TableCell align="left">
@@ -1599,6 +1586,7 @@ export default function HomePage() {
                           <div className="filter-table__title">
                             SHIPPER COMPANY
                           </div>
+                         
                         </button>
                       </TableCell>
                       <TableCell align="left">
@@ -1606,6 +1594,7 @@ export default function HomePage() {
                           <div className="filter-table__title">
                             SHIPPER CITY
                           </div>
+                         
                         </button>
                       </TableCell>
                       <TableCell align="left">
@@ -1613,11 +1602,13 @@ export default function HomePage() {
                           <div className="filter-table__title">
                             SHIPPER STATE
                           </div>
+                         
                         </button>
                       </TableCell>
                       <TableCell align="left">
                         <button className="filter-table__header filter-table__header--button">
                           <div className="filter-table__title">SHIP DATE</div>
+                         
                         </button>
                       </TableCell>
                       <TableCell align="left">
@@ -1625,11 +1616,13 @@ export default function HomePage() {
                           <div className="filter-table__title">
                             DELIVERY COMPANY
                           </div>
+                          
                         </button>
                       </TableCell>
                       <TableCell align="left">
                         <button className="filter-table__header filter-table__header--button">
                           <div className="filter-table__title">STORE ID</div>
+                         
                         </button>
                       </TableCell>
                       <TableCell align="left">
@@ -1637,6 +1630,7 @@ export default function HomePage() {
                           <div className="filter-table__title">
                             RECIPIENT CONTACT NAME
                           </div>
+                         
                         </button>
                       </TableCell>
                       <TableCell align="left">
@@ -1644,6 +1638,7 @@ export default function HomePage() {
                           <div className="filter-table__title">
                             RECIPIENT COMPANY
                           </div>
+                         
                         </button>
                       </TableCell>
                       <TableCell align="left">
@@ -1651,6 +1646,7 @@ export default function HomePage() {
                           <div className="filter-table__title">
                             RECIPIENT ADDRESS
                           </div>
+                         
                         </button>
                       </TableCell>
                       <TableCell align="left">
@@ -1658,6 +1654,7 @@ export default function HomePage() {
                           <div className="filter-table__title">
                             RECIPIENT CITY
                           </div>
+                         
                         </button>
                       </TableCell>
                       <TableCell align="left">
@@ -1665,6 +1662,7 @@ export default function HomePage() {
                           <div className="filter-table__title">
                             RECIPIENT STATE
                           </div>
+                         
                         </button>
                       </TableCell>
                       <TableCell align="left">
@@ -1672,6 +1670,7 @@ export default function HomePage() {
                           <div className="filter-table__title">
                             RECIPIENT COUNTRY
                           </div>
+                         
                         </button>
                       </TableCell>
                       <TableCell align="left">
@@ -1679,6 +1678,7 @@ export default function HomePage() {
                           <div className="filter-table__title">
                             ACCOUNT NUMBER
                           </div>
+                         
                         </button>
                       </TableCell>
                       <TableCell align="left">
@@ -1686,6 +1686,7 @@ export default function HomePage() {
                           <div className="filter-table__title">
                             FEDEX COMPANY
                           </div>
+                         
                         </button>
                       </TableCell>
                       <TableCell align="left">
@@ -1694,6 +1695,7 @@ export default function HomePage() {
                             {" "}
                             Number of Attempted Deliveries
                           </div>
+                         
                         </button>
                       </TableCell>
                       <TableCell align="left">
@@ -1701,6 +1703,7 @@ export default function HomePage() {
                           <div className="filter-table__title">
                             DELIVERY DATE
                           </div>
+                         
                         </button>
                       </TableCell>
                       <TableCell align="left">
@@ -1708,6 +1711,7 @@ export default function HomePage() {
                           <div className="filter-table__title">
                             MASTER TRACKING NUMBER
                           </div>
+                         
                         </button>
                       </TableCell>
                     </TableRow>
@@ -1724,34 +1728,16 @@ export default function HomePage() {
                           {row.trackingNumber}
                         </TableCell>
                         <TableCell component="td" scope="row" align="left">
-                          {row.status === "Delivered" && (
-                            <>
-                              <img src={checkCircle} />
-                            </>
-                          )}
-                          {row.isDelayed && (
-                            <>
-                              <img src={yellowAlertImg} />
-                              {/* Add caution icon (yellow) */}
-                            </>
-                          )}
-                          {row.status === "In transit" && !row.isDelayed && (
-                            <>
-                              <img src={transit} />
-                            </>
-                          )}
-                          {row.status === "Initiated" && (
-                            <>
-                              <img src={labelImg} />
-                            </>
-                          )}
-                          {(row.status === "Delivery exception" ||
-                            row.status === "Shipment exception") &&
-                            !row.isDelayed && (
-                              <>
-                                <img src={redAlertImg} />
-                              </>
+                            {row.status === "Delivered" && <img src={checkCircle} />}
+                            {row.isDelayed && <img src={yellowAlertImg} />}
+                            {row.status === "In transit" && !row.isDelayed && <img src={transit} />}
+                            {row.status === "Initiated" && <img src={labelImg} />}
+                            {(row.status === "Delivery exception" || row.status === "Shipment exception") && !row.isDelayed && <img src={redAlertImg} />}
+                            {!row.status || (!row.isDelayed && !row.status.includes("Delivered") && !row.status.includes("In transit") && !row.status.includes("Initiated") && !row.status.includes("Delivery exception") && !row.status.includes("Shipment exception")) && (
+                              // Add a default image or fallback content here
+                              <img src={defaultImg} alt="Default" />
                             )}
+
                           &nbsp; {row.status}
                           <br />
                           {row.isDelivered !== true &&
