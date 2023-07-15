@@ -1534,30 +1534,25 @@ export default function HomePage() {
                                  
                                   key={key}
                                 >
-                                {item.type === 1 ? (
-                                  item.field
+                               {item.type === 1 ? (
+                                    row[item.field]
                                   ) : item.type === 2 ? (
-                                    <StatusRow
-                                      status={item.field}
+                                      <StatusRow
+                                      status={row[item.field]}
                                       isDelayed={row.isDelayed}
                                       isException={row.isException}
                                       isDelivered={row.isDelivered}
                                       statusDescription={row.statusDescription}
-                                    />
-                                  )  : item.type === 3 ? (
-                                   item.field !== "" &&
-                                    item.field !== null ? 
-                                    formatDate(item.field,dateFormatToDisplay)
-                                    : row.isDelivered
-                                    ? ""
-                                    : "Pending"
-                                   ) : item.type === 4 ? (
-                                    formatDate(
-                                      item.field,
-                                      dateTimeFormatToDisplay
-                                    )
-                                   )
-                                   : null}
+                                      />
+                                  ) : item.type === 3 ? (
+                                    row[item.field] !== "" && row[item.field] !== null
+                                      ? formatDate(row[item.field], dateFormatToDisplay)
+                                      : row.isDelivered
+                                      ? ""
+                                      : "Pending"
+                                  ) : item.type === 4 ? (
+                                    formatDate(row[item.field], dateTimeFormatToDisplay)
+                                  ) : null}
                                   
                                 </TableCell>
                               );
