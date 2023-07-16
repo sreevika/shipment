@@ -154,6 +154,7 @@ export default function HomePage() {
     setSearchType(value);
     setDropDown(!dropDown);
     clearSearchValue();
+    resetAllFilters();
   };
   const searchValueChange = (e: { target: { value: any } }) => {
     setSearchValue(e.target.value);
