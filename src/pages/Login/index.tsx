@@ -29,9 +29,43 @@ interface LoginData {
 }
 
 export default function LoginPage() {
+
+  let useridLocalStorage : any ="";
+
+
+  let passwordLocalStorage : any ="";
+
+  let remembermeLocalStorage= localStorage.getItem("rememberMe") !== null ?  localStorage.getItem("rememberMe") : "false";
+  let remembermeLocalStorage1 : boolean = false;
+
+  if(remembermeLocalStorage == "true") {
+    
+    remembermeLocalStorage1 = true;
+  } else {
+    remembermeLocalStorage1 = false;
+  }
+  console.log("1=="+remembermeLocalStorage1)
+  if(remembermeLocalStorage1) {
+   
+
+    passwordLocalStorage = localStorage.getItem("password") !== null ?  localStorage.getItem("password") : "";
+    useridLocalStorage = localStorage.getItem("username") !== null ? localStorage.getItem("username") : "";
+    
+
+  } else {
+    passwordLocalStorage = "";
+    useridLocalStorage= "";
+    remembermeLocalStorage1 = false;
+  }
+  console.log("2=="+remembermeLocalStorage1)
+ 
+    // setUserName(localStorage.getItem(username));
+
+   
+
   const [ShowLoader, setShowLoader] = useState(false);
-  const [uname, setUserName] = useState("");
-  const [password, setPassword] = useState("");
+  const [uname, setUserName] = useState(useridLocalStorage);
+  const [password, setPassword] = useState(atob(passwordLocalStorage));
   const [nameError, setNameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -39,16 +73,7 @@ export default function LoginPage() {
   const [loginError, setLoginError] = useState("");
   const [loginErrorStatus, setLoginErrorStatus] = useState(false);
   const navigate = useNavigate();
-  // if(localStorage.getItem(password) != null ){
-  //   //setPassword(localStorage.getItem(password));
-  //   //setUserName(localStorage.getItem(username));
 
-  // } else {
-  //   setPassword("");
-  //   setUserName("");
-  // }
-  // setPassword(localStorage.getItem(password));
-  // setUserName(localStorage.getItem(username));
   const unameChangeHandler = (e: { target: { value: any } }) => {
     setUserName(e.target.value);
     setNameError("");
@@ -67,8 +92,9 @@ export default function LoginPage() {
   };
 
   // remember me
-  const [rememberMe, setRememberMe] = useState(true);
+  const [rememberMe, setRememberMe] = useState(remembermeLocalStorage1);
 
+  console.log(remembermeLocalStorage1)
   const handleCheckboxChange = () => {
     setRememberMe(!rememberMe);
   };
@@ -87,14 +113,13 @@ export default function LoginPage() {
       if (rememberMe) {
         localStorage.setItem("rememberMe", "true");
         localStorage.setItem("username", uname);
-        localStorage.setItem("password", password);
+
+        localStorage.setItem("password", btoa(password));
       } else {
         localStorage.setItem("rememberMe", "false");
         localStorage.setItem("username", "");
         localStorage.setItem("password", "");
-        // localStorage.removeItem("rememberMe");
-        // localStorage.removeItem("username");
-        // localStorage.removeItem("password");
+   
       }
       const loginUser = { username: uname, password: password };
       setShowLoader(false);
@@ -108,6 +133,7 @@ export default function LoginPage() {
       console.log(loginResponse);
 
       if (loginResponse.succeeded) {
+ 
         localStorage.setItem("Authorization", loginResponse.data.accessToken);
         setLoginErrorStatus(false);
         setLoginError("");
@@ -153,6 +179,8 @@ export default function LoginPage() {
                     <input
                       type="text"
                       id="form3Example3"
+                      autoComplete="username111"
+
                       placeholder="User ID"
                       className={
                         nameError
