@@ -536,11 +536,14 @@ export default function HomePage() {
     }));
   };
 
-  const toggleFilter = () => {
-    setShowFilter(!showFilter);
-  };
+ 
   const [innerFilter, setInnerFilter] = useState(0);
   const [innerFilterJson, setInnerFilterJson] = useState<any[]>([]);
+
+  const toggleFilter = () => {
+    setInnerFilter(0)
+    setShowFilter(!showFilter);
+  };
 
   // first layer filter
   const showInnerFilter = (val: String) => {
@@ -758,7 +761,7 @@ export default function HomePage() {
         const formattedDate = moment(dateValue, "MM/DD/YYYY", true).format("MM/DD/YYYY");
         const isValidDate = moment(formattedDate, "MM/DD/YYYY", true).isValid();
       
-        return filterArray.includes(isValidDate ? formattedDate : "0000-00-00");
+        return filterArray.includes(isValidDate ? formattedDate : "00/00/0000");
       });
      
       // var filteredData = originalRows.filter((item) =>
