@@ -19,6 +19,7 @@ interface Login {
   data: LoginData;
   succeeded: boolean;
   message: string;
+ 
 }
 interface LoginData {
   id: number;
@@ -26,6 +27,11 @@ interface LoginData {
   lastName: string | null;
   username: string | null;
   accessToken: string;
+  levelName:string;
+  surName :string;
+  userId:string| null;
+  levelTypeId :number| null;
+  levelId:number;
 }
 
 export default function LoginPage() {
@@ -135,6 +141,8 @@ export default function LoginPage() {
       if (loginResponse.succeeded) {
  
         localStorage.setItem("Authorization", loginResponse.data.accessToken);
+       localStorage.setItem("LevelName", loginResponse.data.levelName);
+        localStorage.setItem("SurName", loginResponse.data.surName);
         setLoginErrorStatus(false);
         setLoginError("");
         navigate("/home");

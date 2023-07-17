@@ -58,6 +58,8 @@ export default function HomePage() {
   const [sortedColumn, setSortedColumn] = useState("trackingNumber");
   const [rows, setRows] = useState<Shipment[]>([]);
   const token = localStorage.getItem("Authorization");
+  const levelName = localStorage.getItem("LevelName");
+  const surName = localStorage.getItem("SurName");
   const config = {
     headers: { Authorization: `Bearer ${token}` },
   };
@@ -70,11 +72,12 @@ export default function HomePage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+
         const response = await axios.get(
           `${EDUCONNECT_URL}/Dashboard/fedex?fromDate=${formatDate(
             fromDate,
             dateFormatForDb
-          )}&toDate=${formatDate(toDate, dateFormatForDb)}`,
+          )}&toDate=${formatDate(toDate, dateFormatForDb)}&levelName=${levelName}&surName=${surName}`,
           config
         );
         originalRows = response.data.data;
@@ -482,7 +485,7 @@ export default function HomePage() {
       return _(data)
         .groupBy((item) => {
           const formattedDate = moment(item[propertyName]).format("MM/DD/YYYY");
-          return moment(formattedDate).isValid() ? formattedDate : "00/00/0000";
+          return moment(formattedDate).isValid() ? formattedDate : "";
         })
         .map((items, name) => ({
           name,
@@ -761,7 +764,7 @@ export default function HomePage() {
         const formattedDate = moment(dateValue, "MM/DD/YYYY", true).format("MM/DD/YYYY");
         const isValidDate = moment(formattedDate, "MM/DD/YYYY", true).isValid();
       
-        return filterArray.includes(isValidDate ? formattedDate : "00/00/0000");
+        return filterArray.includes(isValidDate ? formattedDate : "");
       });
      
       // var filteredData = originalRows.filter((item) =>
