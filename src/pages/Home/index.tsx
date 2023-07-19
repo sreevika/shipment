@@ -295,6 +295,7 @@ export default function HomePage() {
         originalRows1 = originalRows_backup;
         originalRows = originalRows1;
         resetAllFilters();
+        setAnyFilter(false);
       }
   
       
@@ -471,17 +472,8 @@ export default function HomePage() {
     propertyName: string,
     type: string
   ) => {
-    if (type == "string") {
-      return _.chain(data)
-        .groupBy(propertyName)
-        .map((items, name) => ({
-          name,
-          count: items.length,
-          type: propertyName,
-        }))
-        .orderBy(["name"], ["asc"]) // Order by the "name" property in ascending order
-        .value();
-    } else {
+    if (type == "date") {
+
       return _(data)
         .groupBy((item) => {
           const formattedDate = moment(item[propertyName]).format("MM/DD/YYYY");
@@ -494,7 +486,18 @@ export default function HomePage() {
         }))
         .orderBy(["name"], ["asc"]) // Order by the "name" property in ascending order
         .value();
-
+      
+    } else {
+      
+      return _.chain(data)
+      .groupBy(propertyName)
+      .map((items, name) => ({
+        name,
+        count: items.length,
+        type: propertyName,
+      }))
+      .orderBy(["name"], ["asc"]) // Order by the "name" property in ascending order
+      .value();
     } 
   };
 

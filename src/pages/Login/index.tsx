@@ -50,20 +50,22 @@ export default function LoginPage() {
   } else {
     remembermeLocalStorage1 = false;
   }
-  console.log("1=="+remembermeLocalStorage1)
   if(remembermeLocalStorage1) {
    
 
     passwordLocalStorage = localStorage.getItem("password") !== null ?  localStorage.getItem("password") : "";
     useridLocalStorage = localStorage.getItem("username") !== null ? localStorage.getItem("username") : "";
-    
+    if(passwordLocalStorage !== "") {
+      passwordLocalStorage = atob(passwordLocalStorage)
+    }
+     
 
   } else {
     passwordLocalStorage = "";
     useridLocalStorage= "";
     remembermeLocalStorage1 = false;
   }
-  console.log("2=="+remembermeLocalStorage1)
+  
  
     // setUserName(localStorage.getItem(username));
 
@@ -71,7 +73,7 @@ export default function LoginPage() {
 
   const [ShowLoader, setShowLoader] = useState(false);
   const [uname, setUserName] = useState(useridLocalStorage);
-  const [password, setPassword] = useState(atob(passwordLocalStorage));
+  const [password, setPassword] = useState(passwordLocalStorage);
   const [nameError, setNameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
