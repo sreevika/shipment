@@ -15,6 +15,10 @@ import EastOutlinedIcon from "@mui/icons-material/EastOutlined";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useNavigate } from "react-router-dom";
 
+import {
+  isEncodedString
+} from "../../components/commonFunctions";
+
 interface Login {
   data: LoginData;
   succeeded: boolean;
@@ -55,8 +59,10 @@ export default function LoginPage() {
 
     passwordLocalStorage = localStorage.getItem("password") !== null ?  localStorage.getItem("password") : "";
     useridLocalStorage = localStorage.getItem("username") !== null ? localStorage.getItem("username") : "";
-    if(passwordLocalStorage !== "") {
+    if(passwordLocalStorage !== "" && isEncodedString(passwordLocalStorage)) {
       passwordLocalStorage = atob(passwordLocalStorage)
+    } else {
+      passwordLocalStorage = "";
     }
      
 
@@ -130,9 +136,10 @@ export default function LoginPage() {
    
       }
       const loginUser = { username: uname, password: password };
-      setShowLoader(false);
+     
       const response = await ApiService.verifyLogin(loginUser);
       setLoginResponse(response.data);
+      setShowLoader(false);
     }
   };
 

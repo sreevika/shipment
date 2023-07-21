@@ -122,3 +122,12 @@ export function formatDate(dateTime: any, format: Intl.DateTimeFormatOptions): s
     return null; 
 
   }
+
+
+  export function isEncodedString(str :any) {
+    try {
+      return btoa(atob(str)) === str;
+    } catch (error) {
+      return false;
+    }
+  }
