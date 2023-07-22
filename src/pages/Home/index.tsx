@@ -53,6 +53,8 @@ export default function HomePage() {
   const [sortedColumn, setSortedColumn] = useState("trackingNumber");
   const [rows, setRows] = useState<Shipment[]>([]);
   const token = localStorage.getItem("Authorization");
+  const levelName = localStorage.getItem("LevelName");
+  const surName = localStorage.getItem("SurName");
   const config = {
     headers: { Authorization: `Bearer ${token}` },
   };
@@ -66,11 +68,12 @@ export default function HomePage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+
         const response = await axios.get(
           `${EDUCONNECT_URL}/Dashboard/fedex?fromDate=${formatDate(
             fromDate,
             dateFormatForDb
-          )}&toDate=${formatDate(toDate, dateFormatForDb)}`,
+          )}&toDate=${formatDate(toDate, dateFormatForDb)}&levelName=${levelName}&surName=${surName}`,
           config
         );
         originalRows = response.data.data;
@@ -150,6 +153,7 @@ export default function HomePage() {
     setSearchType(value);
     setDropDown(!dropDown);
     clearSearchValue();
+    resetAllFilters();
   };
   const searchValueChange = (e: { target: { value: any } }) => {
     setSearchValue(e.target.value);
@@ -287,6 +291,7 @@ export default function HomePage() {
         originalRows1 = originalRows_backup;
         originalRows = originalRows1;
         resetAllFilters();
+        setAnyFilter(false);
       }
   
       
@@ -463,21 +468,12 @@ export default function HomePage() {
     propertyName: string,
     type: string
   ) => {
-    if (type == "string") {
-      return _.chain(data)
-        .groupBy(propertyName)
-        .map((items, name) => ({
-          name,
-          count: items.length,
-          type: propertyName,
-        }))
-        .orderBy(["name"], ["asc"]) // Order by the "name" property in ascending order
-        .value();
-    } else {
+    if (type == "date") {
+
       return _(data)
         .groupBy((item) => {
           const formattedDate = moment(item[propertyName]).format("MM/DD/YYYY");
-          return moment(formattedDate).isValid() ? formattedDate : "00/00/0000";
+          return moment(formattedDate).isValid() ? formattedDate : "";
         })
         .map((items, name) => ({
           name,
@@ -486,7 +482,18 @@ export default function HomePage() {
         }))
         .orderBy(["name"], ["asc"]) // Order by the "name" property in ascending order
         .value();
-
+      
+    } else {
+      
+      return _.chain(data)
+      .groupBy(propertyName)
+      .map((items, name) => ({
+        name,
+        count: items.length,
+        type: propertyName,
+      }))
+      .orderBy(["name"], ["asc"]) // Order by the "name" property in ascending order
+      .value();
     } 
   };
 
@@ -531,11 +538,14 @@ export default function HomePage() {
     }));
   };
 
-  const toggleFilter = () => {
-    setShowFilter(!showFilter);
-  };
+ 
   const [innerFilter, setInnerFilter] = useState(0);
   const [innerFilterJson, setInnerFilterJson] = useState<any[]>([]);
+
+  const toggleFilter = () => {
+    setInnerFilter(0)
+    setShowFilter(!showFilter);
+  };
 
   // first layer filter
   const showInnerFilter = (val: String) => {
@@ -753,7 +763,7 @@ export default function HomePage() {
         const formattedDate = moment(dateValue, "MM/DD/YYYY", true).format("MM/DD/YYYY");
         const isValidDate = moment(formattedDate, "MM/DD/YYYY", true).isValid();
       
-        return filterArray.includes(isValidDate ? formattedDate : "0000-00-00");
+        return filterArray.includes(isValidDate ? formattedDate : "");
       });
      
       // var filteredData = originalRows.filter((item) =>
