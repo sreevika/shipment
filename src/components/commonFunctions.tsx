@@ -102,3 +102,32 @@ export function formatDate(dateTime: any, format: Intl.DateTimeFormatOptions): s
       return newItem;
     });
   };
+
+ 
+
+
+  export function showFilterNameInUI(filterArray :any[], value: string) {
+
+    for (const statusKey in filterArray) {
+      if (filterArray.hasOwnProperty(statusKey)) {
+       
+        const status = filterArray[statusKey];
+        if (status.field === value) {
+          return status.display;
+        } else if(statusKey === value) {
+          return filterArray[statusKey].display;
+        }
+      }
+    }
+    return null; 
+
+  }
+
+
+  export function isEncodedString(str :any) {
+    try {
+      return btoa(atob(str)) === str;
+    } catch (error) {
+      return false;
+    }
+  }

@@ -6,7 +6,7 @@ interface CheckboxProps {
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   name: string;
   count: number;
-  value:string;
+  value: string;
 }
 
 const Checkbox: React.FC<CheckboxProps> = ({
@@ -15,9 +15,8 @@ const Checkbox: React.FC<CheckboxProps> = ({
   onChange,
   name,
   count,
-  value
+  value,
 }) => {
-  console.log("ddddddddddd" + value);
   return (
     <>
       <div className="filter-section-btn-icon">
