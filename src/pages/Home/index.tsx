@@ -382,7 +382,7 @@ export default function HomePage() {
     } else {
       resetAllFilters();
       setAnyFilter(true);
-      let tempArr = [];
+      let tempArr :any[]= [];
       tempArr.push(getFilterValueforUI(value));
       // setSelectedList(tempArr);
 
