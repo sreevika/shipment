@@ -54,6 +54,7 @@ interface Shipment {
   isEarly: boolean;
   isCancelled: boolean;
   isOutForDelivery: boolean;
+
 }
 
 export default Shipment;

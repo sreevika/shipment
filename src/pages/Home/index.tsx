@@ -5,17 +5,11 @@ import "./_home.scss";
 import {
   dateTimeFormatToDisplay,
   dateFormatToDisplay,
-  dateFormatForDb,
-  timeFormatToDisplay,
+  dateFormatForDb
 } from "../../constants/dateFormatOptions";
 import petsmartImg from "../../assets/images/petsmart.png";
 import pangeaImg from "../../assets/images/pangea.png";
-import checkCircle from "../../assets/images/check_circle.png";
-import transit from "../../assets/images/transit.png";
-import labelImg from "../../assets/images/label.png";
-import redAlertImg from "../../assets/images/red-alert.png";
-import yellowAlertImg from "../../assets/images/yellow-alert.png";
-import defaultImg from "../../assets/images/default-img.png";
+
 import { useNavigate } from "react-router-dom";
 import {
   Paper,
@@ -38,9 +32,11 @@ import {
   getFilterValueforUI,
 } from "../../components/commonFunctions";
 import Checkbox from "../../components/checkbox";
+import StatusRow from "../../components/statusRow";
 import SelectedFilterListInfo from "../../interfaces/selectedFilterListInfo";
 import initialStatusFilterInfo from "../../constants/statusFIlterData";
 import intialNormalFilterInfo from "../../constants/normalFilterData";
+import intialShipmentTableData from "../../constants/shipmentTableData";
 
 let originalRows: Shipment[] = [];
 let originalRows_backup: Shipment[] = [];
@@ -386,7 +382,7 @@ export default function HomePage() {
     } else {
       resetAllFilters();
       setAnyFilter(true);
-      let tempArr = [];
+      let tempArr :any[]= [];
       tempArr.push(getFilterValueforUI(value));
       // setSelectedList(tempArr);
 
@@ -1503,322 +1499,78 @@ export default function HomePage() {
           <div className="shipping-list container mid-container">
             <Paper>
               <TableContainer sx={{ maxHeight: 500 }}>
-                <Table aria-label="shipping table" className="filter-table">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell width="274">
-                        <button className="filter-table__header filter-table__header--button" onClick={() => sortedRows("trackingNumber")} >
-                          <div className="filter-table__title">
-                            TRACKING NUMBER
-                          </div>
-                          <div className={(order === "asc" && sortedColumn =="trackingNumber")  ? "filter-table__sort-icon ascending" :"filter-table__sort-icon desending" }>
-                            <svg
-                              width="10"
-                              height="5"
-                              viewBox="0 0 10 5"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M0 5L5 0L10 5H0Z"
-                                fill="black"
-                                fillOpacity="0.75"
-                              />
-                            </svg>
-                          </div>
-                        </button>
-                      </TableCell>
-                      <TableCell align="left" className="status-cell">
-                        <button className="filter-table__header filter-table__header--button" onClick={() => sortedRows("status")} >
-                          <div className="filter-table__title">STATUS</div>
-                          <div className={(order === "asc"  && sortedColumn =="status") ? "filter-table__sort-icon ascending" :"filter-table__sort-icon desending" }>
-                            <svg
-                              width="10"
-                              height="5"
-                              viewBox="0 0 10 5"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M0 5L5 0L10 5H0Z"
-                                fill="black"
-                                fillOpacity="0.75"
-                              />
-                            </svg>
-                          </div>
-                        </button>
-                      </TableCell>
-                      <TableCell align="left">
-                        <button className="filter-table__header filter-table__header--button">
-                          <div className="filter-table__title">
-                            SCHEDULED DELIVERY DATE
-                          </div>
-                          <div className="filter-table__sort-icon none">
-                            <svg
-                              width="10"
-                              height="5"
-                              viewBox="0 0 10 5"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M0 5L5 0L10 5H0Z"
-                                fill="black"
-                                fillOpacity="0.75"
-                              />
-                            </svg>
-                          </div>
-                        </button>
-                      </TableCell>
-                      <TableCell align="left">
-                        <button className="filter-table__header filter-table__header--button">
-                          <div className="filter-table__title">
-                            {" "}
-                            SCHEDULED DELIVERY TIME BEFORE
-                          </div>
-                         
-                        </button>
-                      </TableCell>
-                      <TableCell align="left">
-                        <button className="filter-table__header filter-table__header--button">
-                          <div className="filter-table__title">
-                            SHIPPER NAME
-                          </div>
-                        
-                        </button>
-                      </TableCell>
-                      <TableCell align="left">
-                        <button className="filter-table__header filter-table__header--button">
-                          <div className="filter-table__title">
-                            SHIPPER COMPANY
-                          </div>
-                         
-                        </button>
-                      </TableCell>
-                      <TableCell align="left">
-                        <button className="filter-table__header filter-table__header--button">
-                          <div className="filter-table__title">
-                            SHIPPER CITY
-                          </div>
-                         
-                        </button>
-                      </TableCell>
-                      <TableCell align="left">
-                        <button className="filter-table__header filter-table__header--button">
-                          <div className="filter-table__title">
-                            SHIPPER STATE
-                          </div>
-                         
-                        </button>
-                      </TableCell>
-                      <TableCell align="left">
-                        <button className="filter-table__header filter-table__header--button">
-                          <div className="filter-table__title">SHIP DATE</div>
-                         
-                        </button>
-                      </TableCell>
-                      <TableCell align="left">
-                        <button className="filter-table__header filter-table__header--button">
-                          <div className="filter-table__title">
-                            DELIVERY COMPANY
-                          </div>
-                          
-                        </button>
-                      </TableCell>
-                      <TableCell align="left">
-                        <button className="filter-table__header filter-table__header--button">
-                          <div className="filter-table__title">STORE ID</div>
-                         
-                        </button>
-                      </TableCell>
-                      <TableCell align="left">
-                        <button className="filter-table__header filter-table__header--button">
-                          <div className="filter-table__title">
-                            RECIPIENT CONTACT NAME
-                          </div>
-                         
-                        </button>
-                      </TableCell>
-                      <TableCell align="left">
-                        <button className="filter-table__header filter-table__header--button">
-                          <div className="filter-table__title">
-                            RECIPIENT COMPANY
-                          </div>
-                         
-                        </button>
-                      </TableCell>
-                      <TableCell align="left">
-                        <button className="filter-table__header filter-table__header--button">
-                          <div className="filter-table__title">
-                            RECIPIENT ADDRESS
-                          </div>
-                         
-                        </button>
-                      </TableCell>
-                      <TableCell align="left">
-                        <button className="filter-table__header filter-table__header--button">
-                          <div className="filter-table__title">
-                            RECIPIENT CITY
-                          </div>
-                         
-                        </button>
-                      </TableCell>
-                      <TableCell align="left">
-                        <button className="filter-table__header filter-table__header--button">
-                          <div className="filter-table__title">
-                            RECIPIENT STATE
-                          </div>
-                         
-                        </button>
-                      </TableCell>
-                      <TableCell align="left">
-                        <button className="filter-table__header filter-table__header--button">
-                          <div className="filter-table__title">
-                            RECIPIENT COUNTRY
-                          </div>
-                         
-                        </button>
-                      </TableCell>
-                      <TableCell align="left">
-                        <button className="filter-table__header filter-table__header--button">
-                          <div className="filter-table__title">
-                            ACCOUNT NUMBER
-                          </div>
-                         
-                        </button>
-                      </TableCell>
-                      <TableCell align="left">
-                        <button className="filter-table__header filter-table__header--button">
-                          <div className="filter-table__title">
-                            FEDEX COMPANY
-                          </div>
-                         
-                        </button>
-                      </TableCell>
-                      <TableCell align="left">
-                        <button className="filter-table__header filter-table__header--button">
-                          <div className="filter-table__title">
-                            {" "}
-                            Number of Attempted Deliveries
-                          </div>
-                         
-                        </button>
-                      </TableCell>
-                      <TableCell align="left">
-                        <button className="filter-table__header filter-table__header--button">
-                          <div className="filter-table__title">
-                            DELIVERY DATE
-                          </div>
-                         
-                        </button>
-                      </TableCell>
-                      <TableCell align="left">
-                        <button className="filter-table__header filter-table__header--button">
-                          <div className="filter-table__title">
-                            MASTER TRACKING NUMBER
-                          </div>
-                         
-                        </button>
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {rows.map((row) => (
-                      <TableRow key={row.trackingNumber}>
-                        <TableCell
-                          component="td"
-                          scope="row"
-                          align="left"
-                          className="tranckRow"
-                        >
-                          {row.trackingNumber}
-                        </TableCell>
-                        <TableCell component="td" scope="row" align="left">
-                            {row.status === "Delivered" && <img src={checkCircle} />}
-                            {row.isDelayed && <img src={yellowAlertImg} />}
-                            {row.status === "In transit" && !row.isDelayed && <img src={transit} />}
-                            {row.status === "Initiated" && <img src={labelImg} />}
-                            {(row.status === "Delivery exception" || row.status === "Shipment exception") && !row.isDelayed && <img src={redAlertImg} />}
-                            {!row.status || (!row.isDelayed && !row.status.includes("Delivered") && !row.status.includes("In transit") && !row.status.includes("Initiated") && !row.status.includes("Delivery exception") && !row.status.includes("Shipment exception")) && (
-                              // Add a default image or fallback content here
-                              <img src={defaultImg} alt="Default" />
-                            )}
-
-                          &nbsp; {row.status}
-                          <br />
-                          {row.isDelivered !== true &&
-                            row.isException !== true && (
-                              <small>{row.statusDescription}</small>
-                            )}
-                        </TableCell>
-                        <TableCell align="left">
-                          {row.scheduledDeliveryDate !== "" &&
-                          row.scheduledDeliveryDate !== null
-                            ? formatDate(
-                                row.scheduledDeliveryDate,
-                                dateFormatToDisplay
-                              )
-                            : row.isDelivered
-                            ? ""
-                            : "Pending"}
-                        </TableCell>
-                        <TableCell align="left">
-                          {row.scheduledDeliveryDate !== "" &&
-                          row.scheduledDeliveryDate !== null
-                            ? formatDate(
-                                row.scheduledDeliveryDate,
-                                timeFormatToDisplay
-                              )
-                            : row.isDelivered
-                            ? ""
-                            : "Pending"}
-                        </TableCell>
-                        <TableCell align="left">{row.shipperName}</TableCell>
-                        <TableCell align="left">{row.shipperCompany}</TableCell>
-                        <TableCell align="left">{row.shipperCity}</TableCell>
-                        <TableCell align="left">{row.shipperState}</TableCell>
-                        <TableCell align="left">
-                          {formatDate(row.shipDate, dateFormatToDisplay) === ""
-                            ? "Pending"
-                            : formatDate(row.shipDate, dateFormatToDisplay)}
-                        </TableCell>
-                        <TableCell align="left">
-                          {row.deliveryCompany}
-                        </TableCell>
-                        <TableCell align="left">{row.storeId}</TableCell>
-                        <TableCell align="left">
-                          {row.recipientContactName}
-                        </TableCell>
-                        <TableCell align="left">
-                          {row.recipientCompany}
-                        </TableCell>
-                        <TableCell align="left">
-                          {row.recipientAddress}
-                        </TableCell>
-                        <TableCell align="left">{row.recipientCity}</TableCell>
-                        <TableCell align="left">{row.recipientState}</TableCell>
-                        <TableCell align="left">
-                          {row.recipientCountry}
-                        </TableCell>
-                        <TableCell align="left">{row.accountNumber}</TableCell>
-                        <TableCell align="left">{row.fedExCompany}</TableCell>
-
-                        <TableCell align="left">
-                          {row.numberOfAttemptedDeliveries}
-                        </TableCell>
-                        <TableCell align="left">
-                          {formatDate(
-                            row.deliveredTime,
-                            dateTimeFormatToDisplay
-                          )}
-                        </TableCell>
-                        <TableCell align="left">
-                          {row.masterTrackingNumber}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+              <Table aria-label="shipping table" className="filter-table">
+                      <TableHead>
+                        <TableRow>
+                          {Object.keys(intialShipmentTableData).map(key => {
+                            const item = intialShipmentTableData[key];
+                            return (
+                              <TableCell width="274" key={key}>
+                                <button className="filter-table__header filter-table__header--button" onClick={() => sortedRows(key)}>
+                                  <div className="filter-table__title">
+                                    {item.tableHeadLine}
+                                  </div>
+                                  <div className={(order === "asc" && sortedColumn === key) ? "filter-table__sort-icon ascending" : "filter-table__sort-icon desending"}>
+                                    <svg
+                                      width="10"
+                                      height="5"
+                                      viewBox="0 0 10 5"
+                                      fill="none"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                      <path
+                                        d="M0 5L5 0L10 5H0Z"
+                                        fill="black"
+                                        fillOpacity="0.75"
+                                      />
+                                    </svg>
+                                  </div>
+                                </button>
+                              </TableCell>
+                            );
+                          })}
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {rows.map((row) => (
+                          <TableRow key={row.trackingNumber}>
+                            {Object.keys(intialShipmentTableData).map(key => {
+                              const item = intialShipmentTableData[key];
+                              return (
+                                <TableCell
+                                  component="td"
+                                  scope="row"
+                                  align="left"
+                                 
+                                  key={key}
+                                >
+                               {item.type === 1 ? (
+                                    row[item.field]
+                                  ) : item.type === 2 ? (
+                                      <StatusRow
+                                      status={row[item.field]}
+                                      isDelayed={row.isDelayed}
+                                      isException={row.isException}
+                                      isDelivered={row.isDelivered}
+                                      statusDescription={row.statusDescription}
+                                      />
+                                  ) : item.type === 3 ? (
+                                    row[item.field] !== "" && row[item.field] !== null
+                                      ? formatDate(row[item.field], dateFormatToDisplay)
+                                      : row.isDelivered
+                                      ? ""
+                                      : "Pending"
+                                  ) : item.type === 4 ? (
+                                    formatDate(row[item.field], dateTimeFormatToDisplay)
+                                  ) : null}
+                                  
+                                </TableCell>
+                              );
+                            })}
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
               </TableContainer>
             </Paper>
           </div>
