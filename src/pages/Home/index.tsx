@@ -5,7 +5,8 @@ import "./_home.scss";
 import {
   dateTimeFormatToDisplay,
   dateFormatToDisplay,
-  dateFormatForDb
+  dateFormatForDb,
+  
 } from "../../constants/dateFormatOptions";
 import petsmartImg from "../../assets/images/petsmart.png";
 import pangeaImg from "../../assets/images/pangea.png";
@@ -382,7 +383,7 @@ export default function HomePage() {
     } else {
       resetAllFilters();
       setAnyFilter(true);
-      let tempArr :any[]= [];
+      let tempArr :any[] = [];
       tempArr.push(getFilterValueforUI(value));
       // setSelectedList(tempArr);
 
