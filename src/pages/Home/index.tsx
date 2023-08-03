@@ -88,7 +88,7 @@ export default function HomePage() {
     
       const sortedRows = response.data.data.sort(compareFn);
         setRows(sortedRows);
-       
+        console.log("Fetch Data")
         setShowLoader(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -304,7 +304,7 @@ export default function HomePage() {
       }
   
       
-      // console.log(JSON.stringify(rows))
+       //console.log(JSON.stringify(rows))
     
         setRows(originalRows1);
         console.log(JSON.stringify(rows))
