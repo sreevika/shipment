@@ -242,7 +242,7 @@ export default function HomePage() {
   };
 
   const searchData = (event: { key: string }) => {
-    setAnyFilter(true);
+  
 
     
       //reset filters in filter box
@@ -262,6 +262,7 @@ export default function HomePage() {
       selectedFilterListForUI = [];
 
     if (event.key === "Enter") {
+      setAnyFilter(true);
       setCardSelected("");
 
       if (searchValue != "") {
@@ -377,6 +378,8 @@ export default function HomePage() {
 
   //Apply filter for cards
   const filterByBlock = (value: string) => {
+  
+    setShowLoader(true);
     var displayName: string = value;
     if (value == "deliveredToday") displayName = "DELIVERED TODAY";
     else if (value == "outForDelivery") displayName = "OUT FOR DELIVERY";
@@ -464,6 +467,7 @@ export default function HomePage() {
         //setRows(filteredData);
         filterBlockData = filteredData;
         setRows(filterBlockData);
+        setShowLoader(false);
       }
     }
   };
@@ -661,6 +665,8 @@ export default function HomePage() {
     setRows(uniqueArray_table);
     //close filter box
     setShowFilter(false);
+    //card selection
+    setCardSelected("");
     if (checkedStatusFilterCount + checkedNormalFilterCount == 0)
       setAnyFilter(false);
     else setAnyFilter(true);
@@ -840,7 +846,7 @@ export default function HomePage() {
           <div className="container max-container header-navigation-container">
             <div className="header-navigation__product-image">
               <a
-                href="#"
+                  onClick={resetAllFilters}
                 className="header-navigation__logo-item header-navigation__ps-logo"
               >
                 <img
@@ -850,7 +856,7 @@ export default function HomePage() {
                 />
               </a>
               <a
-                href="#"
+                 onClick={resetAllFilters}
                 className="header-navigation__logo-item  header-navigation-pg-logo"
               >
                 <img
@@ -862,7 +868,7 @@ export default function HomePage() {
             </div>
             <ul className="header-navigation__menu">
               <li className="header-navigation__menu-item">
-                <a href="#" className="header-navigation__menu-link active">
+                <a  onClick={resetAllFilters} className="header-navigation__menu-link active">
                   FedEx
                 </a>
               </li>
@@ -1096,13 +1102,16 @@ export default function HomePage() {
             </Paper>
           </div>
         </div>
-        <div className="footer__content">
-          <div className="footer__item">Help for Shipment tracking</div>
-          <div className="footer__item">
-            The Service Desk: servicedesk@petsmart.com
+        <div className="footer">
+          <div className="footer__content">
+            <div className="footer__item">Help for Shipment tracking</div>
+            <div className="footer__item">
+              The Service Desk: servicedesk@petsmart.com
+            </div>
+            <div className="footer__item"> 800.406.2155</div>
           </div>
-          <div className="footer__item"> 800.406.2155</div>
         </div>
+
       </div>
     </>
   );
