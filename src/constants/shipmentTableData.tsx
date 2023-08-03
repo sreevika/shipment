@@ -161,6 +161,11 @@ const intialShipmentTableData: ShipmentTableInfo = {
     tableHeadLine: "No. of packages",
     type: 1,
   },
+  reference: {
+    field: "reference",
+    tableHeadLine: "Reference",
+    type: 1,
+  },
 };
 
 export default intialShipmentTableData;
