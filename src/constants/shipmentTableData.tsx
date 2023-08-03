@@ -1,6 +1,11 @@
 import ShipmentTableInfo from "../interfaces/shipmentTableInfo";
 // 1== normal , 2= status, 3= date, 4=dateTime
 const intialShipmentTableData: ShipmentTableInfo = {
+  storeId: {
+    field: "storeId",
+    tableHeadLine: "Store Id",
+    type: 1,
+  },
   trackingNumber: {
     field: "trackingNumber",
     tableHeadLine: "Tracking Number",
@@ -45,11 +50,6 @@ const intialShipmentTableData: ShipmentTableInfo = {
     field: "shipDate",
     tableHeadLine: "Ship Date",
     type: 3,
-  },
-  storeId: {
-    field: "storeId",
-    tableHeadLine: "Store Id",
-    type: 1,
   },
   recipientContactName: {
     field: "recipientContactName",
@@ -111,11 +111,11 @@ const intialShipmentTableData: ShipmentTableInfo = {
     tableHeadLine: "Master Tracking Number",
     type: 1,
   },
-  packageWeightKg: {
-    field: "packageWeightKg",
-    tableHeadLine: "Pkg Wt (Kg)",
-    type: 1,
-  },
+  // packageWeightKg: {
+  //   field: "packageWeightKg",
+  //   tableHeadLine: "Pkg Wt (Kg)",
+  //   type: 1,
+  // },
   packageWeightLbs: {
     field: "packageWeightLbs",
     tableHeadLine: "Pkg Wt (Lbs) ",

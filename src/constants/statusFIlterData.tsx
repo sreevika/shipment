@@ -32,11 +32,10 @@ const initialStatusFiltersInfo: StatusFilterInfo = {
   label: {
     field: "status",
     sectionValue: "Initiated",
-    display: "Label",
+    display: "Label Created",
     checkedStatus: false,
     count: 0,
   },
-  
 };
 
 export default initialStatusFiltersInfo;
