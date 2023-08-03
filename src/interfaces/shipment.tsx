@@ -3,7 +3,6 @@ interface Shipment {
   id: number;
   trackingNumberUniqueId: string;
   trackingNumber: string;
-  deliveryCompany: string | null;
   storeId: string | null;
   storeDivision: string;
   storeZip: string | null;
