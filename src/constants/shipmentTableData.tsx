@@ -31,31 +31,26 @@ const intialShipmentTableData: ShipmentTableInfo = {
     tableHeadLine: "Shipper Company",
     type: 1,
   },
-
   shipperCity: {
     field: "shipperCity",
     tableHeadLine: "Shipper City",
     type: 1,
   },
-
   shipperState: {
     field: "shipperState",
     tableHeadLine: "Shipper State",
     type: 1,
   },
-
   shipDate: {
     field: "shipDate",
     tableHeadLine: "Ship Date",
     type: 3,
   },
-
   storeId: {
     field: "storeId",
     tableHeadLine: "Store Id",
     type: 1,
   },
-
   recipientContactName: {
     field: "recipientContactName",
     tableHeadLine: "Recipient Contact Name",
@@ -66,37 +61,31 @@ const intialShipmentTableData: ShipmentTableInfo = {
     tableHeadLine: "Recipient Company",
     type: 1,
   },
-
   recipientAddress: {
     field: "recipientAddress",
     tableHeadLine: "Recipient Address",
     type: 1,
   },
-
   recipientPostal: {
     field: "recipientPostal",
     tableHeadLine: "Recipient Postal",
     type: 1,
   },
-
   recipientCity: {
     field: "recipientCity",
     tableHeadLine: "Recipient City",
     type: 1,
   },
-
   recipientState: {
     field: "recipientState",
     tableHeadLine: "Recipient State",
     type: 1,
   },
-
   recipientCountry: {
     field: "recipientCountry",
     tableHeadLine: "Recipient Country",
     type: 1,
   },
-
   accountNumber: {
     field: "accountNumber",
     tableHeadLine: "Account Number",
@@ -139,14 +128,9 @@ const intialShipmentTableData: ShipmentTableInfo = {
   },
   shippedBy: {
     field: "shippedBy",
-    tableHeadLine: "Sshipped By",
+    tableHeadLine: "Shipped By",
     type: 1,
   },
-  // shippedTo: {
-  //   field: "shippedTo",
-  //   tableHeadLine: "shipped To",
-  //   type: 1,
-  // },
   shipperAddress: {
     field: "shipperAddress",
     tableHeadLine: "Shipper Address",
@@ -162,11 +146,11 @@ const intialShipmentTableData: ShipmentTableInfo = {
     tableHeadLine: "Shipper Country",
     type: 1,
   },
-  specialHandling: {
-    field: "specialHandling",
-    tableHeadLine: "Special Handling",
-    type: 1,
-  },
+  // specialHandling: {
+  //   field: "specialHandling",
+  //   tableHeadLine: "Special Handling",
+  //   type: 1,
+  // },
   serviceType: {
     field: "serviceType",
     tableHeadLine: "Service Type",
@@ -180,44 +164,3 @@ const intialShipmentTableData: ShipmentTableInfo = {
 };
 
 export default intialShipmentTableData;
-
-/*
-
-  deliveryCompany: string | null;
-  storeId: string | null;
-  storeDivision: string;
-  storeZip: string | null;
-  shipDate: string;
-  accountNumber: string;
-  purchaseOrderNumber: string | null;
-  masterTrackingNumber: string | null;
-  status: string;
-  statusCode: string;
-  statusDescription: string;
-  shipperName: string;
-  shipperCompany: string;
-  shipperCity: string;
-  shipperState: string;
-  scheduledDeliveryDate: string | null;
-  scheduledDeliveryTimeBefore: string | null;
-
-  reference: string | null;
-  direction: string | null;
-  fedExCompany: string;
-  numberOfAttemptedDeliveries: number;
-  deliveredTime: string | null;
-  packageWeightKg: string;
-  packageWeightLbs: string;
-  receivedBy: string | null;
-  recipientPostal: string;
-  shippedBy: string;
-  shippedTo: string | null;
-  shipperAddress: string;
-  shipperCountry: string;
-  shipperPostal: string;
-  specialHandling: string;
-  serviceType: string;
-  totalWeightInKg: number;
-  totalWeightInLbs: number;
-  packageCount: number;
-  insertedTime: string;  */

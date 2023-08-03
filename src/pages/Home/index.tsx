@@ -33,15 +33,15 @@ import {
   getFilterValueforUI,
 } from "../../components/commonFunctions";
 import Checkbox from "../../components/checkbox";
-import SearchBar from "../../components/FedEx/searchBar";
+import SearchBar from "../../components/fedEx/searchBar";
 import StatusRow from "../../components/statusRow";
 import SelectedFilterListInfo from "../../interfaces/selectedFilterListInfo";
 import initialStatusFilterInfo from "../../constants/statusFIlterData";
 import intialNormalFilterInfo from "../../constants/normalFilterData";
 import intialShipmentTableData from "../../constants/shipmentTableData";
-import CardSection from "../../components/FedEx/cardSection";
-import FilterOptions from "../../components/FedEx/filterOptions";
-import AppliedFilter from "../../components/FedEx/appliedFilter";
+import CardSection from "../../components/fedEx/cardSection";
+import FilterOptions from "../../components/fedEx/filterOptions";
+import AppliedFilter from "../../components/fedEx/appliedFilter";
 
 
 let originalRows: Shipment[] = [];
