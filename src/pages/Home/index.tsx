@@ -242,9 +242,12 @@ export default function HomePage() {
   };
 
   const searchData = (event: { key: string }) => {
-  
 
-    
+    if (event.key === "Enter") {
+      setAnyFilter(true);
+      setCardSelected("");
+
+      
       //reset filters in filter box
       setStatusFilterInfo(initialStatusFilterInfo);
     
@@ -260,10 +263,6 @@ export default function HomePage() {
 
       //remove all filters from selected list
       selectedFilterListForUI = [];
-
-    if (event.key === "Enter") {
-      setAnyFilter(true);
-      setCardSelected("");
 
       if (searchValue != "") {
         if (searchType == "Store ID") {
