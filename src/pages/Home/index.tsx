@@ -23,7 +23,7 @@ import {
 } from "@mui/material";
 
 import axios from "axios";
-import _ from "lodash";
+import _, { trim } from "lodash";
 import moment from "moment";
 
 import Shipment from "../../interfaces/shipment";
@@ -71,6 +71,7 @@ export default function HomePage() {
   const [shipAndRecpFilterInfo, setShipAndRecpFilterInfo] = useState(
     intialNormalFilterInfo
   );
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -84,6 +85,7 @@ export default function HomePage() {
         );
         originalRows = response.data.data;
         originalRows_backup = response.data.data;
+       
         const compareFn = (a: any, b: any) => a.trackingNumber.localeCompare(b.trackingNumber);
     
       const sortedRows = response.data.data.sort(compareFn);
@@ -97,7 +99,7 @@ export default function HomePage() {
 
     fetchData();
   }, []); // Empty dependency array ensures the effect runs only once
-
+  const totalRecords =originalRows_backup.length;
   const navigate = useNavigate(); // Use the useNavigate hook here
   const [searchType, setSearchType] = useState("Store ID");
   const [searchValue, setSearchValue] = useState("");
@@ -310,7 +312,7 @@ export default function HomePage() {
         console.log(JSON.stringify(rows))
     }
   };
-
+  let filterRecord = rows.length;
   const onTimeCount = Object.keys(
     originalRows.filter((item) => item.isOnTime === true)
   ).length;
@@ -479,11 +481,15 @@ export default function HomePage() {
     type: string
   ) => {
     if (type == "date") {
+      var emptyDateText ="";
+      if(propertyName === "deliveredTime"){
+        emptyDateText ="Not Delivered"
+      }
 
       return _(data)
         .groupBy((item) => {
           const formattedDate = moment(item[propertyName]).format("MM/DD/YYYY");
-          return moment(formattedDate).isValid() ? formattedDate : "";
+          return moment(formattedDate).isValid() ? formattedDate : emptyDateText ;
         })
         .map((items, name) => ({
           name,
@@ -767,13 +773,18 @@ export default function HomePage() {
       filterArray = filterValue.map((str) => (str === "null" ? null : str));
     }
     if (type == "date") {
+     
+      var emptyDateText ="";
+      if(filterProperty === "deliveredTime"){
+        emptyDateText ="Not Delivered"
+      }
 
       var filteredData = originalRows.filter((item) => {
         const dateValue = formatDate(item[filterProperty], dateFormatToDisplay);
         const formattedDate = moment(dateValue, "MM/DD/YYYY", true).format("MM/DD/YYYY");
         const isValidDate = moment(formattedDate, "MM/DD/YYYY", true).isValid();
       
-        return filterArray.includes(isValidDate ? formattedDate : "");
+        return filterArray.includes(isValidDate ? formattedDate : emptyDateText);
       });
      
       // var filteredData = originalRows.filter((item) =>
@@ -966,6 +977,7 @@ export default function HomePage() {
                   </svg>
                 </div>
               </button>
+              <div className="div-total-record">{filterRecord}/{totalRecords}</div>
             </div>
             {showFilter ? (
               <FilterOptions
@@ -1049,7 +1061,8 @@ export default function HomePage() {
                                   key={key}
                                 >
                                {item.type === 1 ? (
-                                    row[item.field]
+
+                                  trim(row[item.field]) === "" ? "--" : row[item.field]
                                   ) : item.type === 2 ? (
                                       <StatusRow
                                       status={row[item.field]}
@@ -1062,10 +1075,12 @@ export default function HomePage() {
                                     row[item.field] !== "" && row[item.field] !== null
                                       ? formatDate(row[item.field], dateFormatToDisplay)
                                       : row.isDelivered
-                                      ? ""
+                                      ? "--"
                                       : "Pending"
                                   ) : item.type === 4 ? (
+                                    row[item.field] !== "" && row[item.field] !== null ?
                                     formatDate(row[item.field], dateTimeFormatToDisplay)
+                                    : "--"
                                   ) : null}
                                   
                                 </TableCell>
