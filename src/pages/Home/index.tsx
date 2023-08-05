@@ -176,6 +176,8 @@ export default function HomePage() {
 
     setStoreId("");
     setCardSelected("");
+    //setAnyFilter(false) 
+    //doubt
     // resetFilters();
   };
 
