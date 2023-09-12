@@ -3,7 +3,6 @@ interface Shipment {
   id: number;
   trackingNumberUniqueId: string;
   trackingNumber: string;
-  deliveryCompany: string | null;
   storeId: string | null;
   storeDivision: string;
   storeZip: string | null;
@@ -54,6 +53,7 @@ interface Shipment {
   isEarly: boolean;
   isCancelled: boolean;
   isOutForDelivery: boolean;
+
 }
 
 export default Shipment;

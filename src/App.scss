@@ -68,6 +68,7 @@ html {
     height: 100%;
     display: flex;
     flex-direction: column;
+    background-color: #FAFAFA;
 
     // >div,
     // >div>div {
@@ -349,7 +350,20 @@ html {
     }
   }
 }
-
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #4f6d83;
+  color: #fff;
+  font-family: var(--bs-lato-font-family);
+  font-size: 12px;
+  line-height: 21px;
+  font-weight: 700;
+  min-height: 51px; /* Set a minimum height for the footer */
+  width: 100%;
+  position: relative; /* Set the parent container as relative */
+}
 .footer__content {
   margin-top: auto;
   display: flex;
