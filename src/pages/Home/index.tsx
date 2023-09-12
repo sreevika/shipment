@@ -386,6 +386,7 @@ export default function HomePage() {
     if (value == isCardSelected) {
       setCardSelected("");
       clearFilter(newItem);
+      setShowLoader(false);
     } else {
       resetAllFilters();
       setAnyFilter(true);
